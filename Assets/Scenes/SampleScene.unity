@@ -879,7 +879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6300cd5181526fc448fc0394520c7fb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  write: 1
+  write: 0
   net: https://nugamestudioclub-d68d7-default-rtdb.firebaseio.com/
   path: users/Dan/
   data: '{"Dan":15}'

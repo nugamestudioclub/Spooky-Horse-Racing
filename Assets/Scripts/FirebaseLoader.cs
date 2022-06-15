@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Net.Http;
-using System.IO;
+
 using System.Net.Http.Headers;
+
 
 public class FirebaseLoader : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class FirebaseLoader : MonoBehaviour
     private string path;
     [SerializeField]
     private string data;
+
+    private Player[] db;
+
     public async void read()
     {
         using(httpClient = new HttpClient())
@@ -77,6 +81,55 @@ public class FirebaseLoader : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Send scores to the firebase db. Player username, email, absolute time, time removed from other players, their end positions in the race.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="email"></param>
+    /// <param name="time"></param>
+    /// <param name="timeRemoved"></param>
+    /// <param name="pos"></param>
+    public void PushScore(string username, string email, float time,float timeRemoved,int pos)
+    {
+        Player newPlayer = new Player() {
+            name = username,
+            email = email,
+            time = time,
+            timeRemoved=timeRemoved,
+            position=pos
+        };
+        Player[] newDB = new Player[db.Length+1];
+        for(int i = 0; i < db.Length; i++)
+        {
+            newDB[i] = db[i];
+        }
+        newDB[newDB.Length - 1] = newPlayer;
+        db = newDB;
+        PushDB();
+
+    }
+
+    private void PushDB()
+    {
+        var stringPayload = JsonUtility.ToJson(db);
+        send("/users/", stringPayload);
+    }
+
+    public class DatabaseUpload
+    {
+        public Player[] players;
+
+    }
+
+    public class Player
+    {
+        public string name;
+        public string email;
+        public float time;
+        public float timeRemoved;
+        public int position;
+
+    }
     // Start is called before the first frame update
     void Start()
     {
