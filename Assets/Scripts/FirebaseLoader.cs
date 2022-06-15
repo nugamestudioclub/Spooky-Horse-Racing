@@ -18,7 +18,11 @@ public class FirebaseLoader : MonoBehaviour
     public List<string> Buffer { get {return this.buf; } }
     [SerializeField]
     private string net;
-    
+
+    [SerializeField]
+    private string path;
+    [SerializeField]
+    private string data;
     public async void read()
     {
         using(httpClient = new HttpClient())
@@ -27,7 +31,6 @@ public class FirebaseLoader : MonoBehaviour
             {
                 var response = await httpClient.SendAsync(request);
                 var content = await response.Content.ReadAsStringAsync();
-                print(content);
                 this.buf.Add(content);
             }
         }
@@ -49,7 +52,6 @@ public class FirebaseLoader : MonoBehaviour
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
                 var response = await httpClient.SendAsync(request);
                 var content = await response.Content.ReadAsStringAsync();
-                print("Pushed:" + message + " response:" + content);
                 this.buf.Add(content);
             }
         }
@@ -70,7 +72,6 @@ public class FirebaseLoader : MonoBehaviour
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
                 var response = await httpClient.SendAsync(request);
                 var content = await response.Content.ReadAsStringAsync();
-                print("Pushed:" + upload.ToString() + " response:" + content);
                 this.buf.Add(content);
             }
         }
@@ -81,7 +82,7 @@ public class FirebaseLoader : MonoBehaviour
     {
         if (write)
         {
-            send("myContent/fun","{\"Name\":\"Seb\"}");
+            send(path,data);
         }
         else
         {
@@ -94,6 +95,12 @@ public class FirebaseLoader : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        if (buf.Count > 0)
+        {
+            print(buf[0]);
+            buf.RemoveAt(0);
+        }
+
     }
 }
