@@ -10,7 +10,9 @@ public class FirebaseLoader : MonoBehaviour
 {
 
     HttpClient httpClient = new HttpClient();
-    
+
+    [SerializeField]
+    private bool testing = false;
     [SerializeField]
     private bool write;
 
@@ -133,14 +135,18 @@ public class FirebaseLoader : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (write)
+        if (testing)
         {
-            send(path,data);
+            if (write)
+            {
+                send(path, data);
+            }
+            else
+            {
+                read();
+            }
         }
-        else
-        {
-            read();
-        }
+        
         
 
     }
@@ -148,7 +154,7 @@ public class FirebaseLoader : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
         if (buf.Count > 0)
         {
             print(buf[0]);
