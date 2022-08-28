@@ -15,7 +15,7 @@ public class FirebaseImplemnetation : MonoBehaviour
         foreach (PlayerPush player in players)
         {
             string item = "{\"name\":\"" + player.name + "\",\"time\":\"" + player.time + "\",\"position\":\"" + player.pos + "\"}";
-            print(item);
+            // print(item);
             loader.send("/racing-game/"+count,item);
             count++;
             finalString += item;

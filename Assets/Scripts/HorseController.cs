@@ -28,7 +28,7 @@ public class HorseController : MonoBehaviour
 
         Vector2 delta = (Vector2)target.transform.position - prevPos;
         float angle = (Mathf.Atan2(delta.y, delta.x)/(Mathf.PI*2))*360;
-        print(angle);
+        // print(angle);
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
             transform.localEulerAngles.y,
             angle);
