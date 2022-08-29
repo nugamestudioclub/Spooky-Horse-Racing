@@ -20,7 +20,6 @@ public class InputController : MonoBehaviour {
 				Initialize();
 				
 			}
-			print("Initialized!");
 		}
 		catch( Exception ex ) {
 			Debug.Log(ex.Message);

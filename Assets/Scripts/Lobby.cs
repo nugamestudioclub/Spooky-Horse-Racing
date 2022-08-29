@@ -13,7 +13,6 @@ public class Lobby : MonoBehaviour {
 		for( int i = 0; i < players.Length; ++i ) {
 			players[i].IsReady = false;
 			players[i].Name = startingNames[i];
-
 		}
 	}
 

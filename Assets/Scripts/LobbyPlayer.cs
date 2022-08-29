@@ -16,8 +16,13 @@ public class LobbyPlayer : MonoBehaviour {
 	private SpriteRenderer readySpriteRenderer;
 
 	public string Name {
-		get => nameInputField.text;
-		set => (nameInputField.placeholder as TMP_Text).text = value;
+		get => string.IsNullOrEmpty(nameInputField.text) ? (nameInputField.placeholder as TMP_Text).text : nameInputField.text;
+		set {
+			if( string.IsNullOrEmpty(nameInputField.text) )
+				(nameInputField.placeholder as TMP_Text).text = value;
+			else
+				nameInputField.text = value;
+		}
 	}
 
 	private bool isReady;
