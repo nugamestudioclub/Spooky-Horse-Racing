@@ -30,7 +30,7 @@ public class InputController : MonoBehaviour {
 			var devices = FindDevices(i);
 			var data = new InputData();
 
-			actionMaps[i] = MapInput(devices, data);
+			actionMaps[i] = MapInput("Player_" + i.ToString(), devices, data);
 			inputData[i] = data;
 		}
 	}
@@ -107,8 +107,8 @@ public class InputController : MonoBehaviour {
 		return devices;
 	}
 
-	private static InputActionMap MapInput(IEnumerable<InputDevice> devices, InputData data) {
-		var actionMap = new InputActionMap();
+	private static InputActionMap MapInput(string name, IEnumerable<InputDevice> devices, InputData data) {
+		var actionMap = new InputActionMap(name);
 
 		BindMovement(actionMap, data);
 		BindInteraction(actionMap, data);
