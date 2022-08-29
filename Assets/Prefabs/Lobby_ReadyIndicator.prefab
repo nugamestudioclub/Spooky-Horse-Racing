@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7331046675415409767}
   - component: {fileID: 4830884855229157039}
-  - component: {fileID: 6956852110886266166}
   m_Layer: 0
   m_Name: Lobby_ReadyIndicator
   m_TagString: Untagged
@@ -84,21 +83,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6956852110886266166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 946947166149620931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53e85731541f06b4aaa57f7505808c6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textMesh: {fileID: 7939762462841440483}
-  spriteRenderer: {fileID: 4830884855229157039}
-  playerId: 0
 --- !u!1 &3620426481477208831
 GameObject:
   m_ObjectHideFlags: 0
