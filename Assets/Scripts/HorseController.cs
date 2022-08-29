@@ -55,7 +55,7 @@ public class HorseController : MonoBehaviour
 
         Vector2 delta = (Vector2)target.transform.position - prevPos;
         float angle = (Mathf.Atan2(delta.y, delta.x)/(Mathf.PI*2))*360;
-        //print(angle);
+
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
             transform.localEulerAngles.y,
             angle);
@@ -67,7 +67,12 @@ public class HorseController : MonoBehaviour
             positions.Add(transform.position);
             rotation.Add(transform.eulerAngles.z);
         }
-        print(positions.Count);
+        //print(positions.Count);
+
+        if (InputController.GetJumpUp(0)&&target.GetComponent<RollPhysics>().IsGrounded)
+        {
+            target.AddForce((Vector2)transform.up*25,ForceMode2D.Impulse);
+        }
         
     }
     public void LoadTransforms()
