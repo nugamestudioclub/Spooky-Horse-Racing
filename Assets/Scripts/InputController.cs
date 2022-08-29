@@ -18,12 +18,15 @@ public class InputController : MonoBehaviour {
 			if( instance == null ) {
 				instance = this;
 				Initialize();
+				
 			}
+			print("Initialized!");
 		}
 		catch( Exception ex ) {
 			Debug.Log(ex.Message);
 		}
 	}
+
 
 	private void Initialize() {
 		for( int i = 0; i < PlayerCount; ++i ) {

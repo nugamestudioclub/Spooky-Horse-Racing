@@ -8,6 +8,9 @@ public class RollPhysics : MonoBehaviour {
 	[SerializeField]
 	private float speed = 10f;
 
+	private bool isGrounded = false;
+	public bool IsGrounded { get { return isGrounded; } }
+
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
 	}
@@ -30,7 +33,24 @@ public class RollPhysics : MonoBehaviour {
 		if( InputController.GetFireUp(0) )
 			Debug.Log($"fire up at {Time.frameCount}");
 		*/
-
+		//print(-InputController.GetMovement(0).x);
 		rb.AddTorque(-InputController.GetMovement(0).x * Time.deltaTime * speed, ForceMode2D.Impulse);
+	}
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+			this.isGrounded = true;
+			print("Hit ground");
+		}
+		
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+		if (collision.gameObject.CompareTag("Ground"))
+		{
+			this.isGrounded = false;
+		}
 	}
 }
