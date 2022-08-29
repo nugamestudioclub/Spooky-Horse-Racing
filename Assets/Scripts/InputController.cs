@@ -101,7 +101,7 @@ public class InputController : MonoBehaviour {
 		else
 			Debug.Log($"Gamepad {playerId} is not connected");
 
-		if( playerId == 2 )
+		if( playerId == 0 )
 			devices.Add(Keyboard.current);
 
 		return devices;
