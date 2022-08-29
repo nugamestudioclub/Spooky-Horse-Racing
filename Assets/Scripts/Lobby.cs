@@ -127,6 +127,7 @@ public class Lobby : MonoBehaviour {
 			"Kart Attack",
 			"Kart Crusher",
 			"Kart Killer",
+			"Kart Master",
 			"Kart Wars",
 			"Kart-o-maniac",
 			"Kart2Kart",
@@ -195,6 +196,7 @@ public class Lobby : MonoBehaviour {
 			"Skull Crusher",
 			"Slick",
 			"Smoked",
+			"Smokin’ Tires",
 			"Smokin’ Wheels",
 			"Spark Plug",
 			"Specific Rim",
@@ -231,6 +233,7 @@ public class Lobby : MonoBehaviour {
 			"To Kart or Not to Kart",
 			"Tokyo Drift",
 			"Tour Guide",
+			"Track Beast",
 			"Track Police",
 			"Trailblazer",
 			"Training Wheels",
@@ -239,8 +242,7 @@ public class Lobby : MonoBehaviour {
 			"Troublemaker",
 			"Turbo",
 			"Turbomeister",
-			"United States of",
-			"Amerikart",
+			"United States of Amerikart",
 			"USS Karterprise",
 			"Viper",
 			"Warlock",
@@ -253,9 +255,6 @@ public class Lobby : MonoBehaviour {
 			"ZigZag",
 			"Zoomer",
 			"Zorro",
-			"Kart Master",
-			"Track Beast",
-			"Smokin’ Tires",
 		};
 	}
 }
