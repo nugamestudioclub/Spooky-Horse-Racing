@@ -65,7 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6287194952506203606}
   - component: {fileID: 6443555421627778449}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,6 +260,10 @@ PrefabInstance:
     - target: {fileID: 946947166149620931, guid: d112c5a49069b42469d569f7fd7e37e5, type: 3}
       propertyPath: m_Name
       value: ReadyIndicator
+      objectReference: {fileID: 0}
+    - target: {fileID: 946947166149620931, guid: d112c5a49069b42469d569f7fd7e37e5, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7331046675415409767, guid: d112c5a49069b42469d569f7fd7e37e5, type: 3}
       propertyPath: m_RootOrder
