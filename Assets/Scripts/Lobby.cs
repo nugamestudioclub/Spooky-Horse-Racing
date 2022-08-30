@@ -27,13 +27,13 @@ public class Lobby : MonoBehaviour {
 		bool playersReady = players.Count(p => p.IsConnected) > 0
 			&& players.All(p => p.IsReady || !p.IsConnected);
 
-		if( timer.IsRunning && !playersReady ) {
-			timer.Show(false);
-			timer.Reset();
-		}
-		else if( !timer.IsRunning && playersReady ) {
+		if( playersReady && !timer.IsRunning ) {
 			timer.Show(true);
 			timer.Begin();
+		}
+		else if( !playersReady && timer.IsRunning ) {
+			timer.Show(false);
+			timer.Reset();
 		}
 
 		if( timer.IsDone )
