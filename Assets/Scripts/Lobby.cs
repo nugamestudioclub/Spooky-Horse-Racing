@@ -42,10 +42,8 @@ public class Lobby : MonoBehaviour {
 
 	private void UpdatePlayer(int playerId) {
 		if( InputController.GetStartDown(playerId) ) {
-			if( players[playerId].IsConnected && players[playerId].IsReady )
-				players[playerId].IsReady = false;
-			else if( players[playerId].IsConnected )
-				players[playerId].IsReady = true;
+			if( players[playerId].IsConnected )
+				players[playerId].IsReady = !players[playerId].IsReady;
 			else
 				players[playerId].IsConnected = true;
 		}
