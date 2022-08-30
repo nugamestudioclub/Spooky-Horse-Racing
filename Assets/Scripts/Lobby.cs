@@ -42,7 +42,7 @@ public class Lobby : MonoBehaviour {
 			for( int i = 0; i < players.Length; ++i )
 				RegisterPlayer(i);
 			playersRegistered = true;
-			// scene transition?
+			SceneController.LoadRace();
 		}
 	}
 
