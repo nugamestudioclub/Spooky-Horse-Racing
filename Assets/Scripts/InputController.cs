@@ -133,7 +133,7 @@ public class InputController : MonoBehaviour {
 
 	private static void BindInteraction(InputActionMap actionMap, InputData data) {
 		BindButton("Start", actionMap, v => data.start = v, "<Keyboard>/z", "<Gamepad>/leftTrigger", "<Mouse>/leftButton");
-		BindButton("Cancel", actionMap, v => data.cancel = v, "<Keyboard>/x", "<Gamepad>/rightTrigger");
+		BindButton("Cancel", actionMap, v => data.cancel = v, "<Keyboard>/x", "<Gamepad>/rightTrigger", "<Mouse>/rightButton");
 		BindButton("Jump", actionMap, v => data.jump = v, "<Keyboard>/w"); ///
 		BindButton("Fire", actionMap, v => data.fire = v, "<Keyboard>/space"); ///
 	}

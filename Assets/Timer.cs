@@ -24,14 +24,19 @@ public class Timer : MonoBehaviour {
 		Reset();
 	}
 
+	void FixedUpdate() {
+		if( IsRunning )
+			Tick(Time.fixedDeltaTime);
+	}
+
 	public void Begin() {
 		IsRunning = true;
 		Draw();
 		Show(true);
 	}
 
-	public void Tick() {
-		currentTime = Mathf.Max(currentTime - Time.deltaTime, 0f);
+	private void Tick(float delta) {
+		currentTime = Mathf.Max(currentTime - delta, 0.0f);
 		Draw();
 	}
 
@@ -41,12 +46,13 @@ public class Timer : MonoBehaviour {
 		Show(false);
 	}
 
-	private void Draw() {
-		clockImage.fillAmount = currentTime / startTime;
-		text.text = ((int)Mathf.Ceil(currentTime)).ToString();
+	public void Show(bool value) {
+		text.gameObject.SetActive(value);
+		clockImage.gameObject.SetActive(value);
 	}
 
-	private void Show(bool value) {
-		clockImage.gameObject.SetActive(value);
+	private void Draw() {
+		clockImage.fillAmount = 1.0f - (currentTime / startTime);
+		text.text = ((int)Mathf.Ceil(currentTime)).ToString();
 	}
 }
