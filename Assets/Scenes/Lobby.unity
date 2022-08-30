@@ -196,7 +196,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &796458776
 GameObject:
@@ -282,7 +282,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1542082419
 GameObject:
@@ -501,7 +501,7 @@ PrefabInstance:
       objectReference: {fileID: 1542082421}
     - target: {fileID: 1526879113226874509, guid: eb670d788863a564cbe23d6cec6ec572, type: 3}
       propertyPath: m_Name
-      value: Canvas
+      value: Lobby
       objectReference: {fileID: 0}
     - target: {fileID: 1526879113226874518, guid: eb670d788863a564cbe23d6cec6ec572, type: 3}
       propertyPath: m_Pivot.x

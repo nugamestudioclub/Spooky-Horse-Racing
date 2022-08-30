@@ -14,15 +14,13 @@ public class InputController : MonoBehaviour {
 	private static InputController instance;
 
 	void Awake() {
-		try {
-			if( instance == null ) {
-				instance = this;
-				Initialize();
-				
-			}
+		if( instance == null ) {
+			instance = this;
+			DontDestroyOnLoad(gameObject);
+			Initialize();
 		}
-		catch( Exception ex ) {
-			Debug.Log(ex.Message);
+		else {
+			Destroy(gameObject);
 		}
 	}
 
