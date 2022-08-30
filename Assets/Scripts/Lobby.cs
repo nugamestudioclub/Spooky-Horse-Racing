@@ -58,9 +58,9 @@ public class Lobby : MonoBehaviour {
 		var indices = new List<int>(count);
 
 		while( indices.Count < count ) {
-			int index;
+			int index = rng.Next(names.Count);
 			do
-				index = rng.Next(names.Count);
+				index = (index + 1) % names.Count;
 			while( indices.Contains(index) );
 			indices.Add(index);
 		}
