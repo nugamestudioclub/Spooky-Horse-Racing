@@ -2,43 +2,51 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Timer : MonoBehaviour
-{
+public class Timer : MonoBehaviour {
 
-    [SerializeField]
-    private TMP_Text timerText;
-    [SerializeField]
-    private Image background;
+	[SerializeField]
+	private TMP_Text text;
 
-    [SerializeField]
-    private float startingTimer;
-    private float currentTimer;
+	[SerializeField]
+	private Image clockImage;
 
-    public bool IsRunning { get; private set; }
+	[Range(1.0f, float.MaxValue)]
+	[SerializeField]
+	private float startTime;
 
-    public void BeginTimer()
-    {
-        IsRunning = true;
-    }
+	public float currentTime;
 
-    public void UpdateTimer()
-    {
-        currentTimer = Mathf.Max(currentTimer - Time.deltaTime, 0f);
-        timerText.text = ((int)currentTimer).ToString();
-        background.fillAmount = currentTimer / startingTimer;
-        if (currentTimer <= 0)
-        {
-            print("Timer done");
-            //Transition to game
-        }
-    }
+	public bool IsRunning { get; private set; }
 
-    public void ResetTimer()
-    {
-        IsRunning = false;
-        currentTimer = startingTimer;
-        background.fillAmount = 1;
-        timerText.text = ((int)currentTimer).ToString();
-    }
+	public bool IsDone => Mathf.Approximately(currentTime, 0.0f);
 
+	void Start() {
+		Reset();
+	}
+
+	public void Begin() {
+		IsRunning = true;
+		Draw();
+		Show(true);
+	}
+
+	public void Tick() {
+		currentTime = Mathf.Max(currentTime - Time.deltaTime, 0f);
+		Draw();
+	}
+
+	public void Reset() {
+		IsRunning = false;
+		currentTime = startTime;
+		Show(false);
+	}
+
+	private void Draw() {
+		clockImage.fillAmount = currentTime / startTime;
+		text.text = ((int)Mathf.Ceil(currentTime)).ToString();
+	}
+
+	private void Show(bool value) {
+		clockImage.gameObject.SetActive(value);
+	}
 }

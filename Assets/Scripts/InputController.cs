@@ -26,7 +26,6 @@ public class InputController : MonoBehaviour {
 		}
 	}
 
-
 	private void Initialize() {
 		for( int i = 0; i < PlayerCount; ++i ) {
 			var devices = FindDevices(i);
@@ -105,6 +104,8 @@ public class InputController : MonoBehaviour {
 
 		if( playerId == 0 )
 			devices.Add(Keyboard.current);
+		if( playerId == 1 )
+			devices.Add(Mouse.current);
 
 		return devices;
 	}
@@ -131,7 +132,7 @@ public class InputController : MonoBehaviour {
 	}
 
 	private static void BindInteraction(InputActionMap actionMap, InputData data) {
-		BindButton("Start", actionMap, v => data.start = v, "<Keyboard>/z", "<Gamepad>/leftTrigger");
+		BindButton("Start", actionMap, v => data.start = v, "<Keyboard>/z", "<Gamepad>/leftTrigger", "<Mouse>/leftButton");
 		BindButton("Cancel", actionMap, v => data.cancel = v, "<Keyboard>/x", "<Gamepad>/rightTrigger");
 		BindButton("Jump", actionMap, v => data.jump = v, "<Keyboard>/w"); ///
 		BindButton("Fire", actionMap, v => data.fire = v, "<Keyboard>/space"); ///
