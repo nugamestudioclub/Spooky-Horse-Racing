@@ -5,12 +5,14 @@ using System.Linq;
 
 public class Lobby : MonoBehaviour {
 	[SerializeField]
-	LobbyPlayer[] players;
+	LobbyPlayer[] players = new LobbyPlayer[Race.PlayerCount];
 
 	private static readonly System.Random rng = new System.Random();
 
 	[SerializeField]
 	private Timer timer;
+
+	private bool playersRegistered;
 
 	void Start() {
 		timer.Reset();
@@ -36,8 +38,12 @@ public class Lobby : MonoBehaviour {
 			timer.Reset();
 		}
 
-		if( timer.IsDone )
-			Debug.Log("Timer is done!");
+		if( timer.IsDone && !playersRegistered ) {
+			for( int i = 0; i < players.Length; ++i )
+				RegisterPlayer(i);
+			playersRegistered = true;
+			// scene transition?
+		}
 	}
 
 	private void UpdatePlayer(int playerId) {
@@ -51,6 +57,13 @@ public class Lobby : MonoBehaviour {
 			players[playerId].IsConnected = false;
 			players[playerId].IsReady = false;
 		}
+	}
+
+	private void RegisterPlayer(int playerId) {
+		var playerInfo = players[playerId].IsReady
+			? new PlayerInfo(players[playerId].Name)
+			: PlayerInfo.Idle;
+		Race.Register(playerId, playerInfo);
 	}
 
 	private static IList<string> GetStartingNames(int count) {
