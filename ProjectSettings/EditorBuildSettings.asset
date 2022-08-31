@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby.unity
     guid: ed25fc6f05b872f4c9b0b0a1afeab25d
   - enabled: 1
-    path: Assets/Scenes/RollingScene.unity
-    guid: 05c20e985bc45b14d8808ed958e2afa9
+    path: Assets/Scenes/Race.unity
+    guid: 5577dfac683a352429d62073cd62ce00
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: ec454516923832d4fb1d29689176f2a4, type: 2}
