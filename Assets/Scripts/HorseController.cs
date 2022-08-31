@@ -18,6 +18,8 @@ public class HorseController : MonoBehaviour
     private int id = 0;
     private bool callbackMade = false;
     
+    private int loadCurIndex=0;
+    private Vector2 curTarget;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +34,7 @@ public class HorseController : MonoBehaviour
         PlayerPrefs.SetInt("LatestId", id + 1);
         positions = new List<Vector2>();
         rotation = new List<float>();
+        curTarget = transform.position;
     }
 
     // Update is called once per frame
@@ -46,7 +49,7 @@ public class HorseController : MonoBehaviour
         }
         if(recordingState == RecordingState.Run)
         {
-            transform.position = Vector2.Lerp((Vector2)transform.position, positions[curIndex],0.5f);
+            transform.position = Vector2.Lerp((Vector2)transform.position, curTarget,0.5f);
             transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,rotation[curIndex]);
         }
     }
@@ -64,8 +67,11 @@ public class HorseController : MonoBehaviour
 
         if(recordingState == RecordingState.Record)
         {
-            positions.Add(transform.position);
-            rotation.Add(transform.eulerAngles.z);
+            SaveTransform();
+        }
+        else
+        {
+            LoadTransform();
         }
         //print(positions.Count);
 
@@ -74,59 +80,27 @@ public class HorseController : MonoBehaviour
             target.AddForce((Vector2)transform.up*25,ForceMode2D.Impulse);
         }
         
-    }
-    public void LoadTransforms()
-    {
-        string rawPlayersData = PlayerPrefs.GetString("PlayersData");
-        SaveData playersData = JsonUtility.FromJson<SaveData>(rawPlayersData);
-        PlayerSaveData myData = playersData.getFromId(this.id);
-        this.positions.AddRange(myData.positions);
-        this.rotation.AddRange(myData.rotations);
-
-    }
-    public void SaveTransforms(bool isTemp=false)
-    {
-        string reference = "PlayersData";
-        if (isTemp)
-        {
-            reference = "TemporaryRunData";
-        }
-        //PlayersData: "{name:id:"
-        string rawPlayersData = PlayerPrefs.GetString(reference);
-        SaveData playersData = JsonUtility.FromJson<SaveData>(rawPlayersData);
-        PlayerSaveData myData = new PlayerSaveData();
-        myData.positions = positions.ToArray();
-        myData.rotations = rotation.ToArray();
-        myData.id = id;
-        myData.name = name;
-        PlayerSaveData[] newData = new PlayerSaveData[playersData.data.Length + 1];
-        for(int i = 0; i < playersData.data.Length; i++)
-        {
-            newData[i] = playersData.data[i];
-        }
-        newData[newData.Length - 1] = myData;
-        playersData.data = newData;
-        string updated = JsonUtility.ToJson(playersData);
-
-        PlayerPrefs.SetString(reference, updated);
+        
     }
 
-    public void CallbackSave()
+    void SaveTransform()
     {
-        string rawPlayersData = PlayerPrefs.GetString("TemporaryRunData");
-        SaveData playersData = JsonUtility.FromJson<SaveData>(rawPlayersData);
-        PlayerSaveData player = playersData.getFromId(id);
-        if (player == null)
-        {
-            callbackMade = true;
+        int lastInput = PlayerPrefs.GetInt("LastInput" + this.id);
+        
+        PlayerPrefs.SetString("VectorPos" + lastInput, JsonUtility.ToJson(new PlayerSaveData(this.transform.position,this.transform.rotation.x)));
+        PlayerPrefs.SetInt("LastInput" + this.id, lastInput + 1);
 
-            
-        }
-        else
-        {
-            
+    }
+    void LoadTransform()
+    {
 
-        }
+        string data = PlayerPrefs.GetString("VectorPos" + loadCurIndex);
+        PlayerSaveData sData = JsonUtility.FromJson<PlayerSaveData>(data);
+        this.curTarget = transform.position;
+        this.transform.eulerAngles = new Vector2(sData.rotation,0);
+        
+
+        loadCurIndex++;   
     }
 }
 /// <summary>
@@ -138,26 +112,20 @@ public class SaveData
     [SerializeField]
     public PlayerSaveData[] data;
 
-    public PlayerSaveData getFromId(int id)
-    {
-        foreach(PlayerSaveData psd in this.data)
-        {
-            if(psd.id == id)
-            {
-                return psd;
-            }
-        }
-        return null;
-    }
+   
 }
 /// <summary>
 /// Structure representation of one ghost run.
 /// </summary>
 [System.Serializable]
 public class PlayerSaveData {
-    public Vector2[] positions;
-    public float[] rotations;
-    public int id;
-    public string name;
+    public Vector2 position;
+    public float rotation;
+
+    public PlayerSaveData(Vector2 pos,float rot)
+    {
+        this.position = pos;
+        this.rotation = rot;
+    }
 }
 
