@@ -25,14 +25,6 @@ public class bowScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z);
-        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-        float a = mousePos.x - transform.position.x;
-        float b = mousePos.y - transform.position.y;
-        angle = Mathf.Atan2(b, a) * 180 / Mathf.PI;
-
-        transform.rotation = Quaternion.Euler(0, 0, angle);
-
         if (Input.GetMouseButtonDown(0)) chargeBow();
 
         if (Input.GetMouseButtonUp(0)) fireBow();
@@ -50,12 +42,21 @@ public class bowScript : MonoBehaviour
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("bowCharge"))
         {
+            // determines angle of fire
+            Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z);
+            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            float a = mousePos.x - transform.position.x;
+            float b = mousePos.y - transform.position.y;
+            angle = Mathf.Atan2(b, a) * 180 / Mathf.PI;
+
+            // determines power of fire
             float charge = Mathf.Round(animator.GetCurrentAnimatorStateInfo(0).normalizedTime * 10 / 2) + 1;
             if (charge > 6) charge = 6;
             GameObject arrow = Instantiate(arrowPrefab, transform.position + transform.right * 2, transform.rotation);
             Rigidbody2D rigidbody2D = arrow.GetComponent<Rigidbody2D>();
             Vector3 dir = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.right;
 
+            // fires arrow
             rigidbody2D.AddForce(dir * charge * bowPower, ForceMode2D.Impulse);
 
             animator.Play("fireReload");

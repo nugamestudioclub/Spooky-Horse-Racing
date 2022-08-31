@@ -15,11 +15,6 @@ public class arrowScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*        transform.rotation.SetLookRotation(rigidBody2D.velocity);
-                //transform.LookAt(rigidBody2D.velocity);
-
-                transform.right = transform.position;*/
-
         Vector3 targetDirection = rigidBody2D.velocity.normalized;
         transform.rotation = Quaternion.LookRotation(transform.forward, targetDirection);
         transform.Rotate(0, 0, 90);
