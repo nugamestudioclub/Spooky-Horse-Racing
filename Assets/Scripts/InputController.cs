@@ -14,19 +14,15 @@ public class InputController : MonoBehaviour {
 	private static InputController instance;
 
 	void Awake() {
-		try {
-			if( instance == null ) {
-				instance = this;
-				Initialize();
-				
-			}
-			print("Initialized!");
+		if( instance == null ) {
+			instance = this;
+			DontDestroyOnLoad(gameObject);
+			Initialize();
 		}
-		catch( Exception ex ) {
-			Debug.Log(ex.Message);
+		else {
+			Destroy(gameObject);
 		}
 	}
-
 
 	private void Initialize() {
 		for( int i = 0; i < PlayerCount; ++i ) {
@@ -106,6 +102,8 @@ public class InputController : MonoBehaviour {
 
 		if( playerId == 0 )
 			devices.Add(Keyboard.current);
+		if( playerId == 1 )
+			devices.Add(Mouse.current);
 
 		return devices;
 	}
@@ -132,8 +130,8 @@ public class InputController : MonoBehaviour {
 	}
 
 	private static void BindInteraction(InputActionMap actionMap, InputData data) {
-		BindButton("Start", actionMap, v => data.start = v, "<Keyboard>/z", "<Gamepad>/leftTrigger");
-		BindButton("Cancel", actionMap, v => data.cancel = v, "<Keyboard>/x", "<Gamepad>/rightTrigger");
+		BindButton("Start", actionMap, v => data.start = v, "<Keyboard>/z", "<Gamepad>/leftTrigger", "<Mouse>/leftButton");
+		BindButton("Cancel", actionMap, v => data.cancel = v, "<Keyboard>/x", "<Gamepad>/rightTrigger", "<Mouse>/rightButton");
 		BindButton("Jump", actionMap, v => data.jump = v, "<Keyboard>/w"); ///
 		BindButton("Fire", actionMap, v => data.fire = v, "<Keyboard>/space"); ///
 	}

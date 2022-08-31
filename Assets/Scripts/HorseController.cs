@@ -103,6 +103,7 @@ public class HorseController : MonoBehaviour
         loadCurIndex++;   
     }
 }
+
 /// <summary>
 /// Structure representation of ghost runs.
 /// </summary>
