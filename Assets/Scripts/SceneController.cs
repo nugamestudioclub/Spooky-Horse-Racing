@@ -6,6 +6,6 @@ public static class SceneController {
 	}
 
 	public static void LoadRace() {
-		SceneManager.LoadScene("RollingScene"); ///
+		SceneManager.LoadScene("Race");
 	}
 }
