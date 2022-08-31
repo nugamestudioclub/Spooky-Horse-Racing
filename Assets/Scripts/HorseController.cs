@@ -3,161 +3,157 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum RecordingState { Record, Run};
-public class HorseController : MonoBehaviour
-{
-    [SerializeField]
-    private Rigidbody2D target;
+public enum RecordingState { Record, Run };
+public class HorseController : MonoBehaviour {
+	[SerializeField]
+	private Rigidbody2D target;
 
-    private Vector2 prevPos;
+	[SerializeField]
+	private SpriteRenderer spriteRenderer;
 
-    private List<Vector2> positions;
-    private List<float> rotation;
-    public RecordingState recordingState;
-    private int curIndex = 0;
-    private int id = 0;
-    private bool callbackMade = false;
-    
+	private Vector2 prevPos;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-        prevPos = target.transform.position;
-        id = PlayerPrefs.GetInt("LastestId");
-        if(id == 0)
-        {
-            PlayerPrefs.SetInt("LatestId", Random.Range(10000, 01000000));
-        }
-        PlayerPrefs.SetInt("LatestId", id + 1);
-        positions = new List<Vector2>();
-        rotation = new List<float>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-        transform.position = target.transform.position;
-        
-        if(recordingState == RecordingState.Run&&Vector2.Distance(transform.position,positions[curIndex])<0.3f)
-        {
-            curIndex = (curIndex + 1) % positions.Count;
-        }
-        if(recordingState == RecordingState.Run)
-        {
-            transform.position = Vector2.Lerp((Vector2)transform.position, positions[curIndex],0.5f);
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,rotation[curIndex]);
-        }
-    }
-    private void FixedUpdate()
-    {
-
-        Vector2 delta = (Vector2)target.transform.position - prevPos;
-        float angle = (Mathf.Atan2(delta.y, delta.x)/(Mathf.PI*2))*360;
-
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
-            transform.localEulerAngles.y,
-            angle);
-        prevPos = target.transform.position;
+	private List<Vector2> positions;
+	private List<float> rotation;
+	public RecordingState recordingState;
+	private int curIndex = 0;
+	private int id = 0;
+	private bool callbackMade = false;
 
 
-        if(recordingState == RecordingState.Record)
-        {
-            positions.Add(transform.position);
-            rotation.Add(transform.eulerAngles.z);
-        }
-        //print(positions.Count);
+	// Start is called before the first frame update
+	void Start() {
 
-        if (InputController.GetJumpUp(0)&&target.GetComponent<RollPhysics>().IsGrounded)
-        {
-            target.AddForce((Vector2)transform.up*25,ForceMode2D.Impulse);
-        }
-        
-    }
-    public void LoadTransforms()
-    {
-        string rawPlayersData = PlayerPrefs.GetString("PlayersData");
-        SaveData playersData = JsonUtility.FromJson<SaveData>(rawPlayersData);
-        PlayerSaveData myData = playersData.getFromId(this.id);
-        this.positions.AddRange(myData.positions);
-        this.rotation.AddRange(myData.rotations);
+		prevPos = target.transform.position;
+		id = PlayerPrefs.GetInt("LastestId");
+		if( id == 0 ) {
+			PlayerPrefs.SetInt("LatestId", Random.Range(10000, 01000000));
+		}
+		PlayerPrefs.SetInt("LatestId", id + 1);
+		positions = new List<Vector2>();
+		rotation = new List<float>();
+	}
 
-    }
-    public void SaveTransforms(bool isTemp=false)
-    {
-        string reference = "PlayersData";
-        if (isTemp)
-        {
-            reference = "TemporaryRunData";
-        }
-        //PlayersData: "{name:id:"
-        string rawPlayersData = PlayerPrefs.GetString(reference);
-        SaveData playersData = JsonUtility.FromJson<SaveData>(rawPlayersData);
-        PlayerSaveData myData = new PlayerSaveData();
-        myData.positions = positions.ToArray();
-        myData.rotations = rotation.ToArray();
-        myData.id = id;
-        myData.name = name;
-        PlayerSaveData[] newData = new PlayerSaveData[playersData.data.Length + 1];
-        for(int i = 0; i < playersData.data.Length; i++)
-        {
-            newData[i] = playersData.data[i];
-        }
-        newData[newData.Length - 1] = myData;
-        playersData.data = newData;
-        string updated = JsonUtility.ToJson(playersData);
+	// Update is called once per frame
+	void Update() {
 
-        PlayerPrefs.SetString(reference, updated);
-    }
+		transform.position = target.transform.position;
 
-    public void CallbackSave()
-    {
-        string rawPlayersData = PlayerPrefs.GetString("TemporaryRunData");
-        SaveData playersData = JsonUtility.FromJson<SaveData>(rawPlayersData);
-        PlayerSaveData player = playersData.getFromId(id);
-        if (player == null)
-        {
-            callbackMade = true;
+		if( recordingState == RecordingState.Run && Vector2.Distance(transform.position, positions[curIndex]) < 0.3f ) {
+			curIndex = (curIndex + 1) % positions.Count;
+		}
+		if( recordingState == RecordingState.Run ) {
+			transform.position = Vector2.Lerp((Vector2)transform.position, positions[curIndex], 0.5f);
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, rotation[curIndex]);
+		}
+	}
+	private void FixedUpdate() {
+		HandleRotation();
+		HandlePosition();
+		HandleJump();
+	}
 
-            
-        }
-        else
-        {
-            
+	public void LoadTransforms() {
+		string rawPlayersData = PlayerPrefs.GetString("PlayersData");
+		SaveData playersData = JsonUtility.FromJson<SaveData>(rawPlayersData);
+		PlayerSaveData myData = playersData.getFromId(this.id);
+		this.positions.AddRange(myData.positions);
+		this.rotation.AddRange(myData.rotations);
+	}
 
-        }
-    }
+	public void SaveTransforms(bool isTemp = false) {
+		string reference = "PlayersData";
+		if( isTemp ) {
+			reference = "TemporaryRunData";
+		}
+		//PlayersData: "{name:id:"
+		string rawPlayersData = PlayerPrefs.GetString(reference);
+		SaveData playersData = JsonUtility.FromJson<SaveData>(rawPlayersData);
+		PlayerSaveData myData = new PlayerSaveData();
+		myData.positions = positions.ToArray();
+		myData.rotations = rotation.ToArray();
+		myData.id = id;
+		myData.name = name;
+		PlayerSaveData[] newData = new PlayerSaveData[playersData.data.Length + 1];
+		for( int i = 0; i < playersData.data.Length; i++ ) {
+			newData[i] = playersData.data[i];
+		}
+		newData[newData.Length - 1] = myData;
+		playersData.data = newData;
+		string updated = JsonUtility.ToJson(playersData);
+
+		PlayerPrefs.SetString(reference, updated);
+	}
+
+	public void CallbackSave() {
+		string rawPlayersData = PlayerPrefs.GetString("TemporaryRunData");
+		SaveData playersData = JsonUtility.FromJson<SaveData>(rawPlayersData);
+		PlayerSaveData player = playersData.getFromId(id);
+		if( player == null ) {
+			callbackMade = true;
+
+
+		}
+		else {
+
+
+		}
+	}
+
+	private void HandleRotation() {
+		Vector2 delta = (Vector2)target.transform.position - prevPos;
+		float angle = 360 * Mathf.Atan2(delta.y, delta.x) / (2 * Mathf.PI);
+		bool flip = Mathf.Abs(angle) > 90;
+
+		spriteRenderer.flipX = flip;
+		angle -= flip ? 180 : 0;
+
+		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
+			transform.localEulerAngles.y,
+			angle);
+	}
+
+	private void HandlePosition() {
+		prevPos = target.transform.position;
+
+		if( recordingState == RecordingState.Record ) {
+			positions.Add(transform.position);
+			rotation.Add(transform.eulerAngles.z);
+		}
+	}
+
+	private void HandleJump() {
+		if( InputController.GetJumpUp(0) && target.GetComponent<RollPhysics>().IsGrounded ) {
+			target.AddForce((Vector2)transform.up * 25, ForceMode2D.Impulse);
+		}
+	}
 }
+
 /// <summary>
 /// Structure representation of ghost runs.
 /// </summary>
 [System.Serializable]
-public class SaveData
-{
-    [SerializeField]
-    public PlayerSaveData[] data;
+public class SaveData {
+	[SerializeField]
+	public PlayerSaveData[] data;
 
-    public PlayerSaveData getFromId(int id)
-    {
-        foreach(PlayerSaveData psd in this.data)
-        {
-            if(psd.id == id)
-            {
-                return psd;
-            }
-        }
-        return null;
-    }
+	public PlayerSaveData getFromId(int id) {
+		foreach( PlayerSaveData psd in this.data ) {
+			if( psd.id == id ) {
+				return psd;
+			}
+		}
+		return null;
+	}
 }
 /// <summary>
 /// Structure representation of one ghost run.
 /// </summary>
 [System.Serializable]
 public class PlayerSaveData {
-    public Vector2[] positions;
-    public float[] rotations;
-    public int id;
-    public string name;
+	public Vector2[] positions;
+	public float[] rotations;
+	public int id;
+	public string name;
 }
 
