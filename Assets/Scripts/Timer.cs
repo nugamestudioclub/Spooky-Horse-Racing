@@ -13,8 +13,9 @@ public class Timer : MonoBehaviour {
 	[Range(1.0f, float.MaxValue)]
 	[SerializeField]
 	private float startTime;
-
-	public float currentTime;
+	
+	[SerializeField]
+	private float currentTime;
 
 	public bool IsRunning { get; private set; }
 
