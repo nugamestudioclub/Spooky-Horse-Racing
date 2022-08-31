@@ -341,7 +341,6 @@ GameObject:
   m_Component:
   - component: {fileID: 364777544}
   - component: {fileID: 364777543}
-  - component: {fileID: 364777542}
   m_Layer: 0
   m_Name: Camera_0
   m_TagString: Untagged
@@ -349,14 +348,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &364777542
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 364777541}
-  m_Enabled: 1
 --- !u!20 &364777543
 Camera:
   m_ObjectHideFlags: 0
@@ -467,7 +458,6 @@ GameObject:
   m_Component:
   - component: {fileID: 627446407}
   - component: {fileID: 627446406}
-  - component: {fileID: 627446405}
   m_Layer: 0
   m_Name: Camera_3
   m_TagString: Untagged
@@ -475,14 +465,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &627446405
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 627446404}
-  m_Enabled: 1
 --- !u!20 &627446406
 Camera:
   m_ObjectHideFlags: 0
@@ -550,7 +532,6 @@ GameObject:
   m_Component:
   - component: {fileID: 881235906}
   - component: {fileID: 881235905}
-  - component: {fileID: 881235904}
   m_Layer: 0
   m_Name: Camera_2
   m_TagString: Untagged
@@ -558,14 +539,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &881235904
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 881235903}
-  m_Enabled: 1
 --- !u!20 &881235905
 Camera:
   m_ObjectHideFlags: 0
@@ -726,7 +699,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1800074287}
   - component: {fileID: 1800074286}
-  - component: {fileID: 1800074285}
   m_Layer: 0
   m_Name: Camera_1
   m_TagString: Untagged
@@ -734,14 +706,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1800074285
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1800074284}
-  m_Enabled: 1
 --- !u!20 &1800074286
 Camera:
   m_ObjectHideFlags: 0
