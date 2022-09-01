@@ -40,7 +40,7 @@ public class Race : MonoBehaviour {
 
 	void Update() {
 		switch( state ) {
-		case RaceState.Startup:
+		case RaceState.Waiting:
 			currentTime = Mathf.Max(currentTime - Time.deltaTime, 0.0f);
 			if( Mathf.Approximately(currentTime, 0.0f) ) {
 				timer.Show(true);
@@ -63,7 +63,7 @@ public class Race : MonoBehaviour {
 	}
 
 	private void Initialize() {
-		state = RaceState.Startup;
+		state = RaceState.Waiting;
 		currentTime = delayTime;
 	}
 
