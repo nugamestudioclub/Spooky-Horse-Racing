@@ -112,6 +112,7 @@ public class InputController : MonoBehaviour {
 		var actionMap = new InputActionMap(name);
 
 		BindMovement(actionMap, data);
+		BindAim(actionMap, data);
 		BindInteraction(actionMap, data);
 
 		actionMap.devices = devices as InputDevice[] ?? devices.ToArray();
@@ -129,10 +130,19 @@ public class InputController : MonoBehaviour {
 		BindVector2("Movement", actionMap, v => data.movement = v, upPaths, downPaths, leftPaths, rightPaths);
 	}
 
+	private static void BindAim(InputActionMap actionMap, InputData data) {
+		var upPaths = new List<string>() { "<Keyboard>/w", "<Gamepad>/rightStick/up" };
+		var downPaths = new List<string>() { "<Keyboard>/s", "<Gamepad>/rightStick/down" };
+		var leftPaths = new List<string>() { "<Keyboard>/a", "<Gamepad>/rightStick/left" };
+		var rightPaths = new List<string>() { "<Keyboard>/d", "<Gamepad>/rightStick/right" };
+
+		BindVector2("Aim", actionMap, v => data.movement = v, upPaths, downPaths, leftPaths, rightPaths);
+	}
+
 	private static void BindInteraction(InputActionMap actionMap, InputData data) {
 		BindButton("Start", actionMap, v => data.start = v, "<Keyboard>/z", "<Gamepad>/leftTrigger", "<Mouse>/leftButton");
 		BindButton("Cancel", actionMap, v => data.cancel = v, "<Keyboard>/x", "<Gamepad>/rightTrigger", "<Mouse>/rightButton");
-		BindButton("Jump", actionMap, v => data.jump = v, "<Keyboard>/w"); ///
+		BindButton("Jump", actionMap, v => data.jump = v, "<Keyboard>/e"); ///
 		BindButton("Fire", actionMap, v => data.fire = v, "<Keyboard>/space"); ///
 	}
 
