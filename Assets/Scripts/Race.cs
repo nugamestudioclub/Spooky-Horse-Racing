@@ -1,122 +1,162 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public enum RaceState {
-	None,
-	Waiting,
-	Countdown,
-	Racing,
-	Finished,
+public enum RaceState
+{
+    None,
+    Waiting,
+    Countdown,
+    Racing,
+    Finished,
 }
 
-public class Race : MonoBehaviour {
-	public static readonly int MaxPlayers = 4;
+public class Race : MonoBehaviour
+{
+    public static readonly int MaxPlayers = 4;
 
-	public static readonly int MaxRacers = 8;
+    public static readonly int MaxRacers = 8;
 
-	private int activePlayerCount;
+    private int activePlayerCount;
 
-	public static readonly int GhostCount = 4;
+    public static readonly int GhostCount = 4;
 
-	private int ActiveRacerCount => activePlayerCount + GhostCount;
+    private int ActiveRacerCount => activePlayerCount + GhostCount;
 
-	private static Race instance;
+    private static Race instance;
 
-	[SerializeField]
-	private RaceState state;
+    [SerializeField]
+    private Camera[] cameras = new Camera[MaxPlayers];
 
-	[Range(0.0f, float.MaxValue)]
-	[SerializeField]
-	private float delayTime;
+    [SerializeField]
+    private RaceState state;
 
-	private float currentTime;
+    [Range(0.0f, float.MaxValue)]
+    [SerializeField]
+    private float delayTime;
 
-	[SerializeField]
-	private Timer timer;
+    private float currentTime;
 
-	private static readonly PlayerInfo[] playerInfo = new PlayerInfo[MaxRacers];
+    [SerializeField]
+    private Timer timer;
 
-	[SerializeField]
-	private Transform[] spawnPoints = new Transform[MaxRacers];
+    private static readonly PlayerInfo[] playerInfo = new PlayerInfo[MaxRacers];
 
-	[SerializeField]
-	private GameObject[] playerPrefabs = new GameObject[MaxPlayers];
+    [SerializeField]
+    private Transform[] spawnPoints = new Transform[MaxRacers];
 
-	[SerializeField]
-	private GameObject[] ghostPrefabs = new GameObject[GhostCount];
+    [SerializeField]
+    private GameObject[] playerPrefabs = new GameObject[MaxPlayers];
 
-	void Awake() {
-		if( instance == null ) {
-			instance = this;
-			DontDestroyOnLoad(gameObject);
-			Initialize();
-		}
-		else {
-			Destroy(gameObject);
-		}
-	}
+    [SerializeField]
+    private GameObject[] ghostPrefabs = new GameObject[GhostCount];
 
-	void Start() {
-		SpawnRacers();
-	}
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+            Initialize();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
-	void Update() {
-		switch( state ) {
-		case RaceState.Waiting:
-			Tick();
-			if( DoneWaiting() ) {
-				timer.Show(true);
-				timer.Begin();
-				state = RaceState.Countdown;
-			}
-			break;
-		case RaceState.Countdown:
-			if( timer.IsDone ) {
-				timer.Show(false);
-				timer.Reset();
-				state = RaceState.Racing;
-			}
-			break;
-		case RaceState.Racing:
-			break;
-		case RaceState.Finished:
-			Clear();
-			break;
-		}
-	}
+    void Start()
+    {
+        SpawnRacers();
+    }
 
-	private void Initialize() {
-		currentTime = delayTime;
-		state = RaceState.Waiting;
-	}
 
-	public static void Register(int playerId, PlayerInfo playerRegistration) {
-		playerInfo[playerId] = playerRegistration;
-	}
+    void Update()
+    {
+        switch (state)
+        {
+            case RaceState.Waiting:
+                Tick();
+                if (DoneWaiting())
+                {
+                    timer.Show(true);
+                    timer.Begin();
+                    state = RaceState.Countdown;
+                }
+                break;
+            case RaceState.Countdown:
+                if (timer.IsDone)
+                {
+                    timer.Show(false);
+                    timer.Reset();
+                    state = RaceState.Racing;
+                }
+                break;
+            case RaceState.Racing:
+                break;
+            case RaceState.Finished:
+                Clear();
+                break;
+        }
+    }
 
-	private void Tick() {
-		currentTime = Mathf.Max(currentTime - Time.deltaTime, 0.0f);
-	}
+    private void Initialize()
+    {
+        currentTime = delayTime;
+        state = RaceState.Waiting;
+        foreach (Camera camera in cameras)
+        {
+            camera.enabled = false;
+        }
+    }
 
-	private bool DoneWaiting() {
-		return Mathf.Approximately(currentTime, 0.0f);
-	}
+    public static void Register(int playerId, PlayerInfo playerRegistration)
+    {
+        playerInfo[playerId] = playerRegistration;
+    }
 
-	private void SpawnRacers() {
-		int pos = 0;
+    private void Tick()
+    {
+        currentTime = Mathf.Max(currentTime - Time.deltaTime, 0.0f);
+    }
 
-		for( int i = 0; i < MaxPlayers; ++i )
-			if( playerInfo[i] != null )
-				Spawn(playerPrefabs[i], spawnPoints[pos++]);
-		for( int i = 0; i < GhostCount; ++i )
-			Spawn(ghostPrefabs[i], spawnPoints[pos++]);
-	}
+    private bool DoneWaiting()
+    {
+        return Mathf.Approximately(currentTime, 0.0f);
+    }
 
-	private void Spawn(GameObject obj, Transform transform) {
-		Instantiate(obj, transform.position, transform.rotation);
-	}
+    private void SpawnRacers()
+    {
+        int pos = 0;
 
-	private void Clear() {
-		for( int i = 0; i < MaxPlayers; ++i )
-			playerInfo[i] = null;
-	}
+        for (int i = 0; i < MaxPlayers; ++i)
+            if (playerInfo[i] != null)
+            {
+                var player = Spawn(playerPrefabs[i], spawnPoints[pos++]);
+                AssignCameras(i, player);
+                cameras[i].gameObject.transform.parent = player.transform;
+            }
+
+        for (int i = 0; i < GhostCount; ++i)
+            Spawn(ghostPrefabs[i], spawnPoints[pos++]);
+    }
+
+    private void AssignCameras(int index, GameObject parent)
+    {
+        cameras[index].transform.parent = parent.transform;
+        cameras[index].transform.position = parent.transform.position + Vector3.back;
+        cameras[index].transform.rotation = parent.transform.rotation;
+        cameras[index].enabled = true;
+    }
+
+
+    private GameObject Spawn(GameObject obj, Transform transform)
+    {
+        return Instantiate(obj, transform.position, transform.rotation);
+    }
+
+    private void Clear()
+    {
+        for (int i = 0; i < MaxPlayers; ++i)
+            playerInfo[i] = null;
+    }
 }
