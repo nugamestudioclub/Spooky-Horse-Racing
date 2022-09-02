@@ -24,7 +24,7 @@ public class Race : MonoBehaviour {
 	private static Race instance;
 
 	[SerializeField]
-	private Camera[] cameras = new Camera[MaxPlayers];
+	private CameraFollow[] cameras = new CameraFollow[MaxPlayers];
 
 	[SerializeField]
 	private RaceState state;
@@ -100,8 +100,8 @@ public class Race : MonoBehaviour {
 	private void Initialize() {
 		currentTime = delayTime;
 		state = RaceState.Waiting;
-		foreach( Camera camera in cameras ) {
-			camera.enabled = false;
+		foreach( CameraFollow camera in cameras ) {
+			camera.Camera.enabled = false;
 		}
 	}
 
@@ -147,10 +147,9 @@ public class Race : MonoBehaviour {
 	}
 
 	private void AssignCamera(int index, GameObject parent) {
-		cameras[index].transform.parent = parent.transform;
-		cameras[index].transform.position = parent.transform.position + Vector3.back;
-		cameras[index].transform.rotation = parent.transform.rotation;
-		cameras[index].enabled = true;
+        var cameraAnchor = parent.GetComponentInChildren<HorseController>().transform;
+		cameras[index].Target = cameraAnchor;
+		cameras[index].Camera.enabled = true;
 	}
 
 

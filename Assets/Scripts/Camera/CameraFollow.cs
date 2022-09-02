@@ -7,19 +7,34 @@ public class CameraFollow : MonoBehaviour
     [SerializeField]
     private Transform target;
 
+    public Transform Target
+    {
+        get => target;
+        set => target = value;
+    }
+
+
+    [SerializeField]
+    private Camera myCamera;
+
+    public Camera Camera => myCamera;
+
     [SerializeField]
     private float followStrength;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
+
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector3 newTarg = new Vector3(target.transform.position.x,target.transform.position.y,transform.position.z);
-        transform.position = Vector3.Lerp(newTarg, transform.position, Time.deltaTime);
+        if (target != null)
+        {
+            Vector3 newTarg = new Vector3(target.transform.position.x, target.transform.position.y, transform.position.z);
+            transform.position = Vector3.Lerp(newTarg, transform.position, Time.deltaTime);
+        }
+
     }
+
+
 }
