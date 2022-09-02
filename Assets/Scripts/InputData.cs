@@ -22,10 +22,10 @@ public struct ButtonState {
 public class InputData {
 	public Vector2 movement;
 	public Vector2 aim;
-	public ButtonState jump = new ButtonState();
-	public ButtonState fire = new ButtonState();
-	public ButtonState start = new ButtonState();
-	public ButtonState cancel = new ButtonState();
+	public ButtonState jump;
+	public ButtonState fire;
+	public ButtonState start;
+	public ButtonState cancel;
 
 	public InputData Clone() {
 		return new InputData {

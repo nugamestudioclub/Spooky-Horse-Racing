@@ -23,8 +23,8 @@ public class playerController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
-		var movement = InputController.GetMovement(0); ///
-		angle = Mathf.Atan2(movement.y, movement.x) * 180 / Mathf.PI;
+		var aim = InputController.GetAim(0); ///
+		angle = Mathf.Atan2(aim.y, aim.x) * 180 / Mathf.PI;
 
 		rightArmBone.rotation = Quaternion.Euler(0, 0, angle);
 		leftBicepBone.rotation = Quaternion.Euler(0, 0, angle);
@@ -54,9 +54,8 @@ public class playerController : MonoBehaviour {
 		}
 
 		// Following code is for demo purposes
-		var demoMovement = InputController.GetMovement(0); /// 
-		if( !Mathf.Approximately(demoMovement.magnitude, 0.0f) )
-			transform.Translate(50 * Time.deltaTime * demoMovement, Space.World);
+		if( InputController.IsMoving(0, out Vector2 movement) ) ///
+			transform.Translate(50 * Time.deltaTime * movement, Space.World);
 		// end demo code
 	}
 

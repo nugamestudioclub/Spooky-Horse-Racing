@@ -136,7 +136,7 @@ public class InputController : MonoBehaviour {
 		var leftPaths = new List<string>() { "<Keyboard>/a", "<Gamepad>/rightStick/left" };
 		var rightPaths = new List<string>() { "<Keyboard>/d", "<Gamepad>/rightStick/right" };
 
-		BindVector2("Aim", actionMap, v => data.movement = v, upPaths, downPaths, leftPaths, rightPaths);
+		BindVector2("Aim", actionMap, v => data.aim = v, upPaths, downPaths, leftPaths, rightPaths);
 	}
 
 	private static void BindInteraction(InputActionMap actionMap, InputData data) {
@@ -152,7 +152,17 @@ public class InputController : MonoBehaviour {
 
 	public static Vector2 GetMovement(int playerId) => instance.inputData[playerId].movement;
 
+	public static bool IsMoving(int playerId, out Vector2 movement, float epsilon = float.Epsilon) {
+		movement = GetMovement(playerId);
+		return movement.magnitude - epsilon > 0.0f;
+	}
+
 	public static Vector2 GetAim(int playerId) => instance.inputData[playerId].aim;
+
+	public static bool IsAiming(int playerId, out Vector2 aim, float epsilon = float.Epsilon) {
+		aim = GetAim(playerId);
+		return aim.magnitude - epsilon > 0.0f;
+	}
 
 	public static bool GetJumpDown(int playerId) => instance.inputData[playerId].jump.IsDown;
 	public static bool GetJump(int playerId) => instance.inputData[playerId].jump;
