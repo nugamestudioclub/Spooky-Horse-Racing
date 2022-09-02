@@ -4216,6 +4216,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &2099593709 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4367274284317120008, guid: 8c5fc45b25cb43e4481310bdd31ffa4b, type: 3}
+  m_PrefabInstance: {fileID: 4367274284688638836}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4367274284688638836
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4223,6 +4228,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4367274284317120010, guid: 8c5fc45b25cb43e4481310bdd31ffa4b, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 2099593709}
     - target: {fileID: 4367274284487756657, guid: 8c5fc45b25cb43e4481310bdd31ffa4b, type: 3}
       propertyPath: m_Name
       value: Player
