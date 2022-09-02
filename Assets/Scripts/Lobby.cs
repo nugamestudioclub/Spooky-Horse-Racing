@@ -5,7 +5,7 @@ using System.Linq;
 
 public class Lobby : MonoBehaviour {
 	[SerializeField]
-	LobbyPlayer[] players = new LobbyPlayer[Race.PlayerCount];
+	LobbyPlayer[] players = new LobbyPlayer[Race.MaxPlayers];
 
 	private static readonly System.Random rng = new System.Random();
 
@@ -40,7 +40,7 @@ public class Lobby : MonoBehaviour {
 
 		if( timer.IsDone && !playersRegistered ) {
 			for( int i = 0; i < players.Length; ++i )
-				RegisterPlayer(i);
+				HandleRegistration(i);
 			playersRegistered = true;
 			SceneController.LoadRace();
 		}
@@ -59,11 +59,9 @@ public class Lobby : MonoBehaviour {
 		}
 	}
 
-	private void RegisterPlayer(int playerId) {
-		var playerInfo = players[playerId].IsReady
-			? new PlayerInfo(players[playerId].Name)
-			: PlayerInfo.Idle;
-		Race.Register(playerId, playerInfo);
+	private void HandleRegistration(int playerId) {
+		if( players[playerId].IsReady )
+			Race.Register(playerId, new PlayerInfo(players[playerId].Name));
 	}
 
 	private static IList<string> GetStartingNames(int count) {

@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: c81cea9390dd285469b621e585e98207, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.13876057, a: 1}
+  m_Color: {r: 0.376, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4367274284487756658}
   m_Layer: 0
-  m_Name: Race_Player
+  m_Name: Race_Ghost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
