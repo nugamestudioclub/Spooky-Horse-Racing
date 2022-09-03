@@ -71,19 +71,14 @@ public class RacePlayerView : MonoBehaviour {
 	}
 
 	private static string ToOrdinal(int value) {
-		if( value < 0 )
-			return value.ToString();
+		int magnitude = Math.Abs(value);
+		int remainder = magnitude % 100;
 
-		int remainder = value % 100;
-
-		if( remainder >= 11 && remainder <= 13 )
-			return value + "th";
-
-		return (value % 10) switch {
-			1 => value + "st",
-			2 => value + "nd",
-			3 => value + "rd",
-			_ => value + "th",
-		};
+		return (value < 0 ? "-" : "")
+			+ magnitude
+			+ (remainder >= 11 && remainder <= 13
+				? "th"
+				: (magnitude % 10) switch { 1 => "st", 2 => "nd", 3 => "rd", _ => "th" }
+		);
 	}
 }
