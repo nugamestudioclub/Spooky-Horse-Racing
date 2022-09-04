@@ -57,20 +57,13 @@ public class Race : MonoBehaviour {
 	private RacePlayerView[] playerViews = new RacePlayerView[MaxPlayers];
 
 	void Awake() {
-		if( instance == null ) {
-			instance = this;
-			DontDestroyOnLoad(gameObject);
-			Initialize();
-		}
-		else {
-			Destroy(gameObject);
-		}
+		instance = this;
+		Initialize();
 	}
 
 	void Start() {
 		SpawnRacers();
 	}
-
 
 	void Update() {
 		switch( state ) {
@@ -147,7 +140,7 @@ public class Race : MonoBehaviour {
 	}
 
 	private void AssignCamera(int index, GameObject parent) {
-        var cameraAnchor = parent.GetComponentInChildren<HorseController>().transform;
+		var cameraAnchor = parent.GetComponentInChildren<HorseController>().transform;
 		cameras[index].Target = cameraAnchor;
 		cameras[index].Camera.enabled = true;
 	}
