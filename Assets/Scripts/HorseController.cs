@@ -22,6 +22,8 @@ public class HorseController : MonoBehaviour {
 	private int loadCurIndex = 0;
 	private Vector2 curTarget;
 
+	private Vector2 lastMovement;
+
 	void Start() {
 
 		prevPos = target.transform.position;
@@ -79,33 +81,33 @@ public class HorseController : MonoBehaviour {
 	}
 
 	private void HandleRotation() {
-		if( target.IsGrounded ) {
-			float angle = 360 * Mathf.Atan2(target.Orientation.y, target.Orientation.x) / (2 * Mathf.PI);
-			bool flip = InputController.GetMovement(0).x < 0;
+		var (angle, flipped) = CalcRotationAndFlip();
 
-			spriteRenderer.flipX = flip;
-			angle -= 90;
-
-			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
-				transform.localEulerAngles.y,
-				angle);
-		}
-
-		else {
-			Vector2 delta = (Vector2)target.transform.position - prevPos;
-
-			float angle = 360 * Mathf.Atan2(delta.y, delta.x) / (2 * Mathf.PI);
-			bool flip = Mathf.Abs(angle) > 90;
-
-			spriteRenderer.flipX = flip;
-			angle -= flip ? 180 : 0;
-
-			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
-				transform.localEulerAngles.y,
-				angle);
-		}
+		spriteRenderer.flipX = flipped;
+		transform.localEulerAngles = new Vector3(
+			transform.localEulerAngles.x,
+			transform.localEulerAngles.y,
+			angle);
 	}
 
+	private (float, bool) CalcRotationAndFlip() {
+		float angle = 360 / (2 * Mathf.PI);
+		bool flipped;
+
+		if( target.IsGrounded ) {
+			angle = (angle * Mathf.Atan2(target.Orientation.y, target.Orientation.x)) - 90;
+			Vector2 movement = InputController.GetMovement(0);
+			flipped = (Mathf.Approximately(movement.x, 0.0f) ? lastMovement : movement).x < 0;
+		}
+		else {
+			Vector2 delta = (Vector2)target.transform.position - prevPos;
+			angle = (angle * Mathf.Atan2(delta.y, delta.x));
+			flipped = Mathf.Abs(angle) > 90;
+			angle += flipped ? 180 : 0;
+		}
+
+		return (angle, flipped);
+	}
 
 	/*
 	private void HandleRotation() {
