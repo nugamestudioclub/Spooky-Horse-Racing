@@ -19,7 +19,7 @@ public class Race : MonoBehaviour {
 
 	public static readonly int GhostCount = 4;
 
-	public static int TotalRacers => instance.ActivePlayers + GhostCount;
+	public static int TotalRacers => (instance == null ? 0 : instance.ActivePlayers) + GhostCount;
 
 	private static Race instance;
 
@@ -40,6 +40,8 @@ public class Race : MonoBehaviour {
 
 	private static readonly PlayerProfile[] playerProfiles = new PlayerProfile[MaxRacers];
 
+	private static readonly PlayerResults[] playerResults = new PlayerResults[MaxRacers];
+
 	[SerializeField]
 	private Transform[] spawnPoints = new Transform[MaxRacers];
 
@@ -49,9 +51,9 @@ public class Race : MonoBehaviour {
 	[SerializeField]
 	private GameObject[] ghostPrefabs = new GameObject[GhostCount];
 
-	private RacePlayer[] humanRacers = new RacePlayer[MaxPlayers];
+	private readonly RacePlayer[] humanRacers = new RacePlayer[MaxPlayers];
 
-	private RacePlayer[] ghostRacers = new RacePlayer[GhostCount];
+	private readonly RacePlayer[] ghostRacers = new RacePlayer[GhostCount];
 
 	[SerializeField]
 	private RacePlayerView[] playerViews = new RacePlayerView[MaxPlayers];
@@ -110,6 +112,10 @@ public class Race : MonoBehaviour {
 		return instance.humanRacers[playerId] == null
 			? new PlayerStats()
 			: instance.humanRacers[playerId].Stats();
+	}
+
+	public static PlayerResults GetPlayerResults(int playerId) {
+		return playerResults[playerId] ?? PlayerResults.Default;
 	}
 
 	private void Tick() {
