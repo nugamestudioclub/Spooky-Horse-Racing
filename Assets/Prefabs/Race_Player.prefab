@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2dd8b852485e6842a8932d8a88daf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 3766783674870001647}
+  target: {fileID: 7648310989341846126}
   spriteRenderer: {fileID: 4367274284317120008}
   recordingState: 0
 --- !u!1 &4367274284487756657
@@ -277,5 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367546ed2353d6145857ba6ce16a5d86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
+  rb: {fileID: 3766783674870001647}
+  circleCollider: {fileID: 7880680979647062541}
   speed: 100
+  jumpStrength: 50

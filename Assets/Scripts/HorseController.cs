@@ -5,7 +5,7 @@ using UnityEngine;
 public enum RecordingState { Record, Run };
 public class HorseController : MonoBehaviour {
 	[SerializeField]
-	private Rigidbody2D target;
+	private RollPhysics target;
 
 	[SerializeField]
 	private SpriteRenderer spriteRenderer;
@@ -19,7 +19,7 @@ public class HorseController : MonoBehaviour {
 	private int id = 0;
 	private bool callbackMade = false;
 
-	private int loadCurIndex=0;
+	private int loadCurIndex = 0;
 	private Vector2 curTarget;
 
 	void Start() {
@@ -58,40 +58,77 @@ public class HorseController : MonoBehaviour {
 		else {
 			LoadTransform();
 		}
-
-		HandleJump();
 	}
 
 	void SaveTransform() {
-		int lastInput = PlayerPrefs.GetInt("LastInput" + this.id);
+		int lastInput = PlayerPrefs.GetInt("LastInput" + id);
 
-		PlayerPrefs.SetString("VectorPos" + lastInput, JsonUtility.ToJson(new PlayerSaveData(this.transform.position, this.transform.rotation.x)));
-		PlayerPrefs.SetInt("LastInput" + this.id, lastInput + 1);
+		PlayerPrefs.SetString("VectorPos" + lastInput, JsonUtility.ToJson(new PlayerSaveData(transform.position, transform.rotation.x)));
+		PlayerPrefs.SetInt("LastInput" + id, lastInput + 1);
 
 	}
 	void LoadTransform() {
 
 		string data = PlayerPrefs.GetString("VectorPos" + loadCurIndex);
 		PlayerSaveData sData = JsonUtility.FromJson<PlayerSaveData>(data);
-		this.curTarget = transform.position;
-		this.transform.eulerAngles = new Vector2(sData.rotation, 0);
+		curTarget = transform.position;
+		transform.eulerAngles = new Vector2(sData.rotation, 0);
 
 
 		loadCurIndex++;
 	}
 
 	private void HandleRotation() {
-		Vector2 delta = (Vector2)target.transform.position - prevPos;
-		float angle = 360 * Mathf.Atan2(delta.y, delta.x) / (2 * Mathf.PI);
-		bool flip = Mathf.Abs(angle) > 90;
+		if( target.IsGrounded ) {
+			float angle = 360 * Mathf.Atan2(target.Orientation.y, target.Orientation.x) / (2 * Mathf.PI);
+			bool flip = InputController.GetMovement(0).x < 0;
 
-		spriteRenderer.flipX = flip;
-		angle -= flip ? 180 : 0;
+			spriteRenderer.flipX = flip;
+			angle -= 90;
+
+			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
+				transform.localEulerAngles.y,
+				angle);
+		}
+
+		else {
+			Vector2 delta = (Vector2)target.transform.position - prevPos;
+
+			float angle = 360 * Mathf.Atan2(delta.y, delta.x) / (2 * Mathf.PI);
+			bool flip = Mathf.Abs(angle) > 90;
+
+			spriteRenderer.flipX = flip;
+			angle -= flip ? 180 : 0;
+
+			transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
+				transform.localEulerAngles.y,
+				angle);
+		}
+	}
+
+
+	/*
+	private void HandleRotation() {
+		bool flip = InputController.GetMovement(0).x < 0;
+		float angle = 360 / (2 * Mathf.PI);
+
+		if( target.IsGrounded ) {
+			angle *= Mathf.Atan2(target.Orientation.y, target.Orientation.x);
+			angle += 90;
+		}
+		else {
+			var delta = (Vector2)target.transform.position - prevPos;
+			angle *= Mathf.Atan2(delta.y, target.Orientation.x);
+			angle -= flip ? 180 : 0;
+		}
 
 		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
 			transform.localEulerAngles.y,
 			angle);
 	}
+	*/
+
+
 
 	private void HandlePosition() {
 		prevPos = target.transform.position;
@@ -99,12 +136,6 @@ public class HorseController : MonoBehaviour {
 		if( recordingState == RecordingState.Record ) {
 			positions.Add(transform.position);
 			rotation.Add(transform.eulerAngles.z);
-		}
-	}
-
-	private void HandleJump() {
-		if( InputController.GetJumpUp(0) && target.GetComponent<RollPhysics>().IsGrounded ) {
-			target.AddForce((Vector2)transform.up * 25, ForceMode2D.Impulse);
 		}
 	}
 }
@@ -128,8 +159,8 @@ public class PlayerSaveData {
 	public float rotation;
 
 	public PlayerSaveData(Vector2 pos, float rot) {
-		this.position = pos;
-		this.rotation = rot;
+		position = pos;
+		rotation = rot;
 	}
 }
 
