@@ -21,9 +21,10 @@ public class LineSmootherDrawer : Editor
         {
             lrs.GenerateEdgeCollider();
         }
-        if (GUILayout.Button("Simplify Mesh"))
+        if (GUILayout.Button("Simplify Line"))
         {
-            lrs.Line.Simplify(0.1f);
+
+            lrs.SimplifyLine();
         }
         //EditorGUI.EndProperty();
     }

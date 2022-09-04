@@ -1,6 +1,9 @@
 //CREDIT : https://github.com/llamacademy/line-renderer-collider/blob/main/Assets/Scripts/LineRendererSmoother.cs
 
+#if UNITY_EDITOR
+
 using UnityEngine;
+using UnityEditor;
 using System.Linq;
 [RequireComponent(typeof(LineRenderer))]
 public class LineRendererSmoother : MonoBehaviour
@@ -10,37 +13,9 @@ public class LineRendererSmoother : MonoBehaviour
     public float SmoothingLength = 2f;
     public int SmoothingSections = 10;
 
-    public void GenerateMeshCollider()
-    {
-        MeshCollider collider = GetComponent<MeshCollider>();
-
-        if (collider == null)
-        {
-            collider = gameObject.AddComponent<MeshCollider>();
-        }
-
-
-        Mesh mesh = new Mesh();
-        Line.BakeMesh(mesh, true);
-
-        // if you need collisions on both sides of the line, simply duplicate & flip facing the other direction!
-        // This can be optimized to improve performance ;)
-        int[] meshIndices = mesh.GetIndices(0);
-        int[] newIndices = new int[meshIndices.Length * 2];
-
-        int j = meshIndices.Length - 1;
-        for (int i = 0; i < meshIndices.Length; i++)
-        {
-            newIndices[i] = meshIndices[i];
-            newIndices[meshIndices.Length + i] = meshIndices[j];
-        }
-        mesh.SetIndices(newIndices, MeshTopology.Triangles, 0);
-
-        collider.sharedMesh = mesh;
-    }
-
     public void GenerateEdgeCollider()
     {
+        Undo.RecordObject(Line, nameof(GenerateEdgeCollider));
         EdgeCollider2D collider = GetComponent<EdgeCollider2D>();
 
         if (collider == null)
@@ -51,32 +26,28 @@ public class LineRendererSmoother : MonoBehaviour
 
         int size = Line.GetPositions(positions);
 
-        collider.SetPoints((from v in positions 
+        collider.SetPoints((from v in positions
                             select new Vector2(v.x - transform.position.x, v.y - transform.position.y)).ToList());
+        EditorUtility.SetDirty(Line);
+    }
 
-            /*
-        //Mesh mesh = new Mesh();
-        //Line.BakeMesh(mesh, true);
+    public void SimplifyLine()
+    {
+        Undo.RecordObject(Line, nameof(SimplifyLine));
+        Vector3[] positions = new Vector3[Line.positionCount];
 
-        // if you need collisions on both sides of the line, simply duplicate & flip facing the other direction!
-        // This can be optimized to improve performance ;)
-        int[] meshIndices = mesh.GetIndices(0);
-        int[] newIndices = new int[meshIndices.Length * 2];
+        int size = Line.GetPositions(positions);
 
-        int j = meshIndices.Length - 1;
-        for (int i = 0; i < meshIndices.Length; i++)
-        {
-            newIndices[i] = meshIndices[i];
-            newIndices[meshIndices.Length + i] = meshIndices[j];
-        }
-        mesh.SetIndices(newIndices, MeshTopology.Triangles, 0);
+        Line.SetPositions((positions).Select(v => new Vector3(v.x, v.y)).ToArray());
 
-        collider.sharedMesh = mesh;
-            */
+
+        Line.Simplify(0.1f);
+        EditorUtility.SetDirty(Line);
     }
 
     public void Smooth()
     {
+        Undo.RecordObject(Line, nameof(Smooth));
         BezierCurve[] curves = new BezierCurve[Line.positionCount - 1];
         for (int i = 0; i < curves.Length; i++)
         {
@@ -122,5 +93,8 @@ public class LineRendererSmoother : MonoBehaviour
                 index++;
             }
         }
+        EditorUtility.SetDirty(Line);
     }
 }
+
+#endif
