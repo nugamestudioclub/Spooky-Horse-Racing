@@ -58,11 +58,11 @@ public class ResultsPlayerView : MonoBehaviour {
 		coinsText.color = isBest ? BestColor : DefaultColor;
 	}
 
-	public void Draw(PlayerResults stats) {
-		SetName(stats.name);
-		SetPlace(stats.place, stats.isPlaceBest);
-		SetTime(stats.time, stats.isTimeBest);
-		SetHits(stats.hitCount, stats.isHitsBest);
-		SetCoins(stats.coinCount, stats.isCoinsBest);
+	public void Draw(PlayerResults results) {
+		SetName(results.name);
+		SetPlace(results.place, results.isPlaceBest);
+		SetTime(results.time, results.isTimeBest);
+		SetHits(results.hitCount, results.isHitsBest);
+		SetCoins(results.coinCount, results.isCoinsBest);
 	}
 }

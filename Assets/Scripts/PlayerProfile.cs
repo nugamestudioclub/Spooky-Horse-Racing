@@ -7,7 +7,9 @@ public class PlayerProfile
     public SpriteSheet Knight { get; private set; }
     public SpriteSheet Horse { get; private set; }
 
-    public static PlayerProfile Idle = new PlayerProfile("", null, null);
+
+    public static PlayerProfile Idle = new PlayerProfile("Idle Player", null, null);
+
 
     public PlayerProfile(string name, SpriteSheet knight, SpriteSheet horse)
     {

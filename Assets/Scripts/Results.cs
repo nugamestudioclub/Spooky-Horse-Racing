@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class Results : MonoBehaviour {
 	[SerializeField]
@@ -11,5 +12,10 @@ public class Results : MonoBehaviour {
 			players[i].Draw(Race.GetPlayerResults(i));
 		for( int i = totalRacers; i < Race.MaxRacers; ++i )
 			players[i].IsVisible = false;
+	}
+
+	void Update() {
+		if( Race.GetActiveIds().Any(id => InputController.GetStartDown(id)) )
+			SceneController.LoadLobby();
 	}
 }

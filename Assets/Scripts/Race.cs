@@ -16,11 +16,11 @@ public class Race : MonoBehaviour {
 
 	public static readonly int MaxRacers = 8;
 
-	public int ActiveHumanPlayers => playerProfiles.Count(x => x != null);
+	public int ActiveHumanPlayers { get; private set; }
 
 	public static readonly int GhostCount = 4;
 
-	public static int TotalRacers => (instance == null ? 0 : instance.ActiveHumanPlayers) + GhostCount;
+	public static int TotalRacers { get; private set; } = GhostCount;
 
 	private static Race instance;
 
@@ -38,6 +38,8 @@ public class Race : MonoBehaviour {
 
 	[SerializeField]
 	private Timer timer;
+
+	private static readonly bool[] active = new bool[MaxHumanPlayers];
 
 	private static readonly PlayerProfile[] playerProfiles = new PlayerProfile[MaxRacers];
 
@@ -68,6 +70,8 @@ public class Race : MonoBehaviour {
 
 	void Start() {
 		SpawnRacers();
+		foreach( var racer in GetAllRacers() )
+			racer.ControlEnabled = false;
 	}
 
 	void Update() {
@@ -81,15 +85,16 @@ public class Race : MonoBehaviour {
 
 	private void Initialize() {
 		currentTime = delayTime;
-		state = RaceState.Waiting;
-		foreach( CameraFollow camera in cameras ) {
+		for( int i = 0; i < active.Length; ++i )
+			active[i] = playerProfiles[i] != null;
+		foreach( CameraFollow camera in cameras )
 			camera.Camera.enabled = false;
-		}
+		state = RaceState.Waiting;
 	}
 
 	private void WaitingUpdate() {
 		currentTime = Mathf.Max(currentTime - Time.deltaTime, 0.0f);
-		if( DoneWaiting() ) {
+		if( IsDoneWaiting() ) {
 			timer.Show(true);
 			timer.Begin();
 			state = RaceState.Countdown;
@@ -100,6 +105,8 @@ public class Race : MonoBehaviour {
 		if( timer.IsDone ) {
 			timer.Show(false);
 			timer.Reset();
+			foreach( var racer in GetAllRacers() )
+				racer.ControlEnabled = true;
 			state = RaceState.Racing;
 		}
 	}
@@ -111,7 +118,8 @@ public class Race : MonoBehaviour {
 		foreach( var racer in ghostRacers )
 			if( racer != null )
 				racer.Time += Time.deltaTime;
-		// state = RaceState.Finished;
+		if( IsGameOver() )
+			state = RaceState.Finished;
 	}
 
 	private void FinishedUpdate() {
@@ -119,12 +127,22 @@ public class Race : MonoBehaviour {
 			SceneController.LoadResults();
 		}
 		else {
-			var racers = GetAllRacers().ToList();
-			var results = new List<PlayerResults>(racers.Count);
+			foreach( var racer in GetAllRacers() )
+				racer.ControlEnabled = false;
 
-			for( int i = 0; i < racers.Count; ++i )
-				results.Add(MakePlayerResults(GetPlayerProfile(i).Name, GetPlayerStats(i)));
-			results.Sort((a, b) => a.place != 0 && a.place < b.place ? -1 : 1);
+			var results = Enumerable.Range(0, MaxRacers)
+				.Select(i => MakePlayerResults(GetPlayerProfile(i).Name, GetPlayerStats(i)))
+				.ToList();
+
+			results.Sort((a, b) => {
+				if( a.place <= 0 && b.place > 0 )
+					return 1;
+				else if( a.place > 0 && b.place <= 0 )
+					return -1;
+				else
+					return a.place.CompareTo(b.place);
+			});
+
 			results.CopyTo(playerResults);
 
 			Clear();
@@ -132,8 +150,10 @@ public class Race : MonoBehaviour {
 		}
 	}
 
-	public static void Register(int playerId, PlayerProfile playerProfile) {
-		playerProfiles[playerId] = playerProfile;
+	public static IEnumerable<int> GetActiveIds() {
+		for( int i = 0; i < active.Length; ++i )
+			if( active[i] )
+				yield return i;
 	}
 
 	public IEnumerable<RacePlayer> GetHumanRacers() {
@@ -153,6 +173,10 @@ public class Race : MonoBehaviour {
 			yield return human;
 		foreach( var ghost in GetGhostRacers() )
 			yield return ghost;
+	}
+
+	public static void Register(int playerId, PlayerProfile playerProfile) {
+		playerProfiles[playerId] = playerProfile;
 	}
 
 	public static PlayerProfile GetPlayerProfile(int playerId) {
@@ -187,27 +211,57 @@ public class Race : MonoBehaviour {
 		return playerResults[playerId] ?? PlayerResults.Default;
 	}
 
-	private bool DoneWaiting() {
-		return Mathf.Approximately(currentTime, 0.0f);
-	}
-
 	private void SpawnRacers() {
 		int pos = 0;
 
+		ActiveHumanPlayers = 0;
 		for( int i = 0; i < MaxHumanPlayers; ++i ) {
-			bool isActive = playerProfiles[i] != null;
-			if( isActive ) {
-				var obj = Spawn(humanPrefabs[i], spawnPoints[pos++]);
-				humanRacers[i] = obj.GetComponent<RacePlayer>();
-				AssignCamera(i, obj);
-
+			if( active[i] ) {
+				LoadHuman(i, pos++);
+				++ActiveHumanPlayers;
 			}
-			playerViews[i].IsEnabled = isActive;
+			playerViews[i].IsEnabled = active[i];
 		}
 		for( int i = 0; i < GhostCount; ++i ) {
-			var obj = Spawn(ghostPrefabs[i], spawnPoints[pos++]);
-			ghostRacers[i] = obj.GetComponent<RacePlayer>();
+			LoadGhost(i, pos++);
 		}
+
+		TotalRacers = ActiveHumanPlayers + GhostCount;
+	}
+
+	private GameObject Spawn(GameObject obj, Transform transform) {
+		return Instantiate(obj, transform.position, transform.rotation);
+	}
+
+	private void LoadHuman(int index, int position) {
+		var obj = Spawn(humanPrefabs[index], spawnPoints[position]);
+		var racer = obj.GetComponent<RacePlayer>();
+
+		racer.SetController(index);
+		racer.Name = GetPlayerProfile(index).Name;
+		racer.Id = index;
+		racer.IsGhost = false;
+		racer.Place = position + 1;
+
+		AssignCamera(index, obj);
+
+		humanRacers[index] = racer;
+
+	}
+
+	// needs to load ghost data from database
+	private void LoadGhost(int index, int position) {
+		var obj = Spawn(humanPrefabs[index], spawnPoints[position]);
+		var racer = obj.GetComponent<RacePlayer>();
+		int id = index + MaxHumanPlayers;
+
+		// racer.SetController(-1);
+		racer.Name = GetPlayerProfile(id).Name;
+		racer.Id = id;
+		racer.IsGhost = true;
+		racer.Place = position + 1;
+
+		ghostRacers[index] = racer;
 	}
 
 	private void AssignCamera(int index, GameObject parent) {
@@ -216,11 +270,8 @@ public class Race : MonoBehaviour {
 		cameras[index].Camera.enabled = true;
 	}
 
-
-	private GameObject Spawn(GameObject obj, Transform transform) {
-		return Instantiate(obj, transform.position, transform.rotation);
-	}
-
+	// these check functions should read from database
+	// and update if there is a new high score
 	private bool CheckBestPlace(PlayerStats stats) {
 		return !stats.isGhost && stats.place == 1;
 	}
@@ -235,6 +286,13 @@ public class Race : MonoBehaviour {
 
 	private bool CheckBestCoins(PlayerStats stats) {
 		return !stats.isGhost; ///
+	}
+
+	private bool IsDoneWaiting() {
+		return Mathf.Approximately(currentTime, 0.0f);
+	}
+	private bool IsGameOver() {
+		return false; ///
 	}
 
 	private void Clear() {
