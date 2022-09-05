@@ -18,7 +18,15 @@ public class RollPhysics : MonoBehaviour {
 
 	public bool IsGrounded { get; private set; }
 
-	void Start() {
+    [SerializeField]
+    private float jumpMinimum = 0.5f;
+
+	[SerializeField]
+	private float jumpAcceleration = 10f;
+
+	private float jumpScale;
+
+    void Start() {
 		rb = GetComponent<Rigidbody2D>();
 	}
 
@@ -43,9 +51,24 @@ public class RollPhysics : MonoBehaviour {
 	}
 
 	private void HandleJump() {
-		if( InputController.GetJumpDown(0) && IsGrounded ) {
-			rb.AddForce(jumpStrength * Orientation, ForceMode2D.Impulse);
-		}
+		if (IsGrounded)
+        {
+			if(InputController.GetJumpDown(0)) // charge jump
+            {
+				//reset jump
+				jumpScale = jumpMinimum;
+
+            }
+			else if (InputController.GetJump(0))
+			{
+				//increment time held
+				jumpScale = Mathf.Min(jumpScale + jumpAcceleration, 1f);
+			}
+			else if (InputController.GetJumpUp(0))
+            {
+				rb.AddForce(jumpScale * jumpStrength * Orientation, ForceMode2D.Impulse);
+			}
+        }
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
