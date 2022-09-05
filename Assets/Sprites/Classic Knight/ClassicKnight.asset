@@ -12,4 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fac7ffc837511046877e1e617ef5291, type: 3}
   m_Name: ClassicKnight
   m_EditorClassIdentifier: 
-  sprites: []
+  sprites:
+  - {fileID: 21300000, guid: e6e898819f837ec4c925c04f7b274f26, type: 3}
+  - {fileID: 21300000, guid: 07273f221c5a54944bb12d8597712bf7, type: 3}
+  - {fileID: 21300000, guid: 4748b092c693183408668b2dfd280cc0, type: 3}
+  - {fileID: 21300000, guid: 8c3dfd417b5ca4447a63cf4213179373, type: 3}
+  - {fileID: 21300000, guid: ddec6e14dd4d9ec40a514e875b66f23f, type: 3}
+  - {fileID: 21300000, guid: 2dd9ab67ba81b784f8c02a95b83b6254, type: 3}
+  - {fileID: 21300000, guid: 01d786afb379f7943b659a7ced616a48, type: 3}
+  - {fileID: 21300000, guid: 501e0f107906dde4fb373db25ffa033b, type: 3}
+  - {fileID: 21300000, guid: f31ea9ee154400647bd1d5c0a16cb463, type: 3}
