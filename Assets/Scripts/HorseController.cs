@@ -11,6 +11,9 @@ public class HorseController : MonoBehaviour
     [SerializeField]
     private SpriteRenderer spriteRenderer;
 
+    [SerializeField]
+    Animator animator;
+
     private Vector2 prevPos;
 
     private List<Vector2> positions;
@@ -60,6 +63,7 @@ public class HorseController : MonoBehaviour
     {
         HandleRotation();
         HandlePosition();
+        HandleAnimationSpeed();
 
         if (recordingState == RecordingState.Record)
         {
@@ -132,28 +136,6 @@ public class HorseController : MonoBehaviour
         return (angle, flipped);
     }
 
-    /*
-	private void HandleRotation() {
-		bool flip = InputController.GetMovement(0).x < 0;
-		float angle = 360 / (2 * Mathf.PI);
-
-		if( target.IsGrounded ) {
-			angle *= Mathf.Atan2(target.Orientation.y, target.Orientation.x);
-			angle += 90;
-		}
-		else {
-			var delta = (Vector2)target.transform.position - prevPos;
-			angle *= Mathf.Atan2(delta.y, target.Orientation.x);
-			angle -= flip ? 180 : 0;
-		}
-
-		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
-			transform.localEulerAngles.y,
-			angle);
-	}
-	*/
-
-
 
     private void HandlePosition()
     {
@@ -165,7 +147,22 @@ public class HorseController : MonoBehaviour
             rotation.Add(transform.eulerAngles.z);
         }
     }
+
+    private void HandleAnimationSpeed()
+    {
+        if (target.IsGrounded)
+        {
+            //change animation speed based on speed
+            animator.speed = target.Speed / target.MaxSpeed;
+        } else
+        {
+            animator.speed = 1;
+        }
+    }
+
 }
+
+
 
 /// <summary>
 /// Structure representation of ghost runs.

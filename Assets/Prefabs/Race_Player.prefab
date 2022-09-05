@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4367274284317120009}
   - component: {fileID: 4367274284317120008}
   - component: {fileID: 1315667745899301219}
+  - component: {fileID: 6315574751142212295}
   m_Layer: 0
   m_Name: Horse
   m_TagString: Untagged
@@ -26,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4367274284317120015}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 4, z: 1}
+  m_LocalPosition: {x: 0, y: 0.15, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_Children: []
   m_Father: {fileID: 4367274284487756658}
   m_RootOrder: 0
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: c81cea9390dd285469b621e585e98207, type: 3}
+  m_Sprite: {fileID: 21300000, guid: debdcee23d12a494b897402da7645efd, type: 3}
   m_Color: {r: 1, g: 0, b: 0.13876057, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,7 +98,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 7648310989341846126}
   spriteRenderer: {fileID: 4367274284317120008}
+  animator: {fileID: 6315574751142212295}
   recordingState: 0
+--- !u!95 &6315574751142212295
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4367274284317120015}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5a9861de0b35176408a742f194bb955e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4367274284487756657
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,7 +300,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 3766783674870001647}
   circleCollider: {fileID: 7880680979647062541}
-  speed: 100
   jumpStrength: 60
   jumpMinimum: 0.3
   jumpAcceleration: 1
+  acceleration: 100
+  maxSpeed: 100

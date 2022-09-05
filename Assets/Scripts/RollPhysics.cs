@@ -8,15 +8,10 @@ public class RollPhysics : MonoBehaviour {
 	[SerializeField]
 	CircleCollider2D circleCollider;
 
-	[SerializeField]
-	private float speed = 100;
+	
 
 	[SerializeField]
 	private float jumpStrength = 60;
-
-	public Vector2 Orientation { get; private set; }
-
-	public bool IsGrounded { get; private set; }
 
 	[SerializeField]
 	private float jumpMinimum = 0.3f;
@@ -25,6 +20,22 @@ public class RollPhysics : MonoBehaviour {
 	private float jumpAcceleration = 1.0f;
 
 	private float jumpScale;
+
+	[SerializeField]
+	private float acceleration = 100;
+
+	private float speed = 100;
+	public float Speed { get => speed; private set => speed = value; }
+
+	[SerializeField]
+	private float maxSpeed = 100;
+	public float MaxSpeed { get => maxSpeed; private set => maxSpeed = value; }
+
+	public Vector2 Orientation { get; private set; }
+
+	public bool IsGrounded { get; private set; }
+
+	
 
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
@@ -37,7 +48,13 @@ public class RollPhysics : MonoBehaviour {
 	}
 
 	private void HandleMovement() {
-		rb.AddTorque(-InputController.GetMovement(0).x * Time.deltaTime * speed, ForceMode2D.Impulse);
+		rb.AddTorque(-InputController.GetMovement(0).x * Time.deltaTime * acceleration, ForceMode2D.Impulse);
+		Speed = Mathf.Clamp(rb.velocity.magnitude, 0f, maxSpeed);
+		if (rb.velocity.magnitude > maxSpeed)
+        {
+			rb.velocity = rb.velocity.normalized * maxSpeed;
+        }
+
 	}
 
 	private void HandleOrientation() {
