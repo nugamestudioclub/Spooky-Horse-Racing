@@ -63,22 +63,10 @@ public class RacePlayerView : MonoBehaviour {
 		if( IsEnabled ) {
 			var stats = Race.GetPlayerStats(id);
 
-			placeText.text = $"{ToOrdinal(stats.place)} / {Race.TotalRacers}";
-			timeText.text = TimeSpan.FromSeconds(stats.time).ToString("m\\:ss\\.fff");
+			placeText.text = $"{Strings.ToOrdinal(stats.place)} / {Race.TotalRacers}";
+			timeText.text = Strings.TimestampFromSeconds(stats.time);
 			coinText.text = stats.coinCount.ToString();
 			hitText.text = stats.hitCount.ToString();
 		}
-	}
-
-	private static string ToOrdinal(int value) {
-		int magnitude = Math.Abs(value);
-		int remainder = magnitude % 100;
-
-		return (value < 0 ? "-" : "")
-			+ magnitude
-			+ (remainder >= 11 && remainder <= 13
-				? "th"
-				: (magnitude % 10) switch { 1 => "st", 2 => "nd", 3 => "rd", _ => "th" }
-		);
 	}
 }

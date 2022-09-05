@@ -5,7 +5,7 @@ using System.Linq;
 
 public class Lobby : MonoBehaviour {
 	[SerializeField]
-	LobbyPlayer[] players = new LobbyPlayer[Race.MaxPlayers];
+	LobbyPlayerView[] players = new LobbyPlayerView[Race.MaxPlayers];
 
 	private static readonly System.Random rng = new System.Random();
 

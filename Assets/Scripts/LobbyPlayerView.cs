@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class LobbyPlayer : MonoBehaviour {
+public class LobbyPlayerView : MonoBehaviour {
 	[SerializeField]
 	private int playerId;
 
