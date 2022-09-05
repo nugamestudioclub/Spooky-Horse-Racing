@@ -10,7 +10,7 @@ public class SpriteSheet : ScriptableObject, IReadOnlyCollection<Sprite>
     [SerializeField]
     private Sprite[] sprites;
 
-    public Sprite this[int index] => sprites[index];
+    public Sprite this[int index] => sprites[index % Count];
 
     public int Count => sprites.Length;
 
