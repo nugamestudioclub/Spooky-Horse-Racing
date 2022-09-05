@@ -8,4 +8,8 @@ public static class SceneController {
 	public static void LoadRace() {
 		SceneManager.LoadScene("Race");
 	}
+
+	public static void LoadResults() {
+		SceneManager.LoadScene("Results");
+	}
 }
