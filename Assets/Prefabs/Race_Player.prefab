@@ -280,4 +280,6 @@ MonoBehaviour:
   rb: {fileID: 3766783674870001647}
   circleCollider: {fileID: 7880680979647062541}
   speed: 100
-  jumpStrength: 50
+  jumpStrength: 60
+  jumpMinimum: 0.3
+  jumpAcceleration: 1

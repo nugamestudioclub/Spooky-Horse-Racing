@@ -9,24 +9,24 @@ public class RollPhysics : MonoBehaviour {
 	CircleCollider2D circleCollider;
 
 	[SerializeField]
-	private float speed = 100f;
+	private float speed = 100;
 
 	[SerializeField]
-	private float jumpStrength = 50;
+	private float jumpStrength = 60;
 
 	public Vector2 Orientation { get; private set; }
 
 	public bool IsGrounded { get; private set; }
 
-    [SerializeField]
-    private float jumpMinimum = 0.5f;
+	[SerializeField]
+	private float jumpMinimum = 0.3f;
 
 	[SerializeField]
-	private float jumpAcceleration = 10f;
+	private float jumpAcceleration = 1.0f;
 
 	private float jumpScale;
 
-    void Start() {
+	void Start() {
 		rb = GetComponent<Rigidbody2D>();
 	}
 
@@ -45,30 +45,24 @@ public class RollPhysics : MonoBehaviour {
 			const int CAPACITY = 3;
 			var contactPoints = new ContactPoint2D[CAPACITY];
 			int size = circleCollider.GetContacts(contactPoints);
-			
+
 			Orientation = contactPoints[0].normal;
 		}
 	}
 
 	private void HandleJump() {
-		if (IsGrounded)
-        {
-			if(InputController.GetJumpDown(0)) // charge jump
-            {
-				//reset jump
-				jumpScale = jumpMinimum;
-
-            }
-			else if (InputController.GetJump(0))
-			{
-				//increment time held
-				jumpScale = Mathf.Min(jumpScale + jumpAcceleration, 1f);
+		if( IsGrounded ) {
+			if( InputController.GetJump(0) ) {
+				jumpScale = Mathf.Clamp(jumpScale + jumpAcceleration * Time.deltaTime, jumpMinimum, 1.0f);
 			}
-			else if (InputController.GetJumpUp(0))
-            {
+			else if( InputController.GetJumpUp(0) ) {
+				Debug.Log(jumpScale);
 				rb.AddForce(jumpScale * jumpStrength * Orientation, ForceMode2D.Impulse);
 			}
-        }
+		}
+		else {
+			jumpScale = 0.0f;
+		}
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
