@@ -157,7 +157,7 @@ public class FirebaseLoader : MonoBehaviour
         
         if (buf.Count > 0)
         {
-            print(buf[0]);
+            // print(buf[0]);
             buf.RemoveAt(0);
         }
 

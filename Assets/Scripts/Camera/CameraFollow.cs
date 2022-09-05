@@ -2,24 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
-{
-    [SerializeField]
-    private Transform target;
+public class CameraFollow : MonoBehaviour {
+	[SerializeField]
+	private Transform target;
 
-    [SerializeField]
-    private float followStrength;
+	public Transform Target {
+		get => target;
+		set => target = value;
+	}
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        Vector3 newTarg = new Vector3(target.transform.position.x,target.transform.position.y,transform.position.z);
-        transform.position = Vector3.Lerp(newTarg, transform.position, Time.deltaTime);
-    }
+	[SerializeField]
+	private Camera myCamera;
+
+	public Camera Camera => myCamera;
+
+	[SerializeField]
+	private float followStrength;
+
+	void LateUpdate() {
+		if( target != null )
+			myCamera.transform.position = target.position + Vector3.back;
+	}
 }
