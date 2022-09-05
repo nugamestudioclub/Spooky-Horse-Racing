@@ -51,8 +51,9 @@ public class HorseController : MonoBehaviour {
 
 	private void FixedUpdate() {
 		HandleRotation();
-		HandlePosition();
 		HandleAnimations();
+		HandlePosition();
+		
 
 		if( recordingState == RecordingState.Record ) {
 			//SaveTransform();
@@ -136,7 +137,7 @@ public class HorseController : MonoBehaviour {
 			}
 			else {
 				//change animation speed based on speed
-				animator.speed = target.Speed / target.MaxSpeed;
+				//animator.speed = target.Speed / target.MaxSpeed;
 			}
 		}
 		else if( target.Velocity.y < 0 ) {
