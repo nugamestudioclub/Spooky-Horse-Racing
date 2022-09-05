@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4367274284317120008}
   - component: {fileID: 1315667745899301219}
   - component: {fileID: 6315574751142212295}
+  - component: {fileID: 7543821139560660332}
   m_Layer: 0
   m_Name: Horse
   m_TagString: Untagged
@@ -120,6 +121,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7543821139560660332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4367274284317120015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ef24d404f82f304d8a09f5af7ff6298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteSheet: {fileID: 11400000, guid: 0f8e3f4312a638d4bbc6df5832336ca0, type: 2}
+  spriteRenderer: {fileID: 4367274284317120008}
 --- !u!1 &4367274284487756657
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,6 +334,7 @@ GameObject:
   - component: {fileID: 4873707204679882548}
   - component: {fileID: 8423554079208965083}
   - component: {fileID: 5290145585153944591}
+  - component: {fileID: 9134113308766197033}
   m_Layer: 0
   m_Name: Nameplate
   m_TagString: Untagged
@@ -478,3 +494,17 @@ MonoBehaviour:
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
+--- !u!114 &9134113308766197033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9165616794417393823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ef24d404f82f304d8a09f5af7ff6298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteSheet: {fileID: 0}
+  spriteRenderer: {fileID: 4367274284317120008}
