@@ -69,26 +69,10 @@ public class Race : MonoBehaviour {
 
 	void Update() {
 		switch( state ) {
-		case RaceState.Waiting:
-			Tick();
-			if( DoneWaiting() ) {
-				timer.Show(true);
-				timer.Begin();
-				state = RaceState.Countdown;
-			}
-			break;
-		case RaceState.Countdown:
-			if( timer.IsDone ) {
-				timer.Show(false);
-				timer.Reset();
-				state = RaceState.Racing;
-			}
-			break;
-		case RaceState.Racing:
-			break;
-		case RaceState.Finished:
-			Clear();
-			break;
+		case RaceState.Waiting: WaitingUpdate(); break;
+		case RaceState.Countdown: CountdownUpdate(); break;
+		case RaceState.Racing: RacingUpdate(); break;
+		case RaceState.Finished: FinishedUpdate(); break;
 		}
 	}
 
@@ -98,6 +82,36 @@ public class Race : MonoBehaviour {
 		foreach( CameraFollow camera in cameras ) {
 			camera.Camera.enabled = false;
 		}
+	}
+
+	private void WaitingUpdate() {
+		currentTime = Mathf.Max(currentTime - Time.deltaTime, 0.0f);
+		if( DoneWaiting() ) {
+			timer.Show(true);
+			timer.Begin();
+			state = RaceState.Countdown;
+		}
+	}
+
+	private void CountdownUpdate() {
+		if( timer.IsDone ) {
+			timer.Show(false);
+			timer.Reset();
+			state = RaceState.Racing;
+		}
+	}
+
+	private void RacingUpdate() {
+		foreach( var racer in humanRacers )
+			if( racer != null )
+				racer.Time += Time.deltaTime;
+		foreach( var racer in ghostRacers )
+			if( racer != null )
+				racer.Time += Time.deltaTime;
+	}
+
+	private void FinishedUpdate() {
+		Clear();
 	}
 
 	public static void Register(int playerId, PlayerProfile playerProfile) {
@@ -116,10 +130,6 @@ public class Race : MonoBehaviour {
 
 	public static PlayerResults GetPlayerResults(int playerId) {
 		return playerResults[playerId] ?? PlayerResults.Default;
-	}
-
-	private void Tick() {
-		currentTime = Mathf.Max(currentTime - Time.deltaTime, 0.0f);
 	}
 
 	private bool DoneWaiting() {
