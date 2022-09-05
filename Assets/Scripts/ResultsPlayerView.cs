@@ -62,7 +62,7 @@ public class ResultsPlayerView : MonoBehaviour {
 		SetName(stats.name);
 		SetPlace(stats.place, stats.isPlaceBest);
 		SetTime(stats.time, stats.isTimeBest);
-		SetHits(stats.hitsCount, stats.isHitsBest);
-		SetCoins(stats.coinsCount, stats.isCoinsBest);
+		SetHits(stats.hitCount, stats.isHitsBest);
+		SetCoins(stats.coinCount, stats.isCoinsBest);
 	}
 }

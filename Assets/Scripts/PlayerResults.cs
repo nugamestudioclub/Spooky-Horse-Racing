@@ -7,16 +7,16 @@
 	public float time;
 	public bool isTimeBest;
 
-	public int hitsCount;
+	public int hitCount;
 	public bool isHitsBest;
 
-	public int coinsCount;
+	public int coinCount;
 	public bool isCoinsBest;
 
-	public static readonly PlayerResults Default = new PlayerResults("", place:0, time:0.0f, hitsCount:0, coinsCount:0);
+	public static readonly PlayerResults Default = new PlayerResults("", place:0, time:0.0f, hitCount:0, coinCount:0);
 
 	public PlayerResults(string name,
-		int place, float time, int hitsCount, int coinsCount,
+		int place, float time, int hitCount, int coinCount,
 		bool isPlaceBest = false, bool isTimeBest = false, bool isHitsBest = false, bool isCoinsBest = false
 	) {
 		this.name = name;
@@ -24,9 +24,9 @@
 		this.isPlaceBest = isPlaceBest;
 		this.time = time;
 		this.isTimeBest = isTimeBest;
-		this.hitsCount = hitsCount;
+		this.hitCount = hitCount;
 		this.isHitsBest = isHitsBest;
-		this.coinsCount = coinsCount;
+		this.coinCount = coinCount;
 		this.isCoinsBest = isCoinsBest;
 	}
 }

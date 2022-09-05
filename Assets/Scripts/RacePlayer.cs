@@ -6,6 +6,7 @@ public struct PlayerStats {
 	public float time;
 	public int coinCount;
 	public int hitCount;
+	public bool isGhost;
 }
 
 public class RacePlayer : MonoBehaviour {
@@ -33,12 +34,19 @@ public class RacePlayer : MonoBehaviour {
 		set => HitCount = Math.Max(value, 0);
 	}
 
+	private bool isGhost;
+	public bool IsGhost {
+		get => isGhost;
+		set => isGhost = value;
+	}
+
 	public PlayerStats Stats() {
 		return new PlayerStats {
 			place = place,
 			time = time,
 			coinCount = coinCount,
-			hitCount = hitCount
+			hitCount = hitCount,
+			isGhost = isGhost
 		};
 	}
 }
