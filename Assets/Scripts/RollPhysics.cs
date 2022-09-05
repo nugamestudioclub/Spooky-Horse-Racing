@@ -55,7 +55,6 @@ public class RollPhysics : MonoBehaviour {
 				jumpScale = Mathf.Clamp(jumpScale + jumpAcceleration * Time.deltaTime, jumpMinimum, 1.0f);
 			}
 			else if( InputController.GetJumpUp(ControllerId) ) {
-				Debug.Log(jumpScale);
 				rb.AddForce(jumpScale * jumpStrength * Orientation, ForceMode2D.Impulse);
 			}
 		}

@@ -233,29 +233,34 @@ public class Race : MonoBehaviour {
 		return Instantiate(obj, transform.position, transform.rotation);
 	}
 
-	private void LoadHuman(int id, int position) {
-		var obj = Spawn(humanPrefabs[id], spawnPoints[position]);
+	private void LoadHuman(int index, int position) {
+		var obj = Spawn(humanPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
 
-		racer.SetController(id);
+		racer.SetController(index);
+		racer.Name = GetPlayerProfile(index).Name;
+		racer.Id = index;
 		racer.IsGhost = false;
 		racer.Place = position + 1;
 
-		AssignCamera(id, obj);
+		AssignCamera(index, obj);
 
-		humanRacers[id] = racer;
+		humanRacers[index] = racer;
 
 	}
 
-	private void LoadGhost(int id, int position) {
-		var obj = Spawn(humanPrefabs[id], spawnPoints[position]);
+	private void LoadGhost(int index, int position) {
+		var obj = Spawn(humanPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
+		int id = index + MaxHumanPlayers;
 
 		// racer.SetController(-1);
+		racer.Name = GetPlayerProfile(id).Name;
+		racer.Id = id;
 		racer.IsGhost = true;
 		racer.Place = position + 1;
 
-		ghostRacers[id] = racer;
+		ghostRacers[index] = racer;
 	}
 
 	private void AssignCamera(int index, GameObject parent) {

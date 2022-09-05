@@ -61,10 +61,10 @@ public class HorseController : MonoBehaviour {
 		HandleAnimations();
 
 		if( recordingState == RecordingState.Record ) {
-			SaveTransform();
+			//SaveTransform();
 		}
 		else {
-			LoadTransform();
+			//LoadTransform();
 		}
 	}
 
