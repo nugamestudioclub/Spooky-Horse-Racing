@@ -3701,7 +3701,7 @@ MonoBehaviour:
   - {fileID: 881235904}
   - {fileID: 627446405}
   state: 0
-  delayTime: 2
+  delayTime: 0
   timer: {fileID: 1466823059}
   spawnPoints:
   - {fileID: 1846629688}
@@ -3898,6 +3898,10 @@ PrefabInstance:
     - target: {fileID: 4660605624895286850, guid: 054c8c8069a027f4b84f46a1e562c9ae, type: 3}
       propertyPath: m_Name
       value: Race_Timer
+      objectReference: {fileID: 0}
+    - target: {fileID: 5126143993485904518, guid: 054c8c8069a027f4b84f46a1e562c9ae, type: 3}
+      propertyPath: startTime
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6575292776226174019, guid: 054c8c8069a027f4b84f46a1e562c9ae, type: 3}
       propertyPath: m_Pivot.x

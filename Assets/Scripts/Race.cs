@@ -70,6 +70,8 @@ public class Race : MonoBehaviour {
 
 	void Start() {
 		SpawnRacers();
+		foreach( var racer in GetAllRacers() )
+			racer.ControlEnabled = false;
 	}
 
 	void Update() {
@@ -103,6 +105,8 @@ public class Race : MonoBehaviour {
 		if( timer.IsDone ) {
 			timer.Show(false);
 			timer.Reset();
+			foreach( var racer in GetAllRacers() )
+				racer.ControlEnabled = true;
 			state = RaceState.Racing;
 		}
 	}
@@ -123,6 +127,9 @@ public class Race : MonoBehaviour {
 			SceneController.LoadResults();
 		}
 		else {
+			foreach( var racer in GetAllRacers() )
+				racer.ControlEnabled = false;
+
 			var results = Enumerable.Range(0, MaxRacers)
 				.Select(i => MakePlayerResults(GetPlayerProfile(i).Name, GetPlayerStats(i)))
 				.ToList();
@@ -210,15 +217,13 @@ public class Race : MonoBehaviour {
 		ActiveHumanPlayers = 0;
 		for( int i = 0; i < MaxHumanPlayers; ++i ) {
 			if( active[i] ) {
-				var obj = Spawn(humanPrefabs[i], spawnPoints[pos++]);
-				LoadHuman(i, obj, pos);
+				LoadHuman(i, pos++);
 				++ActiveHumanPlayers;
 			}
 			playerViews[i].IsEnabled = active[i];
 		}
 		for( int i = 0; i < GhostCount; ++i ) {
-			var obj = Spawn(ghostPrefabs[i], spawnPoints[pos++]);
-			LoadGhost(i, obj, pos);
+			LoadGhost(i, pos++);
 		}
 
 		TotalRacers = ActiveHumanPlayers + GhostCount;
@@ -228,21 +233,27 @@ public class Race : MonoBehaviour {
 		return Instantiate(obj, transform.position, transform.rotation);
 	}
 
-	private void LoadHuman(int id, GameObject obj, int place) {
+	private void LoadHuman(int id, int position) {
+		var obj = Spawn(humanPrefabs[id], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
 
+		racer.SetController(id);
+		racer.IsGhost = false;
+		racer.Place = position + 1;
+
 		AssignCamera(id, obj);
-		racer.Place = place;
 
 		humanRacers[id] = racer;
 
 	}
 
-	private void LoadGhost(int id, GameObject obj, int place) {
+	private void LoadGhost(int id, int position) {
+		var obj = Spawn(humanPrefabs[id], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
 
+		// racer.SetController(-1);
 		racer.IsGhost = true;
-		racer.Place = place;
+		racer.Place = position + 1;
 
 		ghostRacers[id] = racer;
 	}

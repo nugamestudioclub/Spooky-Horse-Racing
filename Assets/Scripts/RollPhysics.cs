@@ -2,13 +2,15 @@ using System;
 using UnityEngine;
 
 public class RollPhysics : MonoBehaviour {
+	public int ControllerId { get; set; }
+
+	public bool ControlEnabled { get; set; }
+
 	[SerializeField]
 	private Rigidbody2D rb;
 
 	[SerializeField]
-	CircleCollider2D circleCollider;
-
-	
+	CircleCollider2D circleCollider;	
 
 	[SerializeField]
 	private float jumpStrength = 60;
@@ -36,21 +38,34 @@ public class RollPhysics : MonoBehaviour {
 	public Vector2 Velocity { get; private set; }
 
 	public bool IsGrounded { get; private set; }
-
 	
-
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
 	}
-
 	void Update() {
 		HandleOrientation();
-		HandleMovement();
-		HandleJump();
+		if( ControlEnabled ) {
+			HandleMovement();
+			HandleJump();
+		}
+	}
+	private void HandleJump() {
+		if( IsGrounded ) {
+			if( InputController.GetJump(ControllerId) ) {
+				jumpScale = Mathf.Clamp(jumpScale + jumpAcceleration * Time.deltaTime, jumpMinimum, 1.0f);
+			}
+			else if( InputController.GetJumpUp(ControllerId) ) {
+				Debug.Log(jumpScale);
+				rb.AddForce(jumpScale * jumpStrength * Orientation, ForceMode2D.Impulse);
+			}
+		}
+		else {
+			jumpScale = 0.0f;
+		}
 	}
 
 	private void HandleMovement() {
-		rb.AddTorque(-InputController.GetMovement(0).x * Time.deltaTime * acceleration, ForceMode2D.Impulse);
+		rb.AddTorque(-InputController.GetMovement(ControllerId).x * Time.deltaTime * acceleration, ForceMode2D.Impulse);
 		Speed = Mathf.Clamp(rb.velocity.magnitude, 0f, maxSpeed);
 		if (rb.velocity.magnitude > maxSpeed)
         {
@@ -68,22 +83,6 @@ public class RollPhysics : MonoBehaviour {
 			Orientation = contactPoints[0].normal;
 		}
 	}
-
-	private void HandleJump() {
-		if( IsGrounded ) {
-			if( InputController.GetJump(0) ) {
-				jumpScale = Mathf.Clamp(jumpScale + jumpAcceleration * Time.deltaTime, jumpMinimum, 1.0f);
-			}
-			else if( InputController.GetJumpUp(0) ) {
-				Debug.Log(jumpScale);
-				rb.AddForce(jumpScale * jumpStrength * Orientation, ForceMode2D.Impulse);
-			}
-		}
-		else {
-			jumpScale = 0.0f;
-		}
-	}
-
 	private void OnCollisionEnter2D(Collision2D collision) {
 		if( collision.gameObject.CompareTag("Ground") ) {
 			IsGrounded = true;

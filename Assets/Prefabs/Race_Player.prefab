@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e43e28abdb0104448f3b131eb42985b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physics: {fileID: 7648310989341846126}
 --- !u!1 &4493638911026333875
 GameObject:
   m_ObjectHideFlags: 0

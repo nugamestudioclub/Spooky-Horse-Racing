@@ -10,6 +10,17 @@ public struct PlayerStats {
 }
 
 public class RacePlayer : MonoBehaviour {
+	[SerializeField]
+	private RollPhysics physics;
+
+	public bool ControlEnabled {
+		get => physics == null ? false : physics.ControlEnabled;
+		set {
+			if( physics != null )
+				physics.ControlEnabled = value;
+		}
+	}
+
 	private int place;
 	public int Place {
 		get => place;
@@ -48,5 +59,12 @@ public class RacePlayer : MonoBehaviour {
 			hitCount = hitCount,
 			isGhost = isGhost
 		};
+	}
+
+	public void SetController(int id) {
+		var rollPhysics = GetComponentsInChildren<RollPhysics>();
+
+		if( rollPhysics.Length > 0 )
+			rollPhysics[0].ControllerId = id;
 	}
 }
