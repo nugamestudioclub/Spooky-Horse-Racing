@@ -249,6 +249,7 @@ public class Race : MonoBehaviour {
 
 	}
 
+	// needs to load ghost data from database
 	private void LoadGhost(int index, int position) {
 		var obj = Spawn(humanPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
@@ -269,6 +270,8 @@ public class Race : MonoBehaviour {
 		cameras[index].Camera.enabled = true;
 	}
 
+	// these check functions should read from database
+	// and update if there is a new high score
 	private bool CheckBestPlace(PlayerStats stats) {
 		return !stats.isGhost && stats.place == 1;
 	}
