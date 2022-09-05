@@ -5,7 +5,7 @@ using UnityEngine;
     fileName = nameof(SpriteSheet),
     menuName = nameof(SpriteSheet))
 ]
-public class SpriteSheet : ScriptableObject
+public class SpriteSheet : ScriptableObject, IReadOnlyCollection<Sprite>
 {
     [SerializeField]
     private Sprite[] sprites;
@@ -13,4 +13,12 @@ public class SpriteSheet : ScriptableObject
     public Sprite this[int index] => sprites[index];
 
     public int Count => sprites.Length;
+
+	public IEnumerator<Sprite> GetEnumerator() {
+		return (sprites as IEnumerable<Sprite>).GetEnumerator();
+	}
+
+	IEnumerator IEnumerable.GetEnumerator() {
+		return sprites.GetEnumerator();
+	}
 }
