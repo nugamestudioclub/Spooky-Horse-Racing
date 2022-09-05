@@ -39,6 +39,8 @@ public class Race : MonoBehaviour {
 	[SerializeField]
 	private Timer timer;
 
+	private static readonly bool[] active = new bool[MaxHumanPlayers];
+
 	private static readonly PlayerProfile[] playerProfiles = new PlayerProfile[MaxRacers];
 
 	private static readonly PlayerResults[] playerResults = new PlayerResults[MaxRacers];
@@ -81,10 +83,11 @@ public class Race : MonoBehaviour {
 
 	private void Initialize() {
 		currentTime = delayTime;
-		state = RaceState.Waiting;
-		foreach( CameraFollow camera in cameras ) {
+		for( int i = 0; i < active.Length; ++i )
+			active[i] = playerProfiles[i] != null;
+		foreach( CameraFollow camera in cameras )
 			camera.Camera.enabled = false;
-		}
+		state = RaceState.Waiting;
 	}
 
 	private void WaitingUpdate() {
@@ -138,6 +141,12 @@ public class Race : MonoBehaviour {
 			Clear();
 			done = true;
 		}
+	}
+
+	public static IEnumerable<int> GetActiveIds() {
+		for( int i = 0; i < active.Length; ++i )
+			if( active[i] )
+				yield return i;
 	}
 
 	public IEnumerable<RacePlayer> GetHumanRacers() {
@@ -200,17 +209,16 @@ public class Race : MonoBehaviour {
 
 		ActiveHumanPlayers = 0;
 		for( int i = 0; i < MaxHumanPlayers; ++i ) {
-			bool isActive = playerProfiles[i] != null;
-			if( isActive ) {
+			if( active[i] ) {
 				var obj = Spawn(humanPrefabs[i], spawnPoints[pos++]);
-				LoadHuman(i, obj);
+				LoadHuman(i, obj, pos);
 				++ActiveHumanPlayers;
 			}
-			playerViews[i].IsEnabled = isActive;
+			playerViews[i].IsEnabled = active[i];
 		}
 		for( int i = 0; i < GhostCount; ++i ) {
 			var obj = Spawn(ghostPrefabs[i], spawnPoints[pos++]);
-			LoadGhost(i, obj);
+			LoadGhost(i, obj, pos);
 		}
 
 		TotalRacers = ActiveHumanPlayers + GhostCount;
@@ -220,21 +228,21 @@ public class Race : MonoBehaviour {
 		return Instantiate(obj, transform.position, transform.rotation);
 	}
 
-	private void LoadHuman(int id, GameObject obj) {
+	private void LoadHuman(int id, GameObject obj, int place) {
 		var racer = obj.GetComponent<RacePlayer>();
 
 		AssignCamera(id, obj);
-		racer.Place = id + 1;
+		racer.Place = place;
 
 		humanRacers[id] = racer;
 
 	}
 
-	private void LoadGhost(int id, GameObject obj) {
+	private void LoadGhost(int id, GameObject obj, int place) {
 		var racer = obj.GetComponent<RacePlayer>();
 
 		racer.IsGhost = true;
-		racer.Place = ActiveHumanPlayers + id + 1;
+		racer.Place = place;
 
 		ghostRacers[id] = racer;
 	}
