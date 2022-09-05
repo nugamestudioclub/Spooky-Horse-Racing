@@ -40,19 +40,19 @@ public class FirebaseImplemnetation : MonoBehaviour
         List<string> data = loader.Buffer;
         if(data.Count != 0)
         {
-            print("LOADING SCRIPT!");
+           // print("LOADING SCRIPT!");
             string dat = loader.ReadFirstFromBuf();
-            print(dat);
+           // print(dat);
             if (dat.Contains("racing-game"))
             {
                 DBDesign design = JsonUtility.FromJson<DBDesign>(dat.Replace("racing-game","racing_game"));
-                print("LOADED DES:" + design);
-                print("LOADE DES:" + design.racing_game);
-                print("LOADED DES:" + design.racing_game.Length);
+              //  print("LOADED DES:" + design);
+              //  print("LOADE DES:" + design.racing_game);
+              //  print("LOADED DES:" + design.racing_game.Length);
                 for(int i = 0; i < design.racing_game.Length; i++)
                 {
-                    print("LOADED PLAYER DATA:" + design.racing_game[i].name);
-                }
+              //      print("LOADED PLAYER DATA:" + design.racing_game[i].name);
+               }
             }
             
            
