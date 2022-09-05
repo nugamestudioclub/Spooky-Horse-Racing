@@ -7,6 +7,18 @@ public class LobbyPlayerView : MonoBehaviour {
 	private int playerId;
 
 	[SerializeField]
+	private SpriteSheet[] knightSpriteSheets;
+
+	[SerializeField]
+	private Image knightImage;
+
+	[SerializeField]
+	private SpriteSheet[] horseSpriteSheets;
+
+	[SerializeField]
+	private Image horseImage;
+
+	[SerializeField]
 	private TMP_InputField nameInputField;
 
 	[SerializeField]
@@ -17,6 +29,7 @@ public class LobbyPlayerView : MonoBehaviour {
 
 	[SerializeField]
 	private TMP_Text connectText;
+
 	public string Name {
 		get => string.IsNullOrEmpty(nameInputField.text) ? (nameInputField.placeholder as TMP_Text).text : nameInputField.text;
 		set {
@@ -26,6 +39,27 @@ public class LobbyPlayerView : MonoBehaviour {
 				nameInputField.text = value;
 		}
 	}
+
+	private int knightIndex;
+	public int KnightIndex {
+		get => knightIndex;
+		set {
+			knightIndex = (value + knightSpriteSheets.Length) % knightSpriteSheets.Length;
+			knightImage.sprite = Knight[0];
+		}
+	}
+	public SpriteSheet Knight => knightSpriteSheets[knightIndex];
+
+	private int horseIndex;
+	public int HorseIndex {
+		get => horseIndex;
+		set {
+			horseIndex = (value + horseSpriteSheets.Length) % horseSpriteSheets.Length;
+			horseImage.sprite = Horse[0];
+		}
+	}
+
+	public SpriteSheet Horse => horseSpriteSheets[horseIndex];
 
 	private bool isReady;
 	public bool IsReady {
@@ -54,23 +88,19 @@ public class LobbyPlayerView : MonoBehaviour {
 		get => isConnected;
 		set {
 			isConnected = value;
-			if( value ) {
-				connectText.enabled = false;
-				nameInputField.gameObject.SetActive(true);
-				readyText.enabled = true;
-				readySpriteRenderer.enabled = true;
-			}
-			else {
-				connectText.enabled = true;
-				nameInputField.gameObject.SetActive(false);
-				readyText.enabled = false;
-				readySpriteRenderer.enabled = false;
-			}
+			connectText.enabled = !value;
+			nameInputField.gameObject.SetActive(value);
+			readyText.enabled = value;
+			readySpriteRenderer.enabled = value;
+			knightImage.gameObject.SetActive(value);
+			horseImage.gameObject.SetActive(value);
 		}
 	}
 
 	void Start() {
 		IsConnected = false;
 		IsReady = false;
+		KnightIndex = 0;
+		HorseIndex = 0;
 	}
 }
