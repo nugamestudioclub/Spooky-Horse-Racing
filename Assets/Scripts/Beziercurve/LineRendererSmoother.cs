@@ -26,8 +26,10 @@ public class LineRendererSmoother : MonoBehaviour
 
         int size = Line.GetPositions(positions);
 
-        collider.SetPoints((from v in positions
-                            select new Vector2(v.x - transform.position.x, v.y - transform.position.y)).ToList());
+        collider.SetPoints(positions
+            .Select(v => new Vector2(v.x - (Line.useWorldSpace ? transform.position.x : 0),
+                            v.y - (Line.useWorldSpace ? transform.position.y : 0)))
+            .ToList());
         EditorUtility.SetDirty(Line);
     }
 
@@ -38,7 +40,7 @@ public class LineRendererSmoother : MonoBehaviour
 
         int size = Line.GetPositions(positions);
 
-        Line.SetPositions((positions).Select(v => new Vector3(v.x, v.y)).ToArray());
+        Line.SetPositions(positions.Select(v => new Vector3(v.x, v.y)).ToArray());
 
 
         Line.Simplify(0.1f);
