@@ -16,7 +16,7 @@ public class Race : MonoBehaviour {
 
 	public static readonly int MaxRacers = 8;
 
-	public int ActiveHumanPlayers => playerProfiles.Count(x => x != null);
+	public int ActiveHumanPlayers { get; private set; }
 
 	public static readonly int GhostCount = 4;
 
@@ -120,12 +120,19 @@ public class Race : MonoBehaviour {
 			SceneController.LoadResults();
 		}
 		else {
-			var racers = GetAllRacers().ToList();
-			var results = new List<PlayerResults>(racers.Count);
+			var results = Enumerable.Range(0, MaxRacers)
+				.Select(i => MakePlayerResults(GetPlayerProfile(i).Name, GetPlayerStats(i)))
+				.ToList();
 
-			for( int i = 0; i < racers.Count; ++i )
-				results.Add(MakePlayerResults(GetPlayerProfile(i).Name, GetPlayerStats(i)));
-			results.Sort((a, b) => a.place != 0 && a.place < b.place ? -1 : 1);
+			results.Sort((a, b) => {
+				if( a.place <= 0 && b.place > 0 )
+					return 1;
+				else if( a.place > 0 && b.place <= 0 )
+					return -1;
+				else
+					return a.place.CompareTo(b.place);
+			});
+
 			results.CopyTo(playerResults);
 
 			Clear();
@@ -191,22 +198,19 @@ public class Race : MonoBehaviour {
 	private void SpawnRacers() {
 		int pos = 0;
 
+		ActiveHumanPlayers = 0;
 		for( int i = 0; i < MaxHumanPlayers; ++i ) {
 			bool isActive = playerProfiles[i] != null;
 			if( isActive ) {
 				var obj = Spawn(humanPrefabs[i], spawnPoints[pos++]);
-				var racer = obj.GetComponent<RacePlayer>();
-				AssignCamera(i, obj);
-				humanRacers[i] = racer;
-
+				LoadHuman(i, obj);
+				++ActiveHumanPlayers;
 			}
 			playerViews[i].IsEnabled = isActive;
 		}
 		for( int i = 0; i < GhostCount; ++i ) {
 			var obj = Spawn(ghostPrefabs[i], spawnPoints[pos++]);
-			var racer = obj.GetComponent<RacePlayer>();
-			LoadGhost(i, racer);
-			ghostRacers[i] = racer;
+			LoadGhost(i, obj);
 		}
 
 		TotalRacers = ActiveHumanPlayers + GhostCount;
@@ -216,8 +220,23 @@ public class Race : MonoBehaviour {
 		return Instantiate(obj, transform.position, transform.rotation);
 	}
 
-	private void LoadGhost(int id, RacePlayer racer) {
-		racer.IsGhost = true; ///
+	private void LoadHuman(int id, GameObject obj) {
+		var racer = obj.GetComponent<RacePlayer>();
+
+		AssignCamera(id, obj);
+		racer.Place = id + 1;
+
+		humanRacers[id] = racer;
+
+	}
+
+	private void LoadGhost(int id, GameObject obj) {
+		var racer = obj.GetComponent<RacePlayer>();
+
+		racer.IsGhost = true;
+		racer.Place = ActiveHumanPlayers + id + 1;
+
+		ghostRacers[id] = racer;
 	}
 
 	private void AssignCamera(int index, GameObject parent) {
@@ -246,7 +265,7 @@ public class Race : MonoBehaviour {
 		return Mathf.Approximately(currentTime, 0.0f);
 	}
 	private bool IsGameOver() {
-		return true; ///
+		return false; ///
 	}
 
 	private void Clear() {
