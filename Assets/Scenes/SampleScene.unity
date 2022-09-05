@@ -915,19 +915,29 @@ MonoBehaviour:
   players:
   - name: Sebastian Hampel
     time: 49.5
-    pos: 1
+    position: 0
+    stuns: 5
+    coins: 5
   - name: Sebastian Kobori
     time: 49.6
-    pos: 2
+    position: 0
+    stuns: 5
+    coins: 10
   - name: Alex Siegel
     time: 100.5
-    pos: 3
+    position: 0
+    stuns: 5
+    coins: 5
   - name: Brendan Brassil
     time: -2
-    pos: 0
+    position: 0
+    stuns: 0
+    coins: 0
   - name: Brendan Brassil
     time: 50
-    pos: 5
+    position: 0
+    stuns: 5
+    coins: 5
 --- !u!1 &1639018751
 GameObject:
   m_ObjectHideFlags: 0

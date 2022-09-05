@@ -46,13 +46,7 @@ public class HorseController : MonoBehaviour {
 
 		transform.position = target.transform.position;
 
-		if( recordingState == RecordingState.Run && Vector2.Distance(transform.position, positions[curIndex]) < 0.3f ) {
-			curIndex = (curIndex + 1) % positions.Count;
-		}
-		if( recordingState == RecordingState.Run ) {
-			transform.position = Vector2.Lerp((Vector2)transform.position, curTarget, 0.5f);
-			transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, rotation[curIndex]);
-		}
+		
 	}
 
 	private void FixedUpdate() {

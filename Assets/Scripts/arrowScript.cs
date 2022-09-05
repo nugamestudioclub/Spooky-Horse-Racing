@@ -20,4 +20,6 @@ public class arrowScript : MonoBehaviour
         transform.Rotate(0, 0, 90);
     }
 
+   
+
 }
