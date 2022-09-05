@@ -28,6 +28,8 @@ public class HorseController : MonoBehaviour
 
     private Vector2 lastMovement;
 
+    private bool isFalling;
+
     void Start()
     {
 
@@ -63,7 +65,7 @@ public class HorseController : MonoBehaviour
     {
         HandleRotation();
         HandlePosition();
-        HandleAnimationSpeed();
+        HandleAnimations();
 
         if (recordingState == RecordingState.Record)
         {
@@ -148,16 +150,35 @@ public class HorseController : MonoBehaviour
         }
     }
 
-    private void HandleAnimationSpeed()
+    private void HandleAnimations()
     {
         if (target.IsGrounded)
         {
-            //change animation speed based on speed
-            animator.speed = target.Speed / target.MaxSpeed;
+            if (InputController.GetJumpUp(0))
+            {
+                animator.Play("horse_jump");
+            }
+            else if (isFalling)
+            {
+                animator.Play("horse_land");
+                isFalling = false;
+            }
+            else
+            {
+                //change animation speed based on speed
+                animator.speed = target.Speed / target.MaxSpeed;
+            }
+        }
+        else if (target.Velocity.y < 0)
+        {
+            animator.Play("horse_fall");
+            isFalling = true;
+            
         } else
         {
             animator.speed = 1;
         }
+
     }
 
 }

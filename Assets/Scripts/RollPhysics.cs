@@ -33,6 +33,8 @@ public class RollPhysics : MonoBehaviour {
 
 	public Vector2 Orientation { get; private set; }
 
+	public Vector2 Velocity { get; private set; }
+
 	public bool IsGrounded { get; private set; }
 
 	
@@ -54,7 +56,7 @@ public class RollPhysics : MonoBehaviour {
         {
 			rb.velocity = rb.velocity.normalized * maxSpeed;
         }
-
+		Velocity = rb.velocity;
 	}
 
 	private void HandleOrientation() {
