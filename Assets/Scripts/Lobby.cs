@@ -81,7 +81,10 @@ public class Lobby : MonoBehaviour {
 
 	private void HandleRegistration(int playerId) {
 		if( players[playerId].IsReady )
-			Race.Register(playerId, new PlayerProfile(players[playerId].Name, null, null));
+			Race.Register(playerId, new PlayerProfile(
+				players[playerId].Name, 
+				players[playerId].Knight, 
+				players[playerId].Horse));
 	}
 
 	private static IList<string> GetStartingNames(int count) {
