@@ -105,7 +105,7 @@ public class FirebaseLoader : MonoBehaviour
     /// <param name="time"></param>
     /// <param name="timeRemoved"></param>
     /// <param name="pos"></param>
-    public void PushScore(string username, string email, float time,float timeRemoved,int pos,int stuns, int coins)
+    public void PushScore(string username, string email, float time,float timeRemoved,int pos,int stuns, int coins,int id)
     {
         Player newPlayer = new Player() {
             name = username,
@@ -114,7 +114,8 @@ public class FirebaseLoader : MonoBehaviour
             timeRemoved = timeRemoved,
             position = pos,
             stuns = stuns,
-            coins = coins
+            coins = coins,
+            id = id
         };
         Player[] newDB = new Player[db.Length+1];
         for(int i = 0; i < db.Length; i++)
@@ -148,6 +149,7 @@ public class FirebaseLoader : MonoBehaviour
         public int position;
         public int stuns;
         public int coins;
+        public int id;
 
     }
     // Start is called before the first frame update
@@ -220,6 +222,7 @@ public struct PlayerPush
     public int position;
     public int stuns;
     public int coins;
+    public int id;
 }
 
 

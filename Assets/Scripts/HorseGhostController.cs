@@ -13,6 +13,9 @@ public class HorseGhostController : MonoBehaviour
 
     private int curIndex = 0;
     string path;
+    SerializableTransformData curPos;
+
+    private bool reachedEnd = false;
 
 
     // Start is called before the first frame update
@@ -48,6 +51,7 @@ public class HorseGhostController : MonoBehaviour
         if(data == null)
         {
             reader.Close();
+            this.reachedEnd = true;
             reader = new StreamReader(this.path);
         }
         return reader.ReadLine();
@@ -70,9 +74,18 @@ public class HorseGhostController : MonoBehaviour
     {
         if(this.state == HorseRecordingState.Playback)
         {
-            SerializableTransformData nextPos = this.getNextPosition();
-            this.transform.position = new Vector3(nextPos.pX, nextPos.pY, nextPos.pZ);
-            this.transform.eulerAngles = new Vector3(this.transform.eulerAngles.x, this.transform.eulerAngles.y, nextPos.rot);
+            if (!reachedEnd)
+            {
+                //CHANGE 0.5 if you want faster or slower
+                this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(curPos.pX, curPos.pY, curPos.pZ), 0.5f);
+                this.transform.eulerAngles = new Vector3(this.transform.eulerAngles.x, this.transform.eulerAngles.y, curPos.rot);
+
+                if (Vector2.Distance(new Vector2(curPos.pX, curPos.pY), transform.position) < 0.1f)
+                {
+                    curPos = this.getNextPosition();
+                }
+            }
+            
 
         }
         else if(this.state==HorseRecordingState.Record)
