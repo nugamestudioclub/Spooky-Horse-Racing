@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1910884004575770894}
   m_Layer: 0
   m_Name: HorseController
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -66,7 +66,7 @@ GameObject:
   - component: {fileID: 7543821139560660332}
   m_Layer: 0
   m_Name: Horse
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 4092239473895986084}
   m_Layer: 0
   m_Name: Rolling
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 9186462283168381609}
   m_Layer: 0
   m_Name: Recording
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -452,7 +452,7 @@ GameObject:
   - component: {fileID: 9134113308766197033}
   m_Layer: 0
   m_Name: Nameplate
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -630,9 +630,49 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4367274284317120009}
     m_Modifications:
+    - target: {fileID: 688517459880384626, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 906756092372693706, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 971994426706705084, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894419386138198097, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2626560680566572106, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3151611391590256886, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5503286012763805701, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092531706663817531, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092896109404142698, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 8683066641799839444, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
       propertyPath: m_Name
       value: ClassicKnight
+      objectReference: {fileID: 0}
+    - target: {fileID: 8683066641799839444, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8925883854427848824, guid: eefd398bb8de7874d989341acb2c636a, type: 3}
       propertyPath: m_RootOrder
@@ -711,6 +751,14 @@ PrefabInstance:
       propertyPath: root
       value: 
       objectReference: {fileID: 5831320650239427274}
+    - target: {fileID: 1499207495813908324, guid: 1eae311de69661449a51a6f1d65731c5, type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 4505460146459932478}
+    - target: {fileID: 4566800988265574404, guid: 1eae311de69661449a51a6f1d65731c5, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 4566800988265574410, guid: 1eae311de69661449a51a6f1d65731c5, type: 3}
       propertyPath: m_SortingOrder
       value: 2
@@ -762,6 +810,14 @@ PrefabInstance:
     - target: {fileID: 4566800988629251197, guid: 1eae311de69661449a51a6f1d65731c5, type: 3}
       propertyPath: m_Name
       value: bow
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566800988629251197, guid: 1eae311de69661449a51a6f1d65731c5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566800988629251197, guid: 1eae311de69661449a51a6f1d65731c5, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1eae311de69661449a51a6f1d65731c5, type: 3}

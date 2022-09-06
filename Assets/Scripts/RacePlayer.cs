@@ -109,5 +109,7 @@ public class RacePlayer : MonoBehaviour {
 
 		if( racePlayerMovement.Length > 0 )
 			racePlayerMovement[0].ControllerId = id;
+
+		gameObject.layer = LayerMask.NameToLayer("Player_" + id);
 	}
 }

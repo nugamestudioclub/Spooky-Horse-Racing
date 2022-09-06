@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 4566800988265574404}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.41, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 4566800988629251169}
   m_RootOrder: 0
@@ -171,6 +171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrowPrefab: {fileID: 3626676033027234402, guid: aa7318da60d44b246a473cca0621b2e1, type: 3}
   bowPower: 5
+  owner: {fileID: 0}
 --- !u!212 &2075456410
 SpriteRenderer:
   m_ObjectHideFlags: 0

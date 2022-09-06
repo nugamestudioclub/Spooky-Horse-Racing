@@ -10,6 +10,8 @@ public class bowScript : MonoBehaviour {
 	private float bowPower = 5;
 	//[SerializeField]
 	//private Transform root; 
+	[SerializeField]
+	private RacePlayer owner;
 
 	void Awake() {
 		animator = GetComponent<Animator>();
@@ -20,14 +22,14 @@ public class bowScript : MonoBehaviour {
 	}
 
 	void Update() {
-		if( InputController.GetFireDown(0) )
+		if( InputController.GetFireDown(owner.Id) )
         {
 			ChargeBow();
 			print("charging bow");
 		}
 
 
-		if (InputController.GetFireUp(0))
+		if (InputController.GetFireUp(owner.Id))
 		{
 			FireBow();
 			print("firing bow");
@@ -46,7 +48,9 @@ public class bowScript : MonoBehaviour {
 			var direction = CalcDirection();
 			float charge = CalcCharge();
 			GameObject arrow = Instantiate(arrowPrefab, transform.position + transform.right * 2, transform.rotation);
-			arrow.GetComponent<arrowScript>().source = transform.root;
+			arrowScript a = arrow.GetComponent<arrowScript>();
+			a.source = transform.root;
+			a.ExcludeLayer(owner.Id);
 			Rigidbody2D rigidbody2D = arrow.GetComponent<Rigidbody2D>();
 
 			rigidbody2D.AddForce(direction * charge * bowPower, ForceMode2D.Impulse);
@@ -56,7 +60,7 @@ public class bowScript : MonoBehaviour {
 	}
 
 	private Vector3 CalcDirection() {
-		var aim = InputController.GetAim(0); ///
+		var aim = InputController.GetAim(owner.Id); ///
 		float angle = Mathf.Atan2(aim.y, aim.x) * 180 / Mathf.PI;
 
 		return Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.right;
