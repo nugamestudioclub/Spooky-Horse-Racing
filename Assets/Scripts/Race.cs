@@ -85,8 +85,9 @@ public class Race : MonoBehaviour {
 
 	void Start() {
 		SpawnRacers();
-		foreach( var racer in GetAllRacers() )
+		foreach( var racer in GetAllRacers() ) {
 			racer.ControlEnabled = false;
+		}
 	}
 
 	void Update() {
@@ -123,8 +124,11 @@ public class Race : MonoBehaviour {
 		if( timer.IsDone ) {
 			timer.Show(false);
 			timer.Reset();
-			foreach( var racer in GetAllRacers() )
+			foreach( var racer in GetAllRacers() ) {
 				racer.ControlEnabled = true;
+				racer.BeginRecording();
+				Debug.Log($"{racer.Id} began recording");
+			}
 			state = RaceState.Racing;
 		}
 	}
@@ -151,8 +155,10 @@ public class Race : MonoBehaviour {
 			SceneController.LoadResults();
 		}
 		else {
-			foreach( var racer in GetAllRacers() )
+			foreach( var racer in GetAllRacers() ) {
 				racer.ControlEnabled = false;
+				racer.EndRecording();
+			}
 
 			var results = Enumerable.Range(0, MaxRacers)
 				.Select(i => MakePlayerResults(GetPlayerProfile(i).Name, GetPlayerStats(i)))
@@ -320,7 +326,7 @@ public class Race : MonoBehaviour {
 		return Mathf.Approximately(currentTime, 0.0f);
 	}
 	private bool IsGameOver() {
-		return false; ///
+		return GetHumanRacers().All(x => x.HasReachedFinishLine);
 	}
 
 	private void Clear() {

@@ -321,7 +321,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: c81cea9390dd285469b621e585e98207, type: 3}
-  m_Color: {r: 0.376, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.376, g: 1, b: 1, a: 0.7490196}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -427,3 +427,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameplateText: {fileID: 6169135488734375526}
   racePlayerMovement: {fileID: 2779906967629371706}
+  recording: {fileID: 2779906967629371706}

@@ -30,6 +30,9 @@ public class RacePlayer : MonoBehaviour {
 	[SerializeField]
 	private RacePlayerMovement racePlayerMovement;
 
+	[SerializeField]
+	private RacePlayerMovement recording;
+
 	public Transform Transform => racePlayerMovement == null ? transform : racePlayerMovement.transform;
 
 	public bool ControlEnabled {
@@ -85,5 +88,15 @@ public class RacePlayer : MonoBehaviour {
 
 		if( racePlayerMovement.Length > 0 )
 			racePlayerMovement[0].ControllerId = id;
+	}
+
+	public void BeginRecording() {
+		recording.ControlEnabled = true;
+		recording.BeginRecording();
+	}
+
+	public void EndRecording() {
+		recording.ControlEnabled = false;
+		recording.EndRecording();
 	}
 }

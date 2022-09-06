@@ -35,8 +35,6 @@ public class RaceHumanPlayerMovement : RacePlayerMovement
 	private float maxSpeed = 100;
 	public float MaxSpeed { get => maxSpeed; private set => maxSpeed = value; }
 
-	public override bool ControlEnabled { get; set; }
-
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
 	}
@@ -91,6 +89,10 @@ public class RaceHumanPlayerMovement : RacePlayerMovement
 			IsGrounded = false;
 		}
 	}
+
+	public override void BeginRecording() { }
+
+	public override void EndRecording() { }
 
 	public override void Freeze()
     {
