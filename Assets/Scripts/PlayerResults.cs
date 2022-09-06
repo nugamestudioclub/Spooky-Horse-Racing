@@ -13,7 +13,7 @@
 	public int coinCount;
 	public bool isCoinsBest;
 
-	public static readonly PlayerResults Default = new PlayerResults("", place:0, time:0.0f, hitCount:0, coinCount:0);
+	public static readonly PlayerResults Default = new PlayerResults("", place:int.MaxValue, time:float.MaxValue, hitCount:0, coinCount:0);
 
 	public PlayerResults(string name,
 		int place, float time, int hitCount, int coinCount,

@@ -390,13 +390,13 @@ public class Race : MonoBehaviour {
 			return first.racer.Place.CompareTo(second.racer.Place);
 		}
 		else if( first.racer.HasReachedFinishLine && !second.racer.HasReachedFinishLine ) {
-			return 1;
-		}
-		else if( !first.racer.HasReachedFinishLine && second.racer.HasReachedFinishLine ) {
 			return -1;
 		}
-		else if( first.checkpoint > second.checkpoint ) {
+		else if( !first.racer.HasReachedFinishLine && second.racer.HasReachedFinishLine ) {
 			return 1;
+		}
+		else if( first.checkpoint > second.checkpoint ) {
+			return -1;
 		}
 		else {
 			var nextCheckpoint = checkpoints[Math.Min(first.checkpoint + 1, checkpoints.Length - 1)];
