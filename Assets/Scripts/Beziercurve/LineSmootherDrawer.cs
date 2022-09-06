@@ -1,4 +1,4 @@
-
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -29,3 +29,4 @@ public class LineSmootherDrawer : Editor
         //EditorGUI.EndProperty();
     }
 }
+#endif

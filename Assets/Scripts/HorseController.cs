@@ -32,9 +32,6 @@ public class HorseController : MonoBehaviour {
 
 	private bool isFalling;
 
-	private int numFlips = 0;
-	private bool lastFlip = false;
-
 	[SerializeField]
 	private Transform horse;
 
@@ -92,13 +89,6 @@ public class HorseController : MonoBehaviour {
 	*/
 	private void HandleRotation() {
 		var (angle, flipped) = CalcRotationAndFlip();
-		if (flipped != lastFlip)
-        {
-			numFlips++;
-			print(numFlips);
-        }
-		lastFlip = flipped;
-		
 
 		horse.transform.localEulerAngles = new Vector3(
 			horse.transform.localEulerAngles.x ,

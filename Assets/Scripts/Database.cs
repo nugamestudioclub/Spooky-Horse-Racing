@@ -5,20 +5,20 @@ using UnityEngine;
 
 public static class Database {
 
-	private static string path;
-	public static string Path {
+	private static string rootPath;
+	public static string RootPath {
 		get {
-			if( string.IsNullOrEmpty(path) )
-				path = Application.dataPath + @"\Resources\";
-			return path;
+			if( string.IsNullOrEmpty(rootPath) )
+				rootPath = Application.dataPath + @"\Resources\";
+			return rootPath;
 		}
 		private set {
-			path = value;
+			rootPath = value;
 		}
 	}
 
 	private static string GetHorsePath(int id) {
-		return Path + "horses" + id + ".json";
+		return RootPath + "horses" + id + ".json";
 	}
 
 	public static IEnumerable<SerializableTransformData> ReadHorseData(int id) {
@@ -38,16 +38,16 @@ public static class Database {
 		string path = GetHorsePath(id);
 
 		if( !File.Exists(path) )
-			File.Create(Path);
+			File.Create(path);
 
 		using var writer = new StreamWriter(path);
 
 		foreach( var item in data )
-			writer.Write(JsonUtility.ToJson(item));
+			writer.WriteLine(JsonUtility.ToJson(item));
 	}
 
 	private static string GetBestPath(int id) {
-		return Path + "best" + id + ".json";
+		return RootPath + "best" + id + ".json";
 	}
 
 	public static SerializableBestData ReadBestData(int id) {
@@ -67,7 +67,7 @@ public static class Database {
 
 		using var writer = new StreamWriter(path);
 
-		writer.Write(JsonUtility.ToJson(data));
+		writer.WriteLine(JsonUtility.ToJson(data));
 	}
 }
 

@@ -61,7 +61,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4367274284317120009}
   - component: {fileID: 4367274284317120008}
-  - component: {fileID: 1315667745899301219}
   - component: {fileID: 6315574751142212295}
   - component: {fileID: 7543821139560660332}
   m_Layer: 0
@@ -137,24 +136,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1315667745899301219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4367274284317120015}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2dd8b852485e6842a8932d8a88daf39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 7648310989341846126}
-  spriteRenderer: {fileID: 4367274284317120008}
-  knight: {fileID: 6430845124342531646}
-  animator: {fileID: 6315574751142212295}
-  recordingState: 0
-  horse: {fileID: 0}
 --- !u!95 &6315574751142212295
 Animator:
   serializedVersion: 3
