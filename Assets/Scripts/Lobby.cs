@@ -7,6 +7,9 @@ public class Lobby : MonoBehaviour {
 	[SerializeField]
 	LobbyPlayerView[] players = new LobbyPlayerView[Race.MaxHumanPlayers];
 
+	// is vector down/up this frame feature should be migrated to InputController
+	private readonly bool[] selectionDown = new bool[Race.MaxHumanPlayers];
+
 	private static readonly System.Random rng = new System.Random();
 
 	[SerializeField]
@@ -57,11 +60,31 @@ public class Lobby : MonoBehaviour {
 			players[playerId].IsConnected = false;
 			players[playerId].IsReady = false;
 		}
+
+		var movement = InputController.GetMovement(playerId);
+
+		selectionDown[playerId] = selectionDown[playerId]
+			&& !Mathf.Approximately(movement.magnitude, 0.0f);
+
+		if( selectionDown[playerId] )
+			return;
+
+		if( !Mathf.Approximately(movement.x, 0.0f) ) {
+			players[playerId].KnightIndex += (int)Mathf.Sign(movement.x);
+			selectionDown[playerId] = true;
+		}
+		if( !Mathf.Approximately(movement.y, 0.0f) ) {
+			players[playerId].HorseIndex += (int)Mathf.Sign(movement.y);
+			selectionDown[playerId] = true;
+		}
 	}
 
 	private void HandleRegistration(int playerId) {
 		if( players[playerId].IsReady )
-			Race.Register(playerId, new PlayerProfile(players[playerId].Name));
+			Race.Register(playerId, new PlayerProfile(
+				players[playerId].Name, 
+				players[playerId].Knight, 
+				players[playerId].Horse));
 	}
 
 	private static IList<string> GetStartingNames(int count) {

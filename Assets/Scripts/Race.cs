@@ -11,6 +11,16 @@ public enum RaceState {
 	Finished,
 }
 
+public class CheckpointStatus { 
+	public RacePlayer racer;
+	public int checkpoint;
+
+	public CheckpointStatus(RacePlayer racer, int checkpoint) {
+		this.racer = racer;
+		this.checkpoint = checkpoint;
+	}
+}
+
 public class Race : MonoBehaviour {
 	public static readonly int MaxHumanPlayers = 4;
 
@@ -61,6 +71,11 @@ public class Race : MonoBehaviour {
 	[SerializeField]
 	private RacePlayerView[] playerViews = new RacePlayerView[MaxHumanPlayers];
 
+	[SerializeField]
+	private LineRenderer checkpointLineRenderer;
+
+	private Vector3[] checkpoints;
+
 	private bool done;
 
 	void Awake() {
@@ -90,6 +105,9 @@ public class Race : MonoBehaviour {
 		foreach( CameraFollow camera in cameras )
 			camera.Camera.enabled = false;
 		state = RaceState.Waiting;
+
+		checkpoints = new Vector3[checkpointLineRenderer.positionCount];
+		checkpointLineRenderer.GetPositions(checkpoints);
 	}
 
 	private void WaitingUpdate() {
@@ -120,6 +138,11 @@ public class Race : MonoBehaviour {
 				racer.Time += Time.deltaTime;
 		if( IsGameOver() )
 			state = RaceState.Finished;
+		var racers = GetRacersInOrder();
+
+		for( int i = 0; i < racers.Count; ++i ) {
+			racers[i].Place = i + 1;
+		}
 	}
 
 	private void FinishedUpdate() {
@@ -154,6 +177,10 @@ public class Race : MonoBehaviour {
 		for( int i = 0; i < active.Length; ++i )
 			if( active[i] )
 				yield return i;
+	}
+
+	public RacePlayer GetRacer(int playerId) {
+		return playerId < MaxHumanPlayers ? humanRacers[playerId] : ghostRacers[playerId];
 	}
 
 	public IEnumerable<RacePlayer> GetHumanRacers() {
@@ -233,29 +260,35 @@ public class Race : MonoBehaviour {
 		return Instantiate(obj, transform.position, transform.rotation);
 	}
 
-	private void LoadHuman(int id, int position) {
-		var obj = Spawn(humanPrefabs[id], spawnPoints[position]);
+	private void LoadHuman(int index, int position) {
+		var obj = Spawn(humanPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
 
-		racer.SetController(id);
+		racer.SetController(index);
+		racer.Name = GetPlayerProfile(index).Name;
+		racer.Id = index;
 		racer.IsGhost = false;
 		racer.Place = position + 1;
 
-		AssignCamera(id, obj);
+		AssignCamera(index, obj);
 
-		humanRacers[id] = racer;
+		humanRacers[index] = racer;
 
 	}
 
-	private void LoadGhost(int id, int position) {
-		var obj = Spawn(humanPrefabs[id], spawnPoints[position]);
+	// needs to load ghost data from database
+	private void LoadGhost(int index, int position) {
+		var obj = Spawn(ghostPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
+		int id = index + MaxHumanPlayers;
 
-		// racer.SetController(-1);
+		racer.SetController(id);
+		racer.Name = GetPlayerProfile(id).Name;
+		racer.Id = id;
 		racer.IsGhost = true;
 		racer.Place = position + 1;
 
-		ghostRacers[id] = racer;
+		ghostRacers[index] = racer;
 	}
 
 	private void AssignCamera(int index, GameObject parent) {
@@ -264,6 +297,8 @@ public class Race : MonoBehaviour {
 		cameras[index].Camera.enabled = true;
 	}
 
+	// these check functions should read from database
+	// and update if there is a new high score
 	private bool CheckBestPlace(PlayerStats stats) {
 		return !stats.isGhost && stats.place == 1;
 	}
@@ -290,5 +325,44 @@ public class Race : MonoBehaviour {
 	private void Clear() {
 		for( int i = 0; i < MaxHumanPlayers; ++i )
 			playerProfiles[i] = null;
+	}
+
+	private int FindClosestCheckpoint(RacePlayer racer) {
+		var pairs = Enumerable.Range(0, checkpoints.Length)
+			.Select(i => new KeyValuePair<int, float>(
+				i,
+				Vector3.Distance(checkpoints[i], racer.Transform.position))
+			)
+			.OrderBy(pair => pair.Value)
+			.ToList();
+		int index = pairs[0].Key;
+
+		if( index == 0 || index == checkpoints.Length - 1 )
+			index = racer.HasReachedMidpoint ? checkpoints.Length - 1 : 0;
+
+		return index;
+	}
+
+	private CheckpointStatus GetCheckpointStatus(RacePlayer racer) {
+		return new CheckpointStatus(racer, FindClosestCheckpoint(racer));
+	}
+
+	private int CompareCheckpointStatus(CheckpointStatus first, CheckpointStatus second) {
+		if( first.checkpoint > second.checkpoint ) {
+			return -1;
+		}
+		else {
+			var nextCheckpoint = checkpoints[Math.Min(first.checkpoint + 1, checkpoints.Length - 1)];
+			return Vector3.Distance(nextCheckpoint, first.racer.Transform.position)
+				.CompareTo(Vector3.Distance(nextCheckpoint, second.racer.Transform.position));
+		}
+	}
+
+	private IList<RacePlayer> GetRacersInOrder() {
+		var racers = GetAllRacers()
+			.Select(x => GetCheckpointStatus(x))
+			.ToList();
+		racers.Sort((a, b) => CompareCheckpointStatus(a, b));
+		return racers.Select(x => x.racer).ToList();
 	}
 }

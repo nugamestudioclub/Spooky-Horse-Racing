@@ -23,7 +23,6 @@ public class arrowScript : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(transform.forward, targetDirection);
         transform.Rotate(0, 0, 90);
     }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Ground"))
@@ -38,7 +37,7 @@ public class arrowScript : MonoBehaviour
 
         if (collision.collider.CompareTag("Player"))
         {
-            collision.collider.GetComponent<RollPhysics>().Freeze(1.5f);
+            collision.collider.GetComponent<RacePlayerMovement>().Freeze(1.5f);
             source.root.GetComponent<RacePlayer>().HitCount++;
             Destroy(gameObject);
         }

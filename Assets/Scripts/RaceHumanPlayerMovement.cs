@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class RollPhysics : MonoBehaviour {
-	public int ControllerId { get; set; }
+public class RaceHumanPlayerMovement : RacePlayerMovement
+{
+	
 
-	public bool ControlEnabled { get; set; }
+	
 
 	[SerializeField]
 	private Rigidbody2D rb;
@@ -34,12 +35,8 @@ public class RollPhysics : MonoBehaviour {
 	private float maxSpeed = 100;
 	public float MaxSpeed { get => maxSpeed; private set => maxSpeed = value; }
 
-	public Vector2 Orientation { get; private set; }
+	public override bool ControlEnabled { get; set; }
 
-	public Vector2 Velocity { get; private set; }
-
-	public bool IsGrounded { get; private set; }
-	
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
 	}
@@ -56,7 +53,6 @@ public class RollPhysics : MonoBehaviour {
 				jumpScale = Mathf.Clamp(jumpScale + jumpAcceleration * Time.deltaTime, jumpMinimum, 1.0f);
 			}
 			else if( InputController.GetJumpUp(ControllerId) ) {
-				Debug.Log(jumpScale);
 				rb.AddForce(jumpScale * jumpStrength * Orientation, ForceMode2D.Impulse);
 			}
 		}
@@ -96,7 +92,7 @@ public class RollPhysics : MonoBehaviour {
 		}
 	}
 
-	public void Freeze()
+	public override void Freeze()
     {
 		rb.velocity = Vector2.zero;
 		rb.gravityScale = 0;
@@ -105,12 +101,12 @@ public class RollPhysics : MonoBehaviour {
 		ControlEnabled = false;
     }
 
-	public void Freeze(float duration)
+	public override void Freeze(float duration)
     {
 		StartCoroutine(FreezeFor(duration));
     }
 
-	public void UnFreeze()
+	public override void UnFreeze()
     {
 		rb.gravityScale = 5;
 		ControlEnabled = true;

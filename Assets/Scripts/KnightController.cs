@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerController : MonoBehaviour {
+public class KnightController : MonoBehaviour {
 	private Transform rightArmBone;
 	private Transform leftBicepBone;
 	private Transform leftArmBone;

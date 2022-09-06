@@ -11,21 +11,40 @@ public struct PlayerStats {
 
 public class RacePlayer : MonoBehaviour {
 	[SerializeField]
-	private RollPhysics physics;
+	private TMPro.TMP_Text nameplateText;
 
-	public bool ControlEnabled {
-		get => physics == null ? false : physics.ControlEnabled;
+	public string Name {
+		get => nameplateText.text;
+		set => nameplateText.text = value;
+	}
+
+	private int id;
+	public int Id {
+		get => id;
 		set {
-			if( physics != null )
-				physics.ControlEnabled = value;
+			nameplateText.gameObject.layer = LayerMask.NameToLayer("Not_Player_" + value);
+			id = value;
 		}
 	}
 
-	private int place;
-	public int Place {
-		get => place;
-		set => place = Math.Min(Math.Max(1, value), Race.MaxRacers);
+	[SerializeField]
+	private RacePlayerMovement racePlayerMovement;
+
+	public Transform Transform => racePlayerMovement == null ? transform : racePlayerMovement.transform;
+
+	public bool ControlEnabled {
+		get => racePlayerMovement == null ? false : racePlayerMovement.ControlEnabled;
+		set {
+			if( racePlayerMovement != null )
+				racePlayerMovement.ControlEnabled = value;
+		}
 	}
+
+	public bool HasReachedMidpoint { get; set; }
+
+	public bool HasReachedFinishLine { get; set; }
+
+	public int Place { get; set; }
 
 	private float time;
 	public float Time {
@@ -53,7 +72,7 @@ public class RacePlayer : MonoBehaviour {
 
     public PlayerStats Stats() {
 		return new PlayerStats {
-			place = place,
+			place = Place,
 			time = time,
 			coinCount = coinCount,
 			hitCount = hitCount,
@@ -62,9 +81,9 @@ public class RacePlayer : MonoBehaviour {
 	}
 
 	public void SetController(int id) {
-		var rollPhysics = GetComponentsInChildren<RollPhysics>();
+		var racePlayerMovement = GetComponentsInChildren<RacePlayerMovement>();
 
-		if( rollPhysics.Length > 0 )
-			rollPhysics[0].ControllerId = id;
+		if( racePlayerMovement.Length > 0 )
+			racePlayerMovement[0].ControllerId = id;
 	}
 }

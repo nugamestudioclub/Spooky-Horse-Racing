@@ -23,7 +23,7 @@ public class FirebaseLoader : MonoBehaviour
     private string net;
 
     [SerializeField]
-    private string path;
+    public string path;
     [SerializeField]
     private string data;
 
@@ -38,10 +38,24 @@ public class FirebaseLoader : MonoBehaviour
                 var response = await httpClient.SendAsync(request);
                 var content = await response.Content.ReadAsStringAsync();
                 this.buf.Add(content);
+                print("Added " + content);
             }
         }
     }
 
+    public string ReadFirstFromBuf()
+    {
+        if(buf.Count > 0)
+        {
+            string data = buf[0];
+            buf.RemoveAt(0);
+            return data;
+        }
+        else
+        {
+            return "";
+        }
+    }
     /// <summary>
     /// Send to firebase using the given path and sending a json message as a string.
     /// </summary>
@@ -78,7 +92,7 @@ public class FirebaseLoader : MonoBehaviour
                 request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
                 var response = await httpClient.SendAsync(request);
                 var content = await response.Content.ReadAsStringAsync();
-                this.buf.Add(content);
+                //this.buf.Add(content);
             }
         }
     }
@@ -91,14 +105,17 @@ public class FirebaseLoader : MonoBehaviour
     /// <param name="time"></param>
     /// <param name="timeRemoved"></param>
     /// <param name="pos"></param>
-    public void PushScore(string username, string email, float time,float timeRemoved,int pos)
+    public void PushScore(string username, string email, float time,float timeRemoved,int pos,int stuns, int coins,int id)
     {
         Player newPlayer = new Player() {
             name = username,
             email = email,
             time = time,
-            timeRemoved=timeRemoved,
-            position=pos
+            timeRemoved = timeRemoved,
+            position = pos,
+            stuns = stuns,
+            coins = coins,
+            id = id
         };
         Player[] newDB = new Player[db.Length+1];
         for(int i = 0; i < db.Length; i++)
@@ -130,6 +147,9 @@ public class FirebaseLoader : MonoBehaviour
         public float time;
         public float timeRemoved;
         public int position;
+        public int stuns;
+        public int coins;
+        public int id;
 
     }
     // Start is called before the first frame update
@@ -154,12 +174,61 @@ public class FirebaseLoader : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (buf.Count > 0)
+
+        //if (buf.Count > 0)
         {
             // print(buf[0]);
-            buf.RemoveAt(0);
+          //  buf.RemoveAt(0);
         }
 
     }
+
+    public DBDesign GetDBData()
+    {
+        FirebaseLoader loader = this;
+        List<string> data = loader.Buffer;
+        if (data.Count != 0)
+        {
+            string dat = loader.ReadFirstFromBuf();
+            if (dat.Contains("racing-game"))
+            {
+                DBDesign design = JsonUtility.FromJson<DBDesign>(dat.Replace("racing-game", "racing_game"));
+                return design;
+            }
+            else
+            {
+                DBDesign newDes = new DBDesign();
+                PlayerPush push = JsonUtility.FromJson<PlayerPush>(dat);
+                newDes.racing_game = new PlayerPush[] { push };
+                return newDes;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public void SendDBData(DBDesign design)
+    { 
+        this.send("/", JsonUtility.ToJson(design));
+    }
+}
+[System.Serializable]
+public struct PlayerPush
+{
+    public string name;
+    public float time;
+    public int position;
+    public int stuns;
+    public int coins;
+    public int id;
+}
+
+
+
+[System.Serializable]
+public class DBDesign
+{
+    public PlayerPush[] racing_game;
 }

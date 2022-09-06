@@ -30,7 +30,7 @@ public class GooScript : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<RollPhysics>().Freeze();
+            collision.GetComponent<RacePlayerMovement>().Freeze();
             if (!ReferenceEquals(source, collision.transform.root))
             {
                 source.GetComponent<RacePlayer>().HitCount++;
@@ -43,7 +43,7 @@ public class GooScript : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<RollPhysics>().UnFreeze();
+            collision.GetComponent<RacePlayerMovement>().UnFreeze();
         }
     }
 
