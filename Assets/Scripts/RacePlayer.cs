@@ -100,11 +100,11 @@ public class RacePlayer : MonoBehaviour {
 
 	public void BeginRecording() {
 		recording.ControlEnabled = true;
-		recording.BeginRecording();
+		recording.Play();
 	}
 
 	public void EndRecording() {
 		recording.ControlEnabled = false;
-		recording.EndRecording();
+		recording.Stop();
 	}
 }
