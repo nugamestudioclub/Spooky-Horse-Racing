@@ -1,7 +1,31 @@
 fileFormatVersion: 2
-guid: df21ecbb10818c845889866e2c8b3de9
+guid: 50f3aa6c95bf21d449b8a495a78fe83c
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -5865124897961190336
+    second: StunGoo_0
+  - first:
+      213: 7819023545740712491
+    second: StunGoo_1
+  - first:
+      213: 294601295611886901
+    second: StunGoo_2
+  - first:
+      213: -1133070949459452049
+    second: StunGoo_3
+  - first:
+      213: -7993865816286461086
+    second: StunGoo_4
+  - first:
+      213: -7569072296841732429
+    second: StunGoo_5
+  - first:
+      213: -7750317514174156407
+    second: StunGoo_6
+  - first:
+      213: 5785818148727428737
+    second: StunGoo_7
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -46,7 +70,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 50
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -87,155 +111,173 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Server
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SpookyBow_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 200
-        width: 200
-        height: 200
-      alignment: 9
-      pivot: {x: 0.5274574, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f9acb1f2691b0c945882a86e22f31ce5
-      internalID: 393777750
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpookyBow_1
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 200
-        width: 200
-        height: 200
-      alignment: 9
-      pivot: {x: 0.5274574, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ba8a2b9f3e6a8f841a713bc596de4801
-      internalID: -955370192
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpookyBow_2
-      rect:
-        serializedVersion: 2
-        x: 400
-        y: 200
-        width: 200
-        height: 200
-      alignment: 9
-      pivot: {x: 0.5274574, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8bfadb6056c75a344b067986c7c4ca08
-      internalID: 985353141
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SpookyBow_3
+      name: StunGoo_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 200
-        height: 200
-      alignment: 9
-      pivot: {x: 0.5274574, y: 0.5}
+        width: 80
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e628c72017a39174dbb4973cf02ea80f
-      internalID: -1347237695
+      spriteID: 04c59b5eaf3ea9ea0800000000000000
+      internalID: -5865124897961190336
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpookyBow_4
+      name: StunGoo_1
       rect:
         serializedVersion: 2
-        x: 200
+        x: 80
         y: 0
-        width: 200
-        height: 200
-      alignment: 9
-      pivot: {x: 0.5274574, y: 0.5}
+        width: 80
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c50afc16488d3b4c97c04fa2ff2a155
-      internalID: -1362003860
+      spriteID: b2a5a46ec70c28c60800000000000000
+      internalID: 7819023545740712491
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SpookyBow_5
+      name: StunGoo_2
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 80
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53df0574152a61400800000000000000
+      internalID: 294601295611886901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StunGoo_3
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 80
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6f972889f58640f0800000000000000
+      internalID: -1133070949459452049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StunGoo_4
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 80
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2638b16b465101190800000000000000
+      internalID: -7993865816286461086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StunGoo_5
       rect:
         serializedVersion: 2
         x: 400
         y: 0
-        width: 200
-        height: 200
-      alignment: 9
-      pivot: {x: 0.5274574, y: 0.5}
+        width: 80
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ce15a73666b402549ad8f95729669bea
-      internalID: -1733027283
+      spriteID: 3be9f7349d045f690800000000000000
+      internalID: -7569072296841732429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StunGoo_6
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 80
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9813927a847517490800000000000000
+      internalID: -7750317514174156407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StunGoo_7
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 80
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18618e1a3fa5b4050800000000000000
+      internalID: 5785818148727428737
       vertices: []
       indices: 
       edges: []

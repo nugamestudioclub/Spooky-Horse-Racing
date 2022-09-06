@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class RaceHumanPlayerMovement : RacePlayerMovement
@@ -90,4 +91,33 @@ public class RaceHumanPlayerMovement : RacePlayerMovement
 			IsGrounded = false;
 		}
 	}
+
+	public void Freeze()
+    {
+		rb.velocity = Vector2.zero;
+		rb.gravityScale = 0;
+		Velocity = Vector2.zero;
+		Speed = 0;
+		ControlEnabled = false;
+    }
+
+	public void Freeze(float duration)
+    {
+		StartCoroutine(FreezeFor(duration));
+    }
+
+	public void UnFreeze()
+    {
+		rb.gravityScale = 5;
+		ControlEnabled = true;
+    }
+
+	private IEnumerator FreezeFor(float duration)
+    {
+		Freeze();
+
+		yield return new WaitForSeconds(duration);
+
+		UnFreeze();
+    }
 }

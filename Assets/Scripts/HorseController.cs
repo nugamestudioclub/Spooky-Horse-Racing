@@ -140,7 +140,7 @@ public class HorseController : MonoBehaviour {
 				//animator.speed = target.Speed / target.MaxSpeed;
 			}
 		}
-		else if( target.Velocity.y < 0 ) {
+		else if( target.Velocity.y < -Mathf.Epsilon) {
 			animator.Play("horse_fall");
 			isFalling = true;
 
