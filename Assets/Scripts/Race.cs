@@ -260,6 +260,10 @@ public class Race : MonoBehaviour {
 			LoadGhost(i, pos++);
 		}
 
+		for( int i = 0; i < MaxHumanPlayers; ++i )
+			if( cameras[i].Target == null )
+				AssignCamera(i, ghostRacers[i].gameObject);
+
 		TotalRacers = ActiveHumanPlayers + GhostCount;
 	}
 
@@ -294,6 +298,8 @@ public class Race : MonoBehaviour {
 		racer.Id = id;
 		racer.IsGhost = true;
 		racer.Place = position + 1;
+
+		if( ActiveHumanPlayers == 1 )
 
 		ghostRacers[index] = racer;
 	}

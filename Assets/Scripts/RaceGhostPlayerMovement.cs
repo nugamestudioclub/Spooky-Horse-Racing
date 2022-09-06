@@ -72,7 +72,6 @@ public class RaceGhostPlayerMovement : RacePlayerMovement {
 		WriteData(jDat);
 	}
 
-
 	private void FixedUpdate() {
 		if( !ControlEnabled )
 			return;
@@ -90,8 +89,6 @@ public class RaceGhostPlayerMovement : RacePlayerMovement {
 					curPos = getNextPosition();
 				}
 			}
-
-
 		}
 		else if( state == HorseRecordingState.Record ) {
 			SerializableTransformData dat = new SerializableTransformData {
