@@ -113,7 +113,7 @@ public class Race : MonoBehaviour {
 		checkpointLineRenderer.GetPositions(checkpoints);
 
 		for( int i = 0; i < bestData.Length; ++i )
-			bestData[i] = Database.ReadBestData(i);
+			bestData[i] = Database.ReadBestData((BestCategory)i);
 	}
 
 	private void WaitingUpdate() {
@@ -299,7 +299,6 @@ public class Race : MonoBehaviour {
 
 	}
 
-	// needs to load ghost data from database
 	private void LoadGhost(int index, int position) {
 		var obj = Spawn(ghostPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
