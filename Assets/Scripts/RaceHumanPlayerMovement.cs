@@ -92,7 +92,7 @@ public class RaceHumanPlayerMovement : RacePlayerMovement
 		}
 	}
 
-	public void Freeze()
+	public override void Freeze()
     {
 		rb.velocity = Vector2.zero;
 		rb.gravityScale = 0;
@@ -101,12 +101,12 @@ public class RaceHumanPlayerMovement : RacePlayerMovement
 		ControlEnabled = false;
     }
 
-	public void Freeze(float duration)
+	public override void Freeze(float duration)
     {
 		StartCoroutine(FreezeFor(duration));
     }
 
-	public void UnFreeze()
+	public override void UnFreeze()
     {
 		rb.gravityScale = 5;
 		ControlEnabled = true;

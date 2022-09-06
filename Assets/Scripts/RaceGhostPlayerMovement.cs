@@ -128,6 +128,21 @@ public class RaceGhostPlayerMovement : RacePlayerMovement
         if (reader != null) reader.Close();
         if (writer != null) writer.Close();
     }
+
+    public override void Freeze()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Freeze(float duration)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void UnFreeze()
+    {
+        throw new System.NotImplementedException();
+    }
 }
 
 public enum HorseRecordingState { Record, Playback };

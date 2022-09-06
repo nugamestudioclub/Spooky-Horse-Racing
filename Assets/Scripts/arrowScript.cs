@@ -37,7 +37,7 @@ public class arrowScript : MonoBehaviour
 
         if (collision.collider.CompareTag("Player"))
         {
-            collision.collider.GetComponent<RollPhysics>().Freeze(1.5f);
+            collision.collider.GetComponent<RacePlayerMovement>().Freeze(1.5f);
             source.root.GetComponent<RacePlayer>().HitCount++;
             Destroy(gameObject);
         }
