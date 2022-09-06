@@ -21,21 +21,12 @@ public static class Database {
 		return Path + "horses" + id + ".json";
 	}
 
-	private static StreamReader OpenHorseReader(int id) {
-		string path = GetHorsePath(id);
-
-		if( !File.Exists(path) )
-			File.Create(Path);
-
-		return new StreamReader(path);
-	}
-
 	public static IEnumerable<SerializableTransformData> ReadHorseData(int id) {
 		string path = GetHorsePath(id);
 
 		if( !File.Exists(path) )
 			yield break;
-		
+
 		using var reader = new StreamReader(path);
 		string line;
 
@@ -91,10 +82,47 @@ public struct SerializableTransformData {
 [Serializable]
 public class SerializableBestData {
 	public string name;
-	public string time;
+	public float time;
 	public int place;
 	public int hitCount;
 	public int coinCount;
 	public int knightId;
 	public int horseId;
+
+	public SerializableBestData() : this(
+		name: "Anonymous",
+		time: float.MaxValue,
+		place: 1,
+		hitCount: 0,
+		coinCount: 0,
+		knightId: 0,
+		horseId: 0
+	) { }
+
+	public SerializableBestData(
+		string name,
+		float time,
+		int place,
+		int hitCount,
+		int coinCount,
+		int knightId,
+		int horseId
+	) {
+		this.name = name;
+		this.time = time;
+		this.place = place;
+		this.hitCount = hitCount;
+		this.coinCount = coinCount;
+		this.knightId = knightId;
+		this.horseId = horseId;
+	}
+	public SerializableBestData(PlayerProfile profile, PlayerStats stats) : this(
+		profile.Name,
+		stats.time,
+		stats.place,
+		stats.hitCount,
+		stats.coinCount,
+		knightId:0,
+		horseId:0
+	) { }
 }

@@ -68,6 +68,8 @@ public class Race : MonoBehaviour {
 
 	private readonly RacePlayer[] ghostRacers = new RacePlayer[GhostCount];
 
+	private static readonly SerializableBestData[] bestData = new SerializableBestData[GhostCount];
+
 	[SerializeField]
 	private RacePlayerView[] playerViews = new RacePlayerView[MaxHumanPlayers];
 
@@ -109,6 +111,9 @@ public class Race : MonoBehaviour {
 
 		checkpoints = new Vector3[checkpointLineRenderer.positionCount];
 		checkpointLineRenderer.GetPositions(checkpoints);
+
+		for( int i = 0; i < bestData.Length; ++i )
+			bestData[i] = Database.ReadBestData(i);
 	}
 
 	private void WaitingUpdate() {
@@ -227,17 +232,17 @@ public class Race : MonoBehaviour {
 			: racer.Stats();
 	}
 
-	private PlayerResults MakePlayerResults(string name, PlayerStats stats) {
+	private PlayerResults MakePlayerResults(PlayerProfile profile, PlayerStats stats) {
 		return new PlayerResults(
-			name,
+			profile.Name,
 			stats.place,
 			stats.time,
 			stats.hitCount,
 			stats.coinCount,
-			CheckBestPlace(stats),
-			CheckBestTime(stats),
-			CheckBestHits(stats),
-			CheckBestCoins(stats)
+			CheckBestPlace(profile, stats),
+			CheckBestTime(profile, stats),
+			CheckBestHits(profile, stats),
+			CheckBestCoins(profile, stats)
 		);
 	}
 
@@ -324,19 +329,26 @@ public class Race : MonoBehaviour {
 
 	// these check functions should read from database
 	// and update if there is a new high score
-	private bool CheckBestPlace(PlayerStats stats) {
-		return !stats.isGhost && stats.place == 1;
+	private bool CheckBestPlace(PlayerProfile profile, PlayerStats stats) {
+		if( !stats.isGhost && stats.place == 1 ) {
+
+
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
-	private bool CheckBestTime(PlayerStats stats) {
+	private bool CheckBestTime(PlayerProfile profile, PlayerStats stats) {
 		return !stats.isGhost; ///
 	}
 
-	private bool CheckBestHits(PlayerStats stats) {
+	private bool CheckBestHits(PlayerProfile profile, PlayerStats stats) {
 		return !stats.isGhost; ///
 	}
 
-	private bool CheckBestCoins(PlayerStats stats) {
+	private bool CheckBestCoins(PlayerProfile profile, PlayerStats stats) {
 		return !stats.isGhost; ///
 	}
 
