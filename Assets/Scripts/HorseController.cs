@@ -154,6 +154,10 @@ public class HorseController : MonoBehaviour {
 				//animator.speed = target.Speed / target.MaxSpeed;
 			}
 		}
+		else if (!target.ControlEnabled)
+        {
+			animator.Play("horse_stand");
+		}
 		else if( target.Velocity.y < -Mathf.Epsilon) {
 			animator.Play("horse_fall");
 			isFalling = true;
@@ -164,6 +168,7 @@ public class HorseController : MonoBehaviour {
 		}
 
 	}
+
 
 }
 

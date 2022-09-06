@@ -8,12 +8,19 @@ public class arrowScript : MonoBehaviour
     [SerializeField]
     private GameObject gooPrefab;
     public Transform source;
-
+    [SerializeField]
+    private Collider2D playerCollider;
     // Start is called before the first frame update
     void Start()
     {
         rigidBody2D = GetComponent<Rigidbody2D>();
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), source.GetChild(1).GetComponent<Collider2D>(), true);
+        /*
+          foreach( int i in Enumerable.Range(0, Race.MaxRacers) )
+			camera.cullingMask &= ~(1 << LayerMask.NameToLayer(
+				(i == id ? "Not_Player_" : "Player_") + id
+			));
+         */
     }
 
     // Update is called once per frame

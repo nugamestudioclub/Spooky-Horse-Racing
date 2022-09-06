@@ -8,6 +8,8 @@ public class bowScript : MonoBehaviour {
 	private GameObject arrowPrefab;
 	[SerializeField]
 	private float bowPower = 5;
+	//[SerializeField]
+	//private Transform root; 
 
 	void Awake() {
 		animator = GetComponent<Animator>();
@@ -18,11 +20,19 @@ public class bowScript : MonoBehaviour {
 	}
 
 	void Update() {
-		if( InputController.GetFireDown(0) ) ///
+		if( InputController.GetFireDown(0) )
+        {
 			ChargeBow();
+			print("charging bow");
+		}
 
-		if( InputController.GetFireUp(0) ) ///
+
+		if (InputController.GetFireUp(0))
+		{
 			FireBow();
+			print("firing bow");
+		}
+			
 	}
 
 	private void ChargeBow() {

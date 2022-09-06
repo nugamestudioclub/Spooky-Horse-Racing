@@ -862,6 +862,7 @@ MonoBehaviour:
   horseSpriteSheets:
   - {fileID: 11400000, guid: 0f8e3f4312a638d4bbc6df5832336ca0, type: 2}
   - {fileID: 11400000, guid: 6182a1241510d964e890092c28e16d74, type: 2}
+  - {fileID: 11400000, guid: 232482329de153048a618be37248734e, type: 2}
   horseSpriteRenderer: {fileID: 5792989762175673518}
   nameInputField: {fileID: 8882643101042325029}
   readyText: {fileID: 3598863867324765857}
