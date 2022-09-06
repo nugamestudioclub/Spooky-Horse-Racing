@@ -166,7 +166,7 @@ public class Race : MonoBehaviour {
 			}
 
 			var results = Enumerable.Range(0, MaxRacers)
-				.Select(i => MakePlayerResults(GetPlayerProfile(i).Name, GetPlayerStats(i)))
+				.Select(i => MakePlayerResults(GetPlayerProfile(i), GetPlayerStats(i)))
 				.ToList();
 
 			results.Sort((a, b) => {
@@ -331,8 +331,9 @@ public class Race : MonoBehaviour {
 	// and update if there is a new high score
 	private bool CheckBestPlace(PlayerProfile profile, PlayerStats stats) {
 		if( !stats.isGhost && stats.place == 1 ) {
+			Database.WriteBestData(0, new SerializableBestData(
 
-
+			));
 			return true;
 		}
 		else {
