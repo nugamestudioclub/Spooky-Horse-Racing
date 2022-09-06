@@ -274,12 +274,16 @@ public class Race : MonoBehaviour {
 	private void LoadHuman(int index, int position) {
 		var obj = Spawn(humanPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
+		var profile = GetPlayerProfile(index);
 
 		racer.SetController(index);
-		racer.Name = GetPlayerProfile(index).Name;
+		racer.Name = profile.Name;
 		racer.Id = index;
 		racer.IsGhost = false;
 		racer.Place = position + 1;
+
+		if( profile.Horse != null )
+			racer.Horse = profile.Horse;
 
 		AssignCamera(index, obj);
 
@@ -292,14 +296,16 @@ public class Race : MonoBehaviour {
 		var obj = Spawn(ghostPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
 		int id = index + MaxHumanPlayers;
+		var profile = GetPlayerProfile(id);
 
 		racer.SetController(id);
-		racer.Name = GetPlayerProfile(id).Name;
+		racer.Name = profile.Name;
 		racer.Id = id;
 		racer.IsGhost = true;
 		racer.Place = position + 1;
 
-		if( ActiveHumanPlayers == 1 )
+		if( profile.Horse != null )
+			racer.Horse = profile.Horse;
 
 		ghostRacers[index] = racer;
 	}

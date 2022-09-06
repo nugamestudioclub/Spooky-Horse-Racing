@@ -183,6 +183,7 @@ MonoBehaviour:
   nameplateText: {fileID: 5290145585153944591}
   racePlayerMovement: {fileID: 7648310989341846126}
   recording: {fileID: 9186462283168381609}
+  horseAnimationManager: {fileID: 7543821139560660332}
 --- !u!1 &4493638911026333875
 GameObject:
   m_ObjectHideFlags: 0

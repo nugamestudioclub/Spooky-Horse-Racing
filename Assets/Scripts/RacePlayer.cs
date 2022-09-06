@@ -33,7 +33,15 @@ public class RacePlayer : MonoBehaviour {
 	[SerializeField]
 	private RacePlayerMovement recording;
 
+	[SerializeField]
+	private AnimationManager horseAnimationManager;
+
 	public Transform Transform => racePlayerMovement == null ? transform : racePlayerMovement.transform;
+
+	public SpriteSheet Horse {
+		get => horseAnimationManager.SpriteSheet;
+		set => horseAnimationManager.SpriteSheet = value;
+	}
 
 	public bool ControlEnabled {
 		get => racePlayerMovement == null ? false : racePlayerMovement.ControlEnabled;

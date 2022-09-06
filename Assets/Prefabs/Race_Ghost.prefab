@@ -428,3 +428,4 @@ MonoBehaviour:
   nameplateText: {fileID: 6169135488734375526}
   racePlayerMovement: {fileID: 2779906967629371706}
   recording: {fileID: 2779906967629371706}
+  horseAnimationManager: {fileID: 7713927989730474296}
