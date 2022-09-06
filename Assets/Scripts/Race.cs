@@ -416,14 +416,16 @@ public class Race : MonoBehaviour {
 	private void StartRecording() {
 		foreach( var racer in GetAllRacers() ) {
 			racer.ControlEnabled = true;
+			racer.Recording.ControlEnabled = true;
 			racer.Recording.Play();
 		}
 	}
 
 	private void StopRecording() {
 		foreach( var racer in GetAllRacers() ) {
-			racer.ControlEnabled = false;
 			racer.Recording.Stop();
+			racer.Recording.ControlEnabled = false;
+			racer.ControlEnabled = false;
 		}
 	}
 
@@ -451,8 +453,21 @@ public class Race : MonoBehaviour {
 	}
 
 	private void WriteBestData() {
-		foreach( BestCategory category in Enum.GetValues(typeof(BestCategory)) )
-			Database.WriteBestData(category, GetBestData(category));
+		for( int i = 0; i < MaxHumanPlayers; ++i ) {
+			if( playerResults[i].isPlaceBest )
+				WriteNewBest(i, BestCategory.Place);
+			if( playerResults[i].isTimeBest )
+				WriteNewBest(i, BestCategory.Time);
+			if( playerResults[i].isHitsBest )
+				WriteNewBest(i, BestCategory.Hits);
+			if( playerResults[i].isCoinsBest )
+				WriteNewBest(i, BestCategory.Coins);
+		}
+	}
+
+	private void WriteNewBest(int playerId, BestCategory category) {
+		Database.WriteHorseData((int)BestCategory.Place + GhostCount, humanRacers[playerId].Recording.Data);
+		Database.WriteBestData(category, GetBestData(category));
 	}
 
 	private SerializableBestData GetBestData(BestCategory category) {

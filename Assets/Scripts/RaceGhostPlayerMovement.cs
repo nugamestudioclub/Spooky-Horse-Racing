@@ -8,15 +8,13 @@ public class RaceGhostPlayerMovement : RacePlayerMovement {
 
 	private int readPosition;
 
-	private bool EndOfFile => readPosition >= data.Count;
+	private bool EndOfFile => readPosition >= Data.Count;
 
 	SerializableTransformData NextData() {
-		return data.Count == 0
+		return Data.Count == 0
 			? new SerializableTransformData()
-			: data[readPosition++];
+			: Data[readPosition++];
 	}
-
-	private IList<SerializableTransformData> data;
 
 	SerializableTransformData currentData;
 
@@ -32,13 +30,13 @@ public class RaceGhostPlayerMovement : RacePlayerMovement {
 
 	public override void Play() {
 		if( state == HorseRecordingState.Playback )
-			data = new List<SerializableTransformData>(Database.ReadHorseData(ControllerId));
+			Data = new List<SerializableTransformData>(Database.ReadHorseData(ControllerId));
 		else if( state == HorseRecordingState.Record )
-			data = new List<SerializableTransformData>();
+			Data = new List<SerializableTransformData>();
 	}
 
 	public override void Stop() {
-		Database.WriteHorseData(ControllerId, data);
+		Database.WriteHorseData(ControllerId, Data);
 	}
 
 	private void Playback() {
@@ -61,7 +59,7 @@ public class RaceGhostPlayerMovement : RacePlayerMovement {
 	}
 
 	private void Record() {
-		data.Add(new SerializableTransformData {
+		Data.Add(new SerializableTransformData {
 			pX = transform.position.x,
 			pY = transform.position.y,
 			pZ = transform.position.z,

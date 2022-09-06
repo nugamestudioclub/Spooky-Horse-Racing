@@ -12,6 +12,8 @@ public abstract class RacePlayerMovement : MonoBehaviour
 
     public bool IsGrounded { get; protected set; }
 
+    public IList<SerializableTransformData> Data { get; protected set; }
+
     public abstract void Play();
 
     public abstract void Stop();
