@@ -141,6 +141,7 @@ public class Race : MonoBehaviour {
 		var racers = GetRacersInOrder();
 
 		for( int i = 0; i < racers.Count; ++i ) {
+			// Debug.Log($"racer {racers[i].Id}: {Strings.ToOrdinal(i + 1)}");
 			racers[i].Place = i + 1;
 		}
 	}
@@ -327,14 +328,14 @@ public class Race : MonoBehaviour {
 			playerProfiles[i] = null;
 	}
 
-	private int FindClosestCheckpoint(RacePlayer racer) {
+	private int FindNearestCheckpoint(RacePlayer racer) {
 		var pairs = Enumerable.Range(0, checkpoints.Length)
 			.Select(i => new KeyValuePair<int, float>(
 				i,
 				Vector3.Distance(checkpoints[i], racer.Transform.position))
 			)
-			.OrderBy(pair => pair.Value)
 			.ToList();
+		pairs.Sort((a, b) => a.Value.CompareTo(b.Value));
 		int index = pairs[0].Key;
 
 		if( index == 0 || index == checkpoints.Length - 1 )
@@ -344,12 +345,21 @@ public class Race : MonoBehaviour {
 	}
 
 	private CheckpointStatus GetCheckpointStatus(RacePlayer racer) {
-		return new CheckpointStatus(racer, FindClosestCheckpoint(racer));
+		return new CheckpointStatus(racer, FindNearestCheckpoint(racer));
 	}
 
 	private int CompareCheckpointStatus(CheckpointStatus first, CheckpointStatus second) {
-		if( first.checkpoint > second.checkpoint ) {
+		if( first.racer.HasReachedFinishLine && second.racer.HasReachedFinishLine) {
+			return first.racer.Place.CompareTo(second.racer.Place);
+		}
+		else if( first.racer.HasReachedFinishLine && !second.racer.HasReachedFinishLine ) {
+			return 1;
+		}
+		else if( !first.racer.HasReachedFinishLine && second.racer.HasReachedFinishLine ) {
 			return -1;
+		}
+		else if( first.checkpoint > second.checkpoint ) {
+			return 1;
 		}
 		else {
 			var nextCheckpoint = checkpoints[Math.Min(first.checkpoint + 1, checkpoints.Length - 1)];

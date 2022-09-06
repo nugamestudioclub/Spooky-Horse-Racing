@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6185878547509919591}
   - component: {fileID: 2779906967629371706}
+  - component: {fileID: 5760859586184104180}
+  - component: {fileID: 6128208007697020065}
   m_Layer: 0
   m_Name: GhostMovement
   m_TagString: Untagged
@@ -26,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3107586307645618488}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 10, z: 1}
   m_Children: []
   m_Father: {fileID: 4367274284487756658}
   m_RootOrder: 1
@@ -44,6 +46,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 1
+--- !u!58 &5760859586184104180
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3107586307645618488}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.22
+--- !u!114 &6128208007697020065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3107586307645618488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca59081a32b2d1458164066db3947a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  racer: {fileID: 7339427894273954048}
 --- !u!1 &4134539490318977621
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,6 +255,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4367274284317120009}
   - component: {fileID: 4367274284317120008}
+  - component: {fileID: 1816136099911599595}
+  - component: {fileID: 1890662974816865203}
+  - component: {fileID: 7713927989730474296}
   m_Layer: 0
   m_Name: Horse
   m_TagString: Untagged
@@ -240,7 +274,7 @@ Transform:
   m_GameObject: {fileID: 4367274284317120015}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 4, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_Children:
   - {fileID: 6471903135823983994}
   m_Father: {fileID: 4367274284487756658}
@@ -297,6 +331,55 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1816136099911599595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4367274284317120015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2dd8b852485e6842a8932d8a88daf39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 2779906967629371706}
+  spriteRenderer: {fileID: 4367274284317120008}
+  animator: {fileID: 1890662974816865203}
+  recordingState: 0
+--- !u!95 &1890662974816865203
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4367274284317120015}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5a9861de0b35176408a742f194bb955e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7713927989730474296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4367274284317120015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ef24d404f82f304d8a09f5af7ff6298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteSheet: {fileID: 11400000, guid: 0f8e3f4312a638d4bbc6df5832336ca0, type: 2}
+  spriteRenderer: {fileID: 4367274284317120008}
 --- !u!1 &4367274284487756657
 GameObject:
   m_ObjectHideFlags: 0

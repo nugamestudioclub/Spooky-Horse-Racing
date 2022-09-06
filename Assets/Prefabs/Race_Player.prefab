@@ -196,6 +196,8 @@ GameObject:
   - component: {fileID: 7880680979647062541}
   - component: {fileID: 7648310989341846126}
   - component: {fileID: 8754166495090636542}
+  - component: {fileID: 3476064096077915617}
+  - component: {fileID: 4092239473895986084}
   m_Layer: 0
   m_Name: Rolling
   m_TagString: Untagged
@@ -337,6 +339,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+--- !u!58 &3476064096077915617
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493638911026333875}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.22
+--- !u!114 &4092239473895986084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493638911026333875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca59081a32b2d1458164066db3947a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  racer: {fileID: 4505460146459932478}
 --- !u!1 &9165616794417393823
 GameObject:
   m_ObjectHideFlags: 0
