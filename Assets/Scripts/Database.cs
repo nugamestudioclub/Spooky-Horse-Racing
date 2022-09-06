@@ -18,11 +18,11 @@ public static class Database {
 	}
 
 	private static string GetHorsePath(int id) {
-		return Path + "horses" + id + ".txt";
+		return Path + "horses" + id + ".json";
 	}
 
 	private static StreamReader OpenHorseReader(int id) {
-		var path = GetHorsePath(id);
+		string path = GetHorsePath(id);
 
 		if( !File.Exists(path) )
 			File.Create(Path);
@@ -31,29 +31,53 @@ public static class Database {
 	}
 
 	public static IEnumerable<SerializableTransformData> ReadHorseData(int id) {
-		using var reader = OpenHorseReader(id);
+		string path = GetHorsePath(id);
+
+		if( !File.Exists(path) )
+			yield break;
+		
+		using var reader = new StreamReader(path);
 		string line;
 
 		while( (line = reader.ReadLine()) != null )
 			yield return JsonUtility.FromJson<SerializableTransformData>(line);
 	}
 
-	private static StreamWriter OpenHorseWriter(int id) {
-		var path = GetHorsePath(id);
+	public static void WriteHorseData(int id, IEnumerable<SerializableTransformData> data) {
+		string path = GetHorsePath(id);
 
 		if( !File.Exists(path) )
 			File.Create(Path);
 
-		return new StreamWriter(path);
-	}
-
-	public static void WriteHorseData(int id, IEnumerable<SerializableTransformData> data) {
-		using var writer = OpenHorseWriter(id);
+		using var writer = new StreamWriter(path);
 
 		foreach( var item in data )
 			writer.Write(JsonUtility.ToJson(item));
 	}
 
+	private static string GetBestPath(int id) {
+		return Path + "best" + id + ".json";
+	}
+
+	public static SerializableBestData ReadBestData(int id) {
+		string path = GetBestPath(id);
+
+		if( !File.Exists(path) )
+			return new SerializableBestData();
+		else
+			return JsonUtility.FromJson<SerializableBestData>(path);
+	}
+
+	public static void WriteBestData(int id, SerializableBestData data) {
+		string path = GetBestPath(id);
+
+		if( !File.Exists(path) )
+			File.Create(path);
+
+		using var writer = new StreamWriter(path);
+
+		writer.Write(JsonUtility.ToJson(data));
+	}
 }
 
 [Serializable]
