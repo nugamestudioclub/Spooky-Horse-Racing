@@ -3,6 +3,70 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+[Serializable]
+public struct SerializableTransformData {
+	public float pX;
+	public float pY;
+	public float pZ;
+	public float rot;
+}
+
+public enum BestCategory {
+	Place,
+	Time,
+	Hits,
+	Coins,
+}
+
+[Serializable]
+public class SerializableBestData {
+	public string name;
+	public float time;
+	public int place;
+	public int hitCount;
+	public int coinCount;
+	public int knightId;
+	public int horseId;
+
+	public SerializableBestData() : this(
+		name: "Anonymous",
+		time: float.MaxValue,
+		place: 1,
+		hitCount: 0,
+		coinCount: 0,
+		knightId: 0,
+		horseId: 0
+	) { }
+
+	public SerializableBestData(
+		string name,
+		float time,
+		int place,
+		int hitCount,
+		int coinCount,
+		int knightId,
+		int horseId
+	) {
+		this.name = name;
+		this.time = time;
+		this.place = place;
+		this.hitCount = hitCount;
+		this.coinCount = coinCount;
+		this.knightId = knightId;
+		this.horseId = horseId;
+	}
+
+	public SerializableBestData(PlayerProfile profile, PlayerStats stats) : this(
+		profile.Name,
+		stats.time,
+		stats.place,
+		stats.hitCount,
+		stats.coinCount,
+		knightId:0, ///
+		horseId:0 ///
+	) { }
+}
+
 public static class Database {
 
 	private static string rootPath;
@@ -46,12 +110,12 @@ public static class Database {
 			writer.WriteLine(JsonUtility.ToJson(item));
 	}
 
-	private static string GetBestPath(int id) {
-		return RootPath + "best" + id + ".json";
+	private static string GetBestPath(BestCategory category) {
+		return RootPath + "best_" + Enum.GetName(typeof(BestCategory), category).ToLower() + ".json";
 	}
 
-	public static SerializableBestData ReadBestData(int id) {
-		string path = GetBestPath(id);
+	public static SerializableBestData ReadBestData(BestCategory category) {
+		string path = GetBestPath(category);
 
 		if( !File.Exists(path) )
 			return new SerializableBestData();
@@ -59,8 +123,8 @@ public static class Database {
 			return JsonUtility.FromJson<SerializableBestData>(path);
 	}
 
-	public static void WriteBestData(int id, SerializableBestData data) {
-		string path = GetBestPath(id);
+	public static void WriteBestData(BestCategory category, SerializableBestData data) {
+		string path = GetBestPath(category);
 
 		if( !File.Exists(path) )
 			File.Create(path);
@@ -69,60 +133,4 @@ public static class Database {
 
 		writer.WriteLine(JsonUtility.ToJson(data));
 	}
-}
-
-[Serializable]
-public struct SerializableTransformData {
-	public float pX;
-	public float pY;
-	public float pZ;
-	public float rot;
-}
-
-[Serializable]
-public class SerializableBestData {
-	public string name;
-	public float time;
-	public int place;
-	public int hitCount;
-	public int coinCount;
-	public int knightId;
-	public int horseId;
-
-	public SerializableBestData() : this(
-		name: "Anonymous",
-		time: float.MaxValue,
-		place: 1,
-		hitCount: 0,
-		coinCount: 0,
-		knightId: 0,
-		horseId: 0
-	) { }
-
-	public SerializableBestData(
-		string name,
-		float time,
-		int place,
-		int hitCount,
-		int coinCount,
-		int knightId,
-		int horseId
-	) {
-		this.name = name;
-		this.time = time;
-		this.place = place;
-		this.hitCount = hitCount;
-		this.coinCount = coinCount;
-		this.knightId = knightId;
-		this.horseId = horseId;
-	}
-	public SerializableBestData(PlayerProfile profile, PlayerStats stats) : this(
-		profile.Name,
-		stats.time,
-		stats.place,
-		stats.hitCount,
-		stats.coinCount,
-		knightId:0,
-		horseId:0
-	) { }
 }

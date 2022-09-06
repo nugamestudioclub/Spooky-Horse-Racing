@@ -327,13 +327,9 @@ public class Race : MonoBehaviour {
 		cameras[index].Camera.enabled = true;
 	}
 
-	// these check functions should read from database
-	// and update if there is a new high score
 	private bool CheckBestPlace(PlayerProfile profile, PlayerStats stats) {
 		if( !stats.isGhost && stats.place == 1 ) {
-			Database.WriteBestData(0, new SerializableBestData(
-
-			));
+			Database.WriteBestData(BestCategory.Place, new SerializableBestData(profile, stats));
 			return true;
 		}
 		else {
@@ -342,15 +338,39 @@ public class Race : MonoBehaviour {
 	}
 
 	private bool CheckBestTime(PlayerProfile profile, PlayerStats stats) {
-		return !stats.isGhost; ///
+		var best = Database.ReadBestData(BestCategory.Time);
+
+		if( !stats.isGhost && stats.time <= best.time ) {
+			Database.WriteBestData(BestCategory.Time, new SerializableBestData(profile, stats));
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	private bool CheckBestHits(PlayerProfile profile, PlayerStats stats) {
-		return !stats.isGhost; ///
+		var best = Database.ReadBestData(BestCategory.Hits);
+
+		if( !stats.isGhost && stats.hitCount >= best.hitCount ) {
+			Database.WriteBestData(BestCategory.Hits, new SerializableBestData(profile, stats));
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	private bool CheckBestCoins(PlayerProfile profile, PlayerStats stats) {
-		return !stats.isGhost; ///
+		var best = Database.ReadBestData(BestCategory.Coins);
+
+		if( !stats.isGhost && stats.coinCount >= best.coinCount ) {
+			Database.WriteBestData(BestCategory.Coins, new SerializableBestData(profile, stats));
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	private bool IsDoneWaiting() {
