@@ -33,6 +33,8 @@ public class RacePlayer : MonoBehaviour {
 	[SerializeField]
 	private RacePlayerMovement recording;
 
+	public RacePlayerMovement Recording => recording;
+
 	[SerializeField]
 	private AnimationManager knightAnimationManager;
 
@@ -55,7 +57,7 @@ public class RacePlayer : MonoBehaviour {
 	}
 
 	public bool ControlEnabled {
-		get => racePlayerMovement == null ? false : racePlayerMovement.ControlEnabled;
+		get => racePlayerMovement != null && racePlayerMovement.ControlEnabled;
 		set {
 			if( racePlayerMovement != null )
 				racePlayerMovement.ControlEnabled = value;
@@ -107,15 +109,5 @@ public class RacePlayer : MonoBehaviour {
 
 		if( racePlayerMovement.Length > 0 )
 			racePlayerMovement[0].ControllerId = id;
-	}
-
-	public void BeginRecording() {
-		recording.ControlEnabled = true;
-		recording.Play();
-	}
-
-	public void EndRecording() {
-		recording.ControlEnabled = false;
-		recording.Stop();
 	}
 }

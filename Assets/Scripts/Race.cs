@@ -11,7 +11,7 @@ public enum RaceState {
 	Finished,
 }
 
-public class CheckpointStatus { 
+public class CheckpointStatus {
 	public RacePlayer racer;
 	public int checkpoint;
 
@@ -112,8 +112,7 @@ public class Race : MonoBehaviour {
 		checkpoints = new Vector3[checkpointLineRenderer.positionCount];
 		checkpointLineRenderer.GetPositions(checkpoints);
 
-		for( int i = 0; i < bestData.Length; ++i )
-			bestData[i] = Database.ReadBestData((BestCategory)i);
+		ReadBestData();
 	}
 
 	private void WaitingUpdate() {
@@ -129,11 +128,7 @@ public class Race : MonoBehaviour {
 		if( timer.IsDone ) {
 			timer.Show(false);
 			timer.Reset();
-			foreach( var racer in GetAllRacers() ) {
-				racer.ControlEnabled = true;
-				racer.BeginRecording();
-				Debug.Log($"{racer.Id} began recording");
-			}
+			StartRecording();
 			state = RaceState.Racing;
 		}
 	}
@@ -160,25 +155,9 @@ public class Race : MonoBehaviour {
 			SceneController.LoadResults();
 		}
 		else {
-			foreach( var racer in GetAllRacers() ) {
-				racer.ControlEnabled = false;
-				racer.EndRecording();
-			}
-
-			var results = Enumerable.Range(0, MaxRacers)
-				.Select(i => MakePlayerResults(GetPlayerProfile(i), GetPlayerStats(i)))
-				.ToList();
-
-			results.Sort((a, b) => {
-				if( a.place <= 0 && b.place > 0 )
-					return 1;
-				else if( a.place > 0 && b.place <= 0 )
-					return -1;
-				else
-					return a.place.CompareTo(b.place);
-			});
-
-			results.CopyTo(playerResults);
+			StopRecording();
+			HandleResults();
+			WriteBestData();
 
 			Clear();
 			done = true;
@@ -287,10 +266,10 @@ public class Race : MonoBehaviour {
 		racer.IsGhost = false;
 		racer.Place = position + 1;
 
-		if (profile.Knight != null)
+		if( profile.Knight != null )
 			racer.Knight = profile.Knight;
 
-		if ( profile.Horse != null )
+		if( profile.Horse != null )
 			racer.Horse = profile.Horse;
 
 		AssignCamera(index, obj);
@@ -303,19 +282,21 @@ public class Race : MonoBehaviour {
 		var obj = Spawn(ghostPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
 		int id = index + MaxHumanPlayers;
-		var profile = GetPlayerProfile(id);
+		var data = bestData[index];
 
 		racer.SetController(id);
-		racer.Name = profile.Name;
+		racer.Name = data.name;
 		racer.Id = id;
 		racer.IsGhost = true;
 		racer.Place = position + 1;
 
+		/*
 		if( profile.Knight != null )
 			racer.Knight = profile.Knight;
 
 		if (profile.Horse != null)
 			racer.Horse = profile.Horse;
+		*/
 
 		ghostRacers[index] = racer;
 	}
@@ -328,7 +309,7 @@ public class Race : MonoBehaviour {
 
 	private bool CheckBestPlace(PlayerProfile profile, PlayerStats stats) {
 		if( !stats.isGhost && stats.place == 1 ) {
-			Database.WriteBestData(BestCategory.Place, new SerializableBestData(profile, stats));
+			SetBestData(BestCategory.Place, new SerializableBestData(profile, stats));
 			return true;
 		}
 		else {
@@ -340,7 +321,7 @@ public class Race : MonoBehaviour {
 		var best = Database.ReadBestData(BestCategory.Time);
 
 		if( !stats.isGhost && stats.time <= best.time ) {
-			Database.WriteBestData(BestCategory.Time, new SerializableBestData(profile, stats));
+			SetBestData(BestCategory.Time, new SerializableBestData(profile, stats));
 			return true;
 		}
 		else {
@@ -352,7 +333,7 @@ public class Race : MonoBehaviour {
 		var best = Database.ReadBestData(BestCategory.Hits);
 
 		if( !stats.isGhost && stats.hitCount >= best.hitCount ) {
-			Database.WriteBestData(BestCategory.Hits, new SerializableBestData(profile, stats));
+			SetBestData(BestCategory.Hits, new SerializableBestData(profile, stats));
 			return true;
 		}
 		else {
@@ -364,7 +345,7 @@ public class Race : MonoBehaviour {
 		var best = Database.ReadBestData(BestCategory.Coins);
 
 		if( !stats.isGhost && stats.coinCount >= best.coinCount ) {
-			Database.WriteBestData(BestCategory.Coins, new SerializableBestData(profile, stats));
+			SetBestData(BestCategory.Coins, new SerializableBestData(profile, stats));
 			return true;
 		}
 		else {
@@ -405,7 +386,7 @@ public class Race : MonoBehaviour {
 	}
 
 	private int CompareCheckpointStatus(CheckpointStatus first, CheckpointStatus second) {
-		if( first.racer.HasReachedFinishLine && second.racer.HasReachedFinishLine) {
+		if( first.racer.HasReachedFinishLine && second.racer.HasReachedFinishLine ) {
 			return first.racer.Place.CompareTo(second.racer.Place);
 		}
 		else if( first.racer.HasReachedFinishLine && !second.racer.HasReachedFinishLine ) {
@@ -430,5 +411,54 @@ public class Race : MonoBehaviour {
 			.ToList();
 		racers.Sort((a, b) => CompareCheckpointStatus(a, b));
 		return racers.Select(x => x.racer).ToList();
+	}
+
+	private void StartRecording() {
+		foreach( var racer in GetAllRacers() ) {
+			racer.ControlEnabled = true;
+			racer.Recording.Play();
+		}
+	}
+
+	private void StopRecording() {
+		foreach( var racer in GetAllRacers() ) {
+			racer.ControlEnabled = false;
+			racer.Recording.Stop();
+		}
+	}
+
+	private void HandleResults() {
+		var results = Enumerable.Range(0, MaxRacers)
+				.Select(i => MakePlayerResults(GetPlayerProfile(i), GetPlayerStats(i)))
+				.ToList();
+
+		results.Sort((a, b) => {
+			if( a.place <= 0 && b.place > 0 )
+				return 1;
+			else if( a.place > 0 && b.place <= 0 )
+				return -1;
+			else
+				return a.place.CompareTo(b.place);
+		});
+
+		results.CopyTo(playerResults);
+	}
+
+	private void ReadBestData() {
+		foreach( BestCategory category in Enum.GetValues(typeof(BestCategory)) )
+			SetBestData(category, Database.ReadBestData(category));
+	}
+
+	private void WriteBestData() {
+		foreach( BestCategory category in Enum.GetValues(typeof(BestCategory)) )
+			Database.WriteBestData(category, GetBestData(category));
+	}
+
+	private SerializableBestData GetBestData(BestCategory category) {
+		return bestData[(int)category];
+	}
+
+	private void SetBestData(BestCategory category, SerializableBestData data) {
+		bestData[(int)category] = data;
 	}
 }
