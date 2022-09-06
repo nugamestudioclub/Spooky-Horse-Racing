@@ -5,105 +5,68 @@ using System.IO;
 
 public class RaceGhostPlayerMovement : RacePlayerMovement {
 	public HorseRecordingState state;
-	//@"D:\UnityGames\Game Studio Club\spooky-horse-racing\Assets\Resources\"
-	public static string raw_filepath;
-	private StreamReader reader;
-	private StreamWriter writer;
 
-	private int curIndex = 0;
-	string path;
-	SerializableTransformData curPos;
+	private int readPosition;
 
-	private bool reachedEnd = false;
+	private bool EndOfFile => readPosition >= data.Count;
 
-	private bool controlEnabled;
-
-	public override void BeginRecording() {
-		raw_filepath = Application.dataPath + @"\Resources\";
-		//print("STARTInG!");
-		path = raw_filepath + "horses" + ControllerId.ToString() + ".txt";
-		print(path);
-		if( !File.Exists(path) ) {
-			//print("Creating file!");
-			File.Create(path);
-			// print("CREATED FILE!");
-		}
-		//text = (TextAsset)Resources.Load(path);
-		print("Loaded resource:");
-		if( state == HorseRecordingState.Playback )
-			reader = new StreamReader(path);
-		else
-			writer = new StreamWriter(path);
-
-		print(writer);
-		print(reader);
+	SerializableTransformData NextData() {
+		return data.Count == 0
+			? new SerializableTransformData()
+			: data[readPosition++];
 	}
 
-	public override void EndRecording() {
-		if( reader != null ) reader.Close();
-		if( writer != null ) writer.Close();
-	}
+	private IList<SerializableTransformData> data;
 
-	public void WriteData(string data) {
-		writer.WriteLine(data);
-	}
-	public string ReadNext() {
-		//print($"Reader is null: {reader == null}");
-		string data = reader.ReadLine();
-
-		if( data == null ) {
-			reader.Close();
-			reachedEnd = true;
-			reader = new StreamReader(path);
-			data = reader.ReadLine();
-		}
-		return data;
-	}
-
-
-	public SerializableTransformData getNextPosition() {
-		string data = ReadNext();
-		//print($"Data is null: {data == null}");
-		return JsonUtility.FromJson<SerializableTransformData>(data);
-	}
-
-	public void writePosition(SerializableTransformData dat) {
-		string jDat = JsonUtility.ToJson(dat);
-		WriteData(jDat);
-	}
+	SerializableTransformData currentData;
 
 	private void FixedUpdate() {
 		if( !ControlEnabled )
 			return;
 
-		if( state == HorseRecordingState.Playback ) {
-			if( !reachedEnd ) {
-				//CHANGE 0.5 if you want faster or slower
-				transform.position = Vector3.Lerp(
-					transform.position,
-					new Vector3(curPos.pX, curPos.pY, curPos.pZ),
-					1.0f);
-				transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, curPos.rot);
-
-				if( Vector2.Distance(new Vector2(curPos.pX, curPos.pY), transform.position) < 0.1f ) {
-					curPos = getNextPosition();
-				}
-			}
-		}
-		else if( state == HorseRecordingState.Record ) {
-			SerializableTransformData dat = new SerializableTransformData {
-				pX = transform.position.x,
-				pY = transform.position.y,
-				pZ = transform.position.z,
-				rot = transform.eulerAngles.z
-			};
-			writePosition(dat);
-		}
-		curIndex += 1;
+		if( state == HorseRecordingState.Playback )
+			Playback();
+		else if( state == HorseRecordingState.Record )
+			Record();
 	}
 
-	void OnApplicationQuit() {
-		EndRecording();
+	public override void Play() {
+		if( state == HorseRecordingState.Playback )
+			data = new List<SerializableTransformData>(Database.ReadHorseData(ControllerId));
+		else if( state == HorseRecordingState.Record )
+			data = new List<SerializableTransformData>();
+	}
+
+	public override void Stop() {
+		Database.WriteHorseData(ControllerId, data);
+	}
+
+	private void Playback() {
+		if( EndOfFile )
+			return;
+
+		transform.position = Vector3.Lerp(
+			transform.position,
+			new Vector3(currentData.pX, currentData.pY, currentData.pZ),
+			1.0f
+		);
+		transform.eulerAngles = new Vector3(
+			transform.eulerAngles.x,
+			transform.eulerAngles.y,
+			currentData.rot
+		);
+
+		if( Vector2.Distance(new Vector2(currentData.pX, currentData.pY), transform.position) < 0.1f )
+			currentData = NextData();
+	}
+
+	private void Record() {
+		data.Add(new SerializableTransformData {
+			pX = transform.position.x,
+			pY = transform.position.y,
+			pZ = transform.position.z,
+			rot = transform.eulerAngles.z
+		});
 	}
 
 	public override void Freeze() { }
@@ -114,11 +77,3 @@ public class RaceGhostPlayerMovement : RacePlayerMovement {
 }
 
 public enum HorseRecordingState { Record, Playback };
-
-[System.Serializable]
-public struct SerializableTransformData {
-	public float pX;
-	public float pY;
-	public float pZ;
-	public float rot;
-}

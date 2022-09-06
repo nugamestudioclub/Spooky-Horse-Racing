@@ -12,9 +12,9 @@ public abstract class RacePlayerMovement : MonoBehaviour
 
     public bool IsGrounded { get; protected set; }
 
-    public abstract void BeginRecording();
+    public abstract void Play();
 
-    public abstract void EndRecording();
+    public abstract void Stop();
 
     public abstract void Freeze();
 

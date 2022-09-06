@@ -90,9 +90,9 @@ public class RaceHumanPlayerMovement : RacePlayerMovement
 		}
 	}
 
-	public override void BeginRecording() { }
+	public override void Play() { }
 
-	public override void EndRecording() { }
+	public override void Stop() { }
 
 	public override void Freeze()
     {
