@@ -21,8 +21,8 @@ public enum BestCategory {
 [Serializable]
 public class SerializableBestData {
 	public string name;
-	public int place;
 	public float time;
+	public int place;
 	public int hitCount;
 	public int coinCount;
 	public int knightId;
@@ -30,8 +30,8 @@ public class SerializableBestData {
 
 	public SerializableBestData() : this(
 		name: "Anonymous",
-		place: int.MaxValue,
 		time: float.MaxValue,
+		place: int.MaxValue,
 		hitCount: 0,
 		coinCount: 0,
 		knightId: 0,
@@ -40,16 +40,16 @@ public class SerializableBestData {
 
 	public SerializableBestData(
 		string name,
-		int place,
 		float time,
+		int place,
 		int hitCount,
 		int coinCount,
 		int knightId,
 		int horseId
 	) {
 		this.name = name;
-		this.place = place;
 		this.time = time;
+		this.place = place;
 		this.hitCount = hitCount;
 		this.coinCount = coinCount;
 		this.knightId = knightId;
@@ -58,8 +58,8 @@ public class SerializableBestData {
 
 	public SerializableBestData(PlayerProfile profile, PlayerStats stats) : this(
 		profile.Name,
-		stats.place,
 		stats.time,
+		stats.place,
 		stats.hitCount,
 		stats.coinCount,
 		knightId: 0, ///
@@ -122,7 +122,8 @@ public static class Database {
 				? JsonUtility.FromJson<SerializableBestData>(path)
 				: new SerializableBestData();
 		}
-		catch {
+		catch( Exception ex ){
+			Debug.Log(ex.Message);
 			return new SerializableBestData();
 		}
 	}
@@ -135,6 +136,6 @@ public static class Database {
 
 		using var writer = new StreamWriter(path);
 
-		writer.Write(JsonUtility.ToJson(data));
+		writer.WriteLine(JsonUtility.ToJson(data));
 	}
 }

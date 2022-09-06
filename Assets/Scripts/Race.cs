@@ -285,7 +285,7 @@ public class Race : MonoBehaviour {
 		var data = bestData[index];
 
 		racer.SetController(id);
-		racer.Name = data.name;
+		racer.Name = "Ghost of " + data.name;
 		racer.Id = id;
 		racer.IsGhost = true;
 		racer.Place = position + 1;
@@ -445,8 +445,9 @@ public class Race : MonoBehaviour {
 	}
 
 	private void ReadBestData() {
-		foreach( BestCategory category in Enum.GetValues(typeof(BestCategory)) )
+		foreach( BestCategory category in Enum.GetValues(typeof(BestCategory)) ) {
 			SetBestData(category, Database.ReadBestData(category));
+		}
 	}
 
 	private void WriteBestData() {
