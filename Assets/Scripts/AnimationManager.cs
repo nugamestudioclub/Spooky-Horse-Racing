@@ -11,7 +11,7 @@ public class AnimationManager : MonoBehaviour {
 	}
 
 	[SerializeField]
-	private SpriteRenderer spriteRenderer;
+	private SpriteRenderer[] spriteRenderers;
 
 	private int index;
 
@@ -19,7 +19,31 @@ public class AnimationManager : MonoBehaviour {
 		get => index;
 		set {
 			index = value;
-			spriteRenderer.sprite = spriteSheet[Index];
+			spriteRenderers[0].sprite = spriteSheet[Index];
+		}
+	}
+
+	public void SetPieces(SpriteSheet pieces)
+    {
+		for (int i = 0; i < pieces.Count;i++)
+        {
+			if (spriteRenderers[i] != null)
+            {
+				spriteRenderers[i].sprite = pieces[i];
+			}
+			
+        }
+    }
+
+	public void FlipPiecesX(bool flip)
+    {
+		for (int i = 0; i < spriteRenderers.Length; i++)
+		{
+			if (spriteRenderers[i] != null)
+			{
+				spriteRenderers[i].flipX = flip;
+			}
+
 		}
 	}
 }

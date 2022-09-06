@@ -282,7 +282,10 @@ public class Race : MonoBehaviour {
 		racer.IsGhost = false;
 		racer.Place = position + 1;
 
-		if( profile.Horse != null )
+		if (profile.Knight != null)
+			racer.Knight = profile.Knight;
+
+		if ( profile.Horse != null )
 			racer.Horse = profile.Horse;
 
 		AssignCamera(index, obj);
@@ -304,7 +307,10 @@ public class Race : MonoBehaviour {
 		racer.IsGhost = true;
 		racer.Place = position + 1;
 
-		if( profile.Horse != null )
+		if( profile.Knight != null )
+			racer.Knight = profile.Knight;
+
+		if (profile.Horse != null)
 			racer.Horse = profile.Horse;
 
 		ghostRacers[index] = racer;

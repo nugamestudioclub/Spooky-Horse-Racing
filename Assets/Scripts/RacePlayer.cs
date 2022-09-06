@@ -34,11 +34,22 @@ public class RacePlayer : MonoBehaviour {
 	private RacePlayerMovement recording;
 
 	[SerializeField]
-	private AnimationManager horseAnimationManager;
+	private AnimationManager knightAnimationManager;
 
+	[SerializeField]
+	private AnimationManager horseAnimationManager;
 	public Transform Transform => racePlayerMovement == null ? transform : racePlayerMovement.transform;
 
-	public SpriteSheet Horse {
+	public SpriteSheet Knight {
+		get => knightAnimationManager.SpriteSheet;
+		set {
+			knightAnimationManager.SpriteSheet = value;
+			knightAnimationManager.SetPieces(knightAnimationManager.SpriteSheet); 
+		}
+	}
+
+	public SpriteSheet Horse
+	{
 		get => horseAnimationManager.SpriteSheet;
 		set => horseAnimationManager.SpriteSheet = value;
 	}

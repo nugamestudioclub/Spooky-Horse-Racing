@@ -11,6 +11,9 @@ public class HorseController : MonoBehaviour {
 	private SpriteRenderer spriteRenderer;
 
 	[SerializeField]
+	private AnimationManager knight;
+
+	[SerializeField]
 	Animator animator;
 
 	private Vector2 prevPos;
@@ -18,16 +21,22 @@ public class HorseController : MonoBehaviour {
 	private List<Vector2> positions;
 	private List<float> rotation;
 	public RecordingState recordingState;
-	private int curIndex = 0;
+	//private int curIndex = 0;
 	private int id = 0;
-	private bool callbackMade = false;
+	//private bool callbackMade = false;
 
-	private int loadCurIndex = 0;
-	private Vector2 curTarget;
+	//private int loadCurIndex = 0;
+	//private Vector2 curTarget;
 
 	private Vector2 lastMovement;
 
 	private bool isFalling;
+
+	private int numFlips = 0;
+	private bool lastFlip = false;
+
+	[SerializeField]
+	private Transform horse;
 
 	void Start() {
 
@@ -39,7 +48,7 @@ public class HorseController : MonoBehaviour {
 		PlayerPrefs.SetInt("LatestId", id + 1);
 		positions = new List<Vector2>();
 		rotation = new List<float>();
-		curTarget = transform.position;
+		//curTarget = transform.position;
 	}
 
 	void Update() {
@@ -62,7 +71,7 @@ public class HorseController : MonoBehaviour {
 			//LoadTransform();
 		}
 	}
-
+	/*
 	void SaveTransform() {
 		int lastInput = PlayerPrefs.GetInt("LastInput" + id);
 
@@ -80,11 +89,26 @@ public class HorseController : MonoBehaviour {
 
 		loadCurIndex++;
 	}
-
+	*/
 	private void HandleRotation() {
 		var (angle, flipped) = CalcRotationAndFlip();
+		if (flipped != lastFlip)
+        {
+			numFlips++;
+			print(numFlips);
+        }
+		lastFlip = flipped;
+		
 
-		spriteRenderer.flipX = flipped;
+		horse.transform.localEulerAngles = new Vector3(
+			horse.transform.localEulerAngles.x ,
+			 flipped ? 180f : 0f,
+			horse.transform.localEulerAngles.z);
+		
+
+		
+		//spriteRenderer.flipX = flipped;
+		//knight.FlipPiecesX(flipped);
 		transform.localEulerAngles = new Vector3(
 			transform.localEulerAngles.x,
 			transform.localEulerAngles.y,
