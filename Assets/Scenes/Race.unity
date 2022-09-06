@@ -3770,6 +3770,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1665964620}
     m_Modifications:
+    - target: {fileID: 1075317393880921184, guid: 054c8c8069a027f4b84f46a1e562c9ae, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4660605624895286850, guid: 054c8c8069a027f4b84f46a1e562c9ae, type: 3}
       propertyPath: m_Name
       value: Race_Timer
