@@ -28,15 +28,15 @@ public class RacePlayer : MonoBehaviour {
 	}
 
 	[SerializeField]
-	private RollPhysics physics;
+	private RacePlayerMovement racePlayerMovement;
 
-	public Transform Transform => physics == null ? transform : physics.transform;
+	public Transform Transform => racePlayerMovement == null ? transform : racePlayerMovement.transform;
 
 	public bool ControlEnabled {
-		get => physics == null ? false : physics.ControlEnabled;
+		get => racePlayerMovement == null ? false : racePlayerMovement.ControlEnabled;
 		set {
-			if( physics != null )
-				physics.ControlEnabled = value;
+			if( racePlayerMovement != null )
+				racePlayerMovement.ControlEnabled = value;
 		}
 	}
 
@@ -81,9 +81,9 @@ public class RacePlayer : MonoBehaviour {
 	}
 
 	public void SetController(int id) {
-		var rollPhysics = GetComponentsInChildren<RollPhysics>();
+		var racePlayerMovement = GetComponentsInChildren<RacePlayerMovement>();
 
-		if( rollPhysics.Length > 0 )
-			rollPhysics[0].ControllerId = id;
+		if( racePlayerMovement.Length > 0 )
+			racePlayerMovement[0].ControllerId = id;
 	}
 }

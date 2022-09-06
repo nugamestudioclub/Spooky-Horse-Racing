@@ -1,10 +1,11 @@
 using System;
 using UnityEngine;
 
-public class RollPhysics : MonoBehaviour {
-	public int ControllerId { get; set; }
+public class RaceHumanPlayerMovement : RacePlayerMovement
+{
+	
 
-	public bool ControlEnabled { get; set; }
+	
 
 	[SerializeField]
 	private Rigidbody2D rb;
@@ -33,12 +34,8 @@ public class RollPhysics : MonoBehaviour {
 	private float maxSpeed = 100;
 	public float MaxSpeed { get => maxSpeed; private set => maxSpeed = value; }
 
-	public Vector2 Orientation { get; private set; }
+	public override bool ControlEnabled { get; set; }
 
-	public Vector2 Velocity { get; private set; }
-
-	public bool IsGrounded { get; private set; }
-	
 	void Start() {
 		rb = GetComponent<Rigidbody2D>();
 	}

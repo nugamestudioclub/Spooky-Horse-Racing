@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameplateText: {fileID: 5290145585153944591}
-  physics: {fileID: 7648310989341846126}
+  racePlayerMovement: {fileID: 7648310989341846126}
 --- !u!1 &4493638911026333875
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,6 +195,7 @@ GameObject:
   - component: {fileID: 3766783674870001647}
   - component: {fileID: 7880680979647062541}
   - component: {fileID: 7648310989341846126}
+  - component: {fileID: 8754166495090636542}
   m_Layer: 0
   m_Name: Rolling
   m_TagString: Untagged
@@ -323,6 +324,19 @@ MonoBehaviour:
   jumpAcceleration: 1
   acceleration: 100
   maxSpeed: 100
+--- !u!114 &8754166495090636542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493638911026333875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e510497732d0bd41953923446eaac9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
 --- !u!1 &9165616794417393823
 GameObject:
   m_ObjectHideFlags: 0

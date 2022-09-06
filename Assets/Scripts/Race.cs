@@ -141,7 +141,6 @@ public class Race : MonoBehaviour {
 		var racers = GetRacersInOrder();
 
 		for( int i = 0; i < racers.Count; ++i ) {
-			Debug.Log($"{racers[i].Id}: {i + 1}");
 			racers[i].Place = i + 1;
 		}
 	}
@@ -279,11 +278,11 @@ public class Race : MonoBehaviour {
 
 	// needs to load ghost data from database
 	private void LoadGhost(int index, int position) {
-		var obj = Spawn(humanPrefabs[index], spawnPoints[position]);
+		var obj = Spawn(ghostPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
 		int id = index + MaxHumanPlayers;
 
-		// racer.SetController(-1);
+		racer.SetController(id);
 		racer.Name = GetPlayerProfile(id).Name;
 		racer.Id = id;
 		racer.IsGhost = true;

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class HorseGhostController : MonoBehaviour
+public class RaceGhostPlayerMovement : RacePlayerMovement
 {
     public HorseRecordingState state;
-    public static string raw_filepath = @"D:\UnityGames\Game Studio Club\spooky-horse-racing\Assets\Resources\";
+    //@"D:\UnityGames\Game Studio Club\spooky-horse-racing\Assets\Resources\"
+    public static string raw_filepath;
     private StreamReader reader;
     private StreamWriter writer;
-    public int id = 1;
 
     private int curIndex = 0;
     string path;
@@ -17,50 +17,69 @@ public class HorseGhostController : MonoBehaviour
 
     private bool reachedEnd = false;
 
+    private bool controlEnabled;
+    public override bool ControlEnabled
+    {
+        get => controlEnabled;
+        set
+        {
+            if (value) Begin();
+            controlEnabled = value;
+        }
+    }
+
 
     // Start is called before the first frame update
-    void Awake()
+    private void Begin()
     {
+        raw_filepath = Application.dataPath + @"\Resources\";
         //print("STARTInG!");
-        path = raw_filepath + "horses" + id.ToString() + ".txt";
+        path = raw_filepath + "horses" + ControllerId.ToString() + ".txt";
+        print(path);
         if (!File.Exists(path))
         {
             //print("Creating file!");
             File.Create(path);
-           // print("CREATED FILE!");
+            // print("CREATED FILE!");
         }
         //text = (TextAsset)Resources.Load(path);
         print("Loaded resource:");
-        if(state == HorseRecordingState.Playback)
+        if (state == HorseRecordingState.Playback)
             reader = new StreamReader(path);
         else
             writer = new StreamWriter(path);
-        
+
         print(writer);
         print(reader);
-            
+
     }
-    
+
+
     public void WriteData(string data)
     {
         writer.WriteLine(data);
     }
     public string ReadNext()
     {
+        print($"Reader is null: {reader == null}");
         string data = reader.ReadLine();
-        if(data == null)
+
+        if (data == null)
         {
             reader.Close();
             this.reachedEnd = true;
             reader = new StreamReader(this.path);
+            data = reader.ReadLine();
         }
-        return reader.ReadLine();
+        return data;
     }
-   
+
 
     public SerializableTransformData getNextPosition()
     {
-        return JsonUtility.FromJson<SerializableTransformData>(ReadNext());
+        string data = ReadNext();
+        print($"Data is null: {data == null}");
+        return JsonUtility.FromJson<SerializableTransformData>(data);
     }
 
     public void writePosition(SerializableTransformData dat)
@@ -72,7 +91,11 @@ public class HorseGhostController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(this.state == HorseRecordingState.Playback)
+        if (!ControlEnabled)
+        {
+            return;
+        }
+        if (this.state == HorseRecordingState.Playback)
         {
             if (!reachedEnd)
             {
@@ -85,10 +108,10 @@ public class HorseGhostController : MonoBehaviour
                     curPos = this.getNextPosition();
                 }
             }
-            
+
 
         }
-        else if(this.state==HorseRecordingState.Record)
+        else if (this.state == HorseRecordingState.Record)
         {
             SerializableTransformData dat = new SerializableTransformData();
             dat.pX = transform.position.x;
@@ -99,14 +122,15 @@ public class HorseGhostController : MonoBehaviour
         }
         curIndex += 1;
     }
-    // Update is called once per frame
-    void Update()
+
+    void OnApplicationQuit()
     {
-        
+        if (reader != null) reader.Close();
+        if (writer != null) writer.Close();
     }
 }
 
-public enum HorseRecordingState { Record, Playback};
+public enum HorseRecordingState { Record, Playback };
 
 [System.Serializable]
 public struct SerializableTransformData

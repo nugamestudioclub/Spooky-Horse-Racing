@@ -5,7 +5,7 @@ using UnityEngine;
 public enum RecordingState { Record, Run };
 public class HorseController : MonoBehaviour {
 	[SerializeField]
-	private RollPhysics target;
+	private RacePlayerMovement target;
 
 	[SerializeField]
 	private SpriteRenderer spriteRenderer;
