@@ -42,7 +42,7 @@ public class RacePlayer : MonoBehaviour {
 	private int hitCount;
 	public int HitCount {
 		get => hitCount;
-		set => HitCount = Math.Max(value, 0);
+		set => hitCount = Math.Max(value, 0);
 	}
 
 	private bool isGhost;
@@ -51,7 +51,7 @@ public class RacePlayer : MonoBehaviour {
 		set => isGhost = value;
 	}
 
-	public PlayerStats Stats() {
+    public PlayerStats Stats() {
 		return new PlayerStats {
 			place = place,
 			time = time,

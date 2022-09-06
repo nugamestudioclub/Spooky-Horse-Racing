@@ -36,9 +36,11 @@ public class bowScript : MonoBehaviour {
 			var direction = CalcDirection();
 			float charge = CalcCharge();
 			GameObject arrow = Instantiate(arrowPrefab, transform.position + transform.right * 2, transform.rotation);
+			arrow.GetComponent<arrowScript>().source = transform.root;
 			Rigidbody2D rigidbody2D = arrow.GetComponent<Rigidbody2D>();
 
 			rigidbody2D.AddForce(direction * charge * bowPower, ForceMode2D.Impulse);
+
 			animator.Play("fireReload");
 		}
 	}

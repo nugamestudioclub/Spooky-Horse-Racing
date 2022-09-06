@@ -52,11 +52,6 @@ public class playerController : MonoBehaviour {
 			leftArmBone.localPosition = new Vector3(0.5850446f, 1.882562e-07f, 0);
 			StartCoroutine(WaitToReload());
 		}
-
-		// Following code is for demo purposes
-		if( InputController.IsMoving(0, out Vector2 movement) ) ///
-			transform.Translate(50 * Time.deltaTime * movement, Space.World);
-		// end demo code
 	}
 
 	private IEnumerator WaitToReload() {
