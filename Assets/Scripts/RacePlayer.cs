@@ -30,6 +30,8 @@ public class RacePlayer : MonoBehaviour {
 	[SerializeField]
 	private RollPhysics physics;
 
+	public Transform Transform => physics == null ? transform : physics.transform;
+
 	public bool ControlEnabled {
 		get => physics == null ? false : physics.ControlEnabled;
 		set {
@@ -38,11 +40,11 @@ public class RacePlayer : MonoBehaviour {
 		}
 	}
 
-	private int place;
-	public int Place {
-		get => place;
-		set => place = Math.Min(Math.Max(1, value), Race.MaxRacers);
-	}
+	public bool HasReachedMidpoint { get; set; }
+
+	public bool HasReachedFinishLine { get; set; }
+
+	public int Place { get; set; }
 
 	private float time;
 	public float Time {
@@ -70,7 +72,7 @@ public class RacePlayer : MonoBehaviour {
 
 	public PlayerStats Stats() {
 		return new PlayerStats {
-			place = place,
+			place = Place,
 			time = time,
 			coinCount = coinCount,
 			hitCount = hitCount,

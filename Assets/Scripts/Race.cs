@@ -11,6 +11,16 @@ public enum RaceState {
 	Finished,
 }
 
+public class CheckpointStatus { 
+	public RacePlayer racer;
+	public int checkpoint;
+
+	public CheckpointStatus(RacePlayer racer, int checkpoint) {
+		this.racer = racer;
+		this.checkpoint = checkpoint;
+	}
+}
+
 public class Race : MonoBehaviour {
 	public static readonly int MaxHumanPlayers = 4;
 
@@ -61,6 +71,11 @@ public class Race : MonoBehaviour {
 	[SerializeField]
 	private RacePlayerView[] playerViews = new RacePlayerView[MaxHumanPlayers];
 
+	[SerializeField]
+	private LineRenderer checkpointLineRenderer;
+
+	private Vector3[] checkpoints;
+
 	private bool done;
 
 	void Awake() {
@@ -90,6 +105,9 @@ public class Race : MonoBehaviour {
 		foreach( CameraFollow camera in cameras )
 			camera.Camera.enabled = false;
 		state = RaceState.Waiting;
+
+		checkpoints = new Vector3[checkpointLineRenderer.positionCount];
+		checkpointLineRenderer.GetPositions(checkpoints);
 	}
 
 	private void WaitingUpdate() {
@@ -120,6 +138,12 @@ public class Race : MonoBehaviour {
 				racer.Time += Time.deltaTime;
 		if( IsGameOver() )
 			state = RaceState.Finished;
+		var racers = GetRacersInOrder();
+
+		for( int i = 0; i < racers.Count; ++i ) {
+			Debug.Log($"{racers[i].Id}: {i + 1}");
+			racers[i].Place = i + 1;
+		}
 	}
 
 	private void FinishedUpdate() {
@@ -154,6 +178,10 @@ public class Race : MonoBehaviour {
 		for( int i = 0; i < active.Length; ++i )
 			if( active[i] )
 				yield return i;
+	}
+
+	public RacePlayer GetRacer(int playerId) {
+		return playerId < MaxHumanPlayers ? humanRacers[playerId] : ghostRacers[playerId];
 	}
 
 	public IEnumerable<RacePlayer> GetHumanRacers() {
@@ -298,5 +326,44 @@ public class Race : MonoBehaviour {
 	private void Clear() {
 		for( int i = 0; i < MaxHumanPlayers; ++i )
 			playerProfiles[i] = null;
+	}
+
+	private int FindClosestCheckpoint(RacePlayer racer) {
+		var pairs = Enumerable.Range(0, checkpoints.Length)
+			.Select(i => new KeyValuePair<int, float>(
+				i,
+				Vector3.Distance(checkpoints[i], racer.Transform.position))
+			)
+			.OrderBy(pair => pair.Value)
+			.ToList();
+		int index = pairs[0].Key;
+
+		if( index == 0 || index == checkpoints.Length - 1 )
+			index = racer.HasReachedMidpoint ? checkpoints.Length - 1 : 0;
+
+		return index;
+	}
+
+	private CheckpointStatus GetCheckpointStatus(RacePlayer racer) {
+		return new CheckpointStatus(racer, FindClosestCheckpoint(racer));
+	}
+
+	private int CompareCheckpointStatus(CheckpointStatus first, CheckpointStatus second) {
+		if( first.checkpoint > second.checkpoint ) {
+			return -1;
+		}
+		else {
+			var nextCheckpoint = checkpoints[Math.Min(first.checkpoint + 1, checkpoints.Length - 1)];
+			return Vector3.Distance(nextCheckpoint, first.racer.Transform.position)
+				.CompareTo(Vector3.Distance(nextCheckpoint, second.racer.Transform.position));
+		}
+	}
+
+	private IList<RacePlayer> GetRacersInOrder() {
+		var racers = GetAllRacers()
+			.Select(x => GetCheckpointStatus(x))
+			.ToList();
+		racers.Sort((a, b) => CompareCheckpointStatus(a, b));
+		return racers.Select(x => x.racer).ToList();
 	}
 }
