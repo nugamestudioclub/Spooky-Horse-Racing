@@ -293,6 +293,8 @@ public class Race : MonoBehaviour {
 
 	}
 
+	private readonly string[] tempGhostNames = new string[] { "Inky", "Pinky", "Blinky", "Clyde" };
+
 	private void LoadGhost(int index, int position) {
 		var obj = Spawn(ghostPrefabs[index], spawnPoints[position]);
 		var racer = obj.GetComponent<RacePlayer>();
@@ -300,7 +302,7 @@ public class Race : MonoBehaviour {
 		var data = bestData[index];
 
 		racer.SetController(id);
-		racer.Name = "Ghost of " + data.name;
+		racer.Name = data.name == "Anonymous" ? tempGhostNames[index] : "Ghost of " + data.name;
 		racer.Id = id;
 		racer.IsGhost = true;
 		racer.Place = position + 1;
@@ -333,7 +335,7 @@ public class Race : MonoBehaviour {
 	}
 
 	private bool CheckBestTime(PlayerProfile profile, PlayerStats stats) {
-		var best = Database.ReadBestData(BestCategory.Time);
+		var best = GetBestData(BestCategory.Time);
 
 		if( !stats.isGhost && stats.time <= best.time ) {
 			SetBestData(BestCategory.Time, new SerializableBestData(profile, stats));
@@ -345,7 +347,7 @@ public class Race : MonoBehaviour {
 	}
 
 	private bool CheckBestHits(PlayerProfile profile, PlayerStats stats) {
-		var best = Database.ReadBestData(BestCategory.Hits);
+		var best = GetBestData(BestCategory.Hits);
 
 		if( !stats.isGhost && stats.hitCount >= best.hitCount ) {
 			SetBestData(BestCategory.Hits, new SerializableBestData(profile, stats));
@@ -357,7 +359,7 @@ public class Race : MonoBehaviour {
 	}
 
 	private bool CheckBestCoins(PlayerProfile profile, PlayerStats stats) {
-		var best = Database.ReadBestData(BestCategory.Coins);
+		var best = GetBestData(BestCategory.Coins);
 
 		if( !stats.isGhost && stats.coinCount >= best.coinCount ) {
 			SetBestData(BestCategory.Coins, new SerializableBestData(profile, stats));
