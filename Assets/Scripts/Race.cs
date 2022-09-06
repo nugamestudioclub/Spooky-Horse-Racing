@@ -212,6 +212,7 @@ public class Race : MonoBehaviour {
 	}
 
 	private PlayerResults MakePlayerResults(PlayerProfile profile, PlayerStats stats) {
+		/*
 		return new PlayerResults(
 			profile.Name,
 			stats.place,
@@ -222,6 +223,20 @@ public class Race : MonoBehaviour {
 			CheckBestTime(profile, stats),
 			CheckBestHits(profile, stats),
 			CheckBestCoins(profile, stats)
+		);
+		*/
+		int isGoodTime = FindBestTime(profile, stats);
+
+		return new PlayerResults(
+			profile.Name,
+			stats.place,
+			stats.time,
+			stats.hitCount,
+			stats.coinCount,
+			CheckBestPlace(profile, stats),
+			isGoodTime == 1,
+			isGoodTime == 2,
+			isGoodTime == 3
 		);
 	}
 
@@ -353,6 +368,18 @@ public class Race : MonoBehaviour {
 		}
 	}
 
+	private int FindBestTime(PlayerProfile profile, PlayerStats stats) {
+		var list = bestData.ToList();
+		int index = list.FindIndex(0, x => x.time > stats.time);
+
+		if( index > 0 ) {
+			list.RemoveAt(list.Count - 1);
+			list.Insert(index, new SerializableBestData(profile, stats));
+			list.CopyTo(bestData);
+		}
+		return index;
+	}
+
 	private bool IsDoneWaiting() {
 		return Mathf.Approximately(currentTime, 0.0f);
 	}
@@ -454,20 +481,26 @@ public class Race : MonoBehaviour {
 
 	private void WriteBestData() {
 		for( int i = 0; i < MaxHumanPlayers; ++i ) {
-			if( playerResults[i].isPlaceBest )
-				WriteNewBest(i, BestCategory.Place);
-			if( playerResults[i].isTimeBest )
-				WriteNewBest(i, BestCategory.Time);
-			if( playerResults[i].isHitsBest )
-				WriteNewBest(i, BestCategory.Hits);
-			if( playerResults[i].isCoinsBest )
-				WriteNewBest(i, BestCategory.Coins);
+			var racer = humanRacers[i];
+			if( racer != null ) {
+				var results = playerResults[i];
+				if( results.isPlaceBest )
+					WriteNewBest(racer, BestCategory.Place);
+				if( results.isTimeBest )
+					WriteNewBest(racer, BestCategory.Time);
+				if( results.isHitsBest )
+					WriteNewBest(racer, BestCategory.Hits);
+				if( results.isCoinsBest )
+					WriteNewBest(racer, BestCategory.Coins);
+			}
 		}
 	}
 
-	private void WriteNewBest(int playerId, BestCategory category) {
-		Database.WriteHorseData((int)BestCategory.Place + GhostCount, humanRacers[playerId].Recording.Data);
-		Database.WriteBestData(category, GetBestData(category));
+	private void WriteNewBest(RacePlayer racer, BestCategory category) {
+		if( racer.Recording != null && racer.Recording.Data != null ) {
+			Database.WriteHorseData((int)category + GhostCount, racer.Recording.Data);
+			Database.WriteBestData(category, GetBestData(category));
+		}
 	}
 
 	private SerializableBestData GetBestData(BestCategory category) {
