@@ -31,6 +31,9 @@ public class LobbyPlayerView : MonoBehaviour
     [SerializeField]
     private TMP_Text connectText;
 
+    [SerializeField]
+    private GameObject arrows;
+
     public string Name
     {
         get => string.IsNullOrEmpty(nameInputField.text) ? (nameInputField.placeholder as TMP_Text).text : nameInputField.text;
@@ -114,6 +117,7 @@ public class LobbyPlayerView : MonoBehaviour
                 knightSpriteRenderers[i].gameObject.SetActive(value);
             }
             horseSpriteRenderer.gameObject.SetActive(value);
+            arrows.SetActive(value);
         }
     }
 

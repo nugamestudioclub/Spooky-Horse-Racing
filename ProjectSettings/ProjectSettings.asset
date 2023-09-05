@@ -3,7 +3,7 @@
 --- !u!129 &1
 PlayerSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 22
+  serializedVersion: 23
   productGUID: 52664787fbfef2949927786f2ece2ad0
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: NUGameStudioClub
   productName: Spooky Horse Racing
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -134,8 +134,9 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.1
-  preloadedAssets: []
+  bundleVersion: 1.1
+  preloadedAssets:
+  - {fileID: 11400000, guid: ec454516923832d4fb1d29689176f2a4, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -150,9 +151,11 @@ PlayerSettings:
   m_ColorGamuts: 00000000
   targetPixelDensity: 30
   resolutionScalingMode: 0
+  resetResolutionOnWindowResize: 0
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
-  applicationIdentifier: {}
+  applicationIdentifier:
+    Standalone: com.NUGameStudioClub.Spooky-Horse-Racing
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -492,6 +495,7 @@ PlayerSettings:
   switchNetworkInterfaceManagerInitializeEnabled: 1
   switchPlayerConnectionEnabled: 1
   switchUseNewStyleFilepaths: 0
+  switchUseLegacyFmodPriorities: 1
   switchUseMicroSleepForYield: 1
   switchEnableRamDiskSupport: 0
   switchMicroSleepForYieldTime: 25
@@ -681,6 +685,7 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 1
+  windowsGamepadBackendHint: 0
   cloudProjectId: 
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
