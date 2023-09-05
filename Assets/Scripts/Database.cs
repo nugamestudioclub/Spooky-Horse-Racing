@@ -63,7 +63,7 @@ public class SerializableBestData {
 		stats.hitCount,
 		stats.coinCount,
 		knightId: 0, ///
-		horseId: 0 ///
+	  horseId: 0 ///
  ) { }
 }
 
@@ -106,8 +106,13 @@ public static class Database {
 
 		using var writer = new StreamWriter(path);
 
-		foreach( var item in data )
-			writer.WriteLine(JsonUtility.ToJson(item));
+		try {
+			foreach( var item in data )
+				writer.WriteLine(JsonUtility.ToJson(item));
+		}
+		catch( Exception ex ) {
+			Debug.Log(ex.Message);
+		}
 	}
 
 	private static string GetBestPath(BestCategory category) {
@@ -117,12 +122,16 @@ public static class Database {
 	public static SerializableBestData ReadBestData(BestCategory category) {
 		string path = GetBestPath(category);
 
+		if( !File.Exists(path) )
+			return new SerializableBestData();
+
+		using var reader = new StreamReader(path);
+
 		try {
-			return File.Exists(path)
-				? JsonUtility.FromJson<SerializableBestData>(path)
-				: new SerializableBestData();
+			string line = reader.ReadLine();
+			return JsonUtility.FromJson<SerializableBestData>(line);
 		}
-		catch( Exception ex ){
+		catch( Exception ex ) {
 			Debug.Log(ex.Message);
 			return new SerializableBestData();
 		}
@@ -136,6 +145,11 @@ public static class Database {
 
 		using var writer = new StreamWriter(path);
 
-		writer.WriteLine(JsonUtility.ToJson(data));
+		try {
+			writer.WriteLine(JsonUtility.ToJson(data));
+		}
+		catch( Exception ex ) {
+			Debug.Log(ex.Message);
+		}
 	}
 }
